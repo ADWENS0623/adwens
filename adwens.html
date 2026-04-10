@@ -4,1050 +4,856 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ADWENS AI STUDIO</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=DM+Mono:wght@300;400&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Noto+Serif+JP:wght@200;300;400&display=swap');
-:root{--black:#060606;--deep:#0c0c0c;--surface:#111;--card:#161616;--card2:#1c1c1c;--border:#262626;--border2:#303030;--text:#e0dbd4;--muted:#5a5550;--muted2:#7a7570;--accent:#c8a96e;--accent-dim:#8a7049;--accent-glow:rgba(200,169,110,0.12);--green:#4a8c5c;--green-dim:#2d5437;--red:#8c4a4a;--blue:#4a6a8c;--white:#f2ede7;--ig:#c13584;--tk:#ff0050;--yt:#ff0000;--x:#e0e0e0;}
+:root{--black:#060606;--deep:#0c0c0c;--surface:#111;--card:#161616;--border:#262626;--border2:#303030;--text:#e0dbd4;--muted:#5a5550;--muted2:#7a7570;--accent:#c8a96e;--accent-dim:#8a7049;--ag:rgba(200,169,110,0.12);--green:#4a8c5c;--green-dim:#2d5437;--red:#8c4a4a;--white:#f2ede7;--ig:#c13584;--tk:#ff0050;--yt:#ff0000;}
 *{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;overflow:hidden;}
 body{font-family:'Noto Serif JP',serif;background:var(--black);color:var(--text);}
-.app{display:grid;grid-template-columns:52px 220px 1fr;grid-template-rows:52px 1fr;height:100vh;position:relative;z-index:1;}
-.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 20px 0 16px;border-bottom:1px solid var(--border);background:rgba(6,6,6,0.97);backdrop-filter:blur(16px);z-index:200;}
-.logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;letter-spacing:.28em;color:var(--white);display:flex;align-items:center;gap:10px;}
+.app{display:grid;grid-template-columns:48px 200px 1fr;grid-template-rows:48px 1fr;height:100vh;}
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--border);background:rgba(6,6,6,.97);z-index:200;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;letter-spacing:.28em;color:var(--white);display:flex;align-items:center;gap:10px;}
 .logo em{color:var(--accent);font-style:normal;}
-.topbar-right{display:flex;align-items:center;gap:14px;}
-.tb-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--muted);border:1px solid var(--border);padding:3px 9px;text-transform:uppercase;}
-.tb-badge span{color:var(--text);}
-.pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.tb-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--border);padding:3px 8px;text-transform:uppercase;}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 .icon-nav{border-right:1px solid var(--border);background:var(--deep);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:2px;}
-.icon-nav-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--muted2);font-size:15px;transition:all .2s;position:relative;}
-.icon-nav-btn.active{color:var(--accent);background:var(--accent-glow);}
-.nav-divider{width:28px;height:1px;background:var(--border);margin:6px 0;}
-.sidebar{border-right:1px solid var(--border);background:var(--deep);overflow-y:auto;padding:16px 0;}
-.sb-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;padding:0 14px;margin-bottom:6px;}
-.sb-btn{display:flex;align-items:center;gap:10px;width:100%;padding:8px 14px;background:none;border:none;color:var(--muted2);font-family:'Noto Serif JP',serif;font-size:12px;font-weight:200;cursor:pointer;text-align:left;transition:all .2s;border-left:2px solid transparent;}
-.sb-btn:hover{color:var(--text);background:rgba(255,255,255,.03);}
-.sb-btn.active{color:var(--white);background:var(--accent-glow);border-left-color:var(--accent);}
-.sb-icon{width:24px;height:24px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:var(--surface);}
-.sb-btn.active .sb-icon{border-color:var(--accent-dim);background:var(--accent-glow);color:var(--accent);}
-.sb-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);border:1px solid var(--accent-dim);padding:1px 5px;}
+.inb{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:var(--muted2);font-size:14px;transition:all .2s;}
+.inb.active{color:var(--accent);background:var(--ag);}
+.inb:hover{color:var(--text);}
+.ndiv{width:26px;height:1px;background:var(--border);margin:4px 0;}
+.sidebar{border-right:1px solid var(--border);background:var(--deep);overflow-y:auto;padding:12px 0;}
+.sidebar::-webkit-scrollbar{width:2px;}
+.sb-label{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;padding:0 12px;margin-bottom:4px;margin-top:12px;}
+.sbb{display:flex;align-items:center;gap:8px;width:100%;padding:7px 12px;background:none;border:none;color:var(--muted2);font-family:'Noto Serif JP',serif;font-size:11px;font-weight:200;cursor:pointer;text-align:left;transition:all .2s;border-left:2px solid transparent;}
+.sbb:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.sbb.active{color:var(--white);background:var(--ag);border-left-color:var(--accent);}
+.sbi{width:22px;height:22px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;background:var(--surface);}
+.sbb.active .sbi{border-color:var(--accent-dim);color:var(--accent);background:var(--ag);}
+.sbbadge{margin-left:auto;font-family:'DM Mono',monospace;font-size:7px;color:var(--accent);border:1px solid var(--accent-dim);padding:1px 4px;}
 .main{overflow:hidden;display:flex;flex-direction:column;}
 .panel{display:none;flex-direction:column;height:100%;overflow:hidden;}
 .panel.active{display:flex;}
-.ph{padding:16px 24px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;flex-shrink:0;}
-.ph-cat{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
-.ph-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.07em;color:var(--white);}
-.ph-desc{font-size:11px;color:var(--muted2);margin-top:1px;}
-.ph-right{display:flex;gap:8px;align-items:center;}
-.ph-tag{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--muted);border:1px solid var(--border);padding:3px 8px;text-transform:uppercase;}
+.ph{padding:14px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;flex-shrink:0;}
+.ph-cat{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;letter-spacing:.07em;color:var(--white);}
+.ph-desc{font-size:10px;color:var(--muted2);margin-top:1px;}
+.ph-right{display:flex;gap:6px;align-items:center;}
+.ph-tag{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--border);padding:2px 7px;text-transform:uppercase;}
 .ph-tag.on{color:var(--green);border-color:var(--green-dim);}
-.scroll-body{flex:1;overflow-y:auto;padding:20px 24px;}
-.sec-title{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.card{background:var(--card);border:1px solid var(--border);padding:16px;position:relative;overflow:hidden;}
-.card-sm{padding:12px;}
-.card-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
-.card-value{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--accent);}
-.card-sub{font-size:10px;color:var(--muted2);margin-top:2px;}
-.sel-card{background:var(--card);border:1px solid var(--border);padding:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
-.sel-card::before{content:'';position:absolute;left:0;top:0;width:2px;height:100%;background:var(--accent);transform:scaleY(0);transition:transform .2s;}
-.sel-card:hover::before,.sel-card.on::before{transform:scaleY(1);}
-.sel-card.on{border-color:var(--accent-dim);background:var(--accent-glow);}
-.sc-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.sc-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;color:var(--white);margin-bottom:2px;}
-.sc-desc{font-size:10px;color:var(--muted2);line-height:1.5;}
-.btn-p{background:var(--accent);border:none;color:var(--black);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:10px 20px;cursor:pointer;transition:all .2s;}
-.btn-p:hover{background:var(--white);}
-.btn-p:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
-.btn-o{background:none;border:1px solid var(--border);color:var(--muted2);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:10px 16px;cursor:pointer;transition:all .2s;}
-.btn-o:hover{border-color:var(--border2);color:var(--text);}
-.btn-sm{padding:6px 12px;font-size:8px;}
-.btn-green{background:var(--green-dim);border:none;color:var(--white);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
-.form-block{background:var(--card);border:1px solid var(--border);padding:16px;margin-bottom:14px;}
-.fb-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
-.inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Noto Serif JP',serif;font-size:12px;font-weight:200;padding:10px 12px;outline:none;transition:border-color .2s;}
+.sb{flex:1;overflow-y:auto;padding:16px 20px;}
+.sb::-webkit-scrollbar{width:2px;}
+.st{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.st::after{content:'';flex:1;height:1px;background:var(--border);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.card{background:var(--card);border:1px solid var(--border);padding:14px;}
+.card-sm{padding:10px;}
+.cl{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.cv{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--accent);}
+.cs{font-size:9px;color:var(--muted2);margin-top:2px;}
+.sc{background:var(--card);border:1px solid var(--border);padding:12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;left:0;top:0;width:2px;height:100%;background:var(--accent);transform:scaleY(0);transition:transform .2s;}
+.sc:hover::before,.sc.on::before{transform:scaleY(1);}
+.sc.on{border-color:var(--accent-dim);background:var(--ag);}
+.sc-l{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.sc-t{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;color:var(--white);margin-bottom:2px;}
+.sc-d{font-size:9px;color:var(--muted2);line-height:1.5;}
+.bp{background:var(--accent);border:none;color:var(--black);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:9px 18px;cursor:pointer;transition:all .2s;}
+.bp:hover{background:var(--white);}
+.bp:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
+.bo{background:none;border:1px solid var(--border);color:var(--muted2);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;cursor:pointer;transition:all .2s;}
+.bo:hover{border-color:var(--border2);color:var(--text);}
+.bsm{padding:5px 10px;font-size:7px;}
+.bg{background:var(--green-dim);border:none;color:var(--white);font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;cursor:pointer;}
+.br{display:flex;gap:6px;flex-wrap:wrap;}
+.fb{background:var(--card);border:1px solid var(--border);padding:14px;margin-bottom:12px;}
+.fl{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Noto Serif JP',serif;font-size:11px;font-weight:200;padding:9px 11px;outline:none;transition:border-color .2s;}
 .inp:focus{border-color:var(--accent-dim);}
 .inp::placeholder{color:var(--muted);}
-.inp-ta{resize:none;min-height:72px;line-height:1.7;}
-.inp-ta-sm{min-height:52px;}
-.tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
-.tag{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--muted2);border:1px solid var(--border);padding:3px 7px;cursor:pointer;transition:all .15s;text-transform:uppercase;}
+.ta{resize:none;min-height:64px;line-height:1.7;}
+.ta-sm{min-height:48px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+.tag{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.08em;color:var(--muted2);border:1px solid var(--border);padding:2px 6px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
 .tag:hover,.tag.on{color:var(--accent);border-color:var(--accent-dim);}
-.sns-badge{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid;cursor:pointer;transition:all .2s;}
-.sns-badge.ig{color:var(--ig);border-color:rgba(193,53,132,.3);}
-.sns-badge.tk{color:var(--tk);border-color:rgba(255,0,80,.3);}
-.sns-badge.yt{color:var(--yt);border-color:rgba(255,0,0,.3);}
-.sns-badge.x-tw{color:var(--x);border-color:rgba(224,224,224,.2);}
-.sns-badge.th{color:#aaa;border-color:rgba(170,170,170,.2);}
-.sns-badge.on.ig{background:rgba(193,53,132,.12);}
-.sns-badge.on.tk{background:rgba(255,0,80,.1);}
-.sns-badge.on.yt{background:rgba(255,0,0,.1);}
-.sns-badge.on.x-tw{background:rgba(224,224,224,.07);}
-.progress-row{display:flex;flex-direction:column;gap:10px;}
-.prog-header{display:flex;justify-content:space-between;margin-bottom:4px;}
-.prog-key{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);}
-.prog-val{font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);}
-.prog-bar{height:2px;background:var(--border);position:relative;overflow:hidden;}
-.prog-fill{height:100%;background:var(--accent);transition:width 1s ease;}
-.prog-fill.green{background:var(--green);}
-.messages{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:14px;}
-.msg{display:flex;gap:10px;animation:fadeUp .25s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.sns{display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border:1px solid;cursor:pointer;transition:all .2s;}
+.sns.ig{color:var(--ig);border-color:rgba(193,53,132,.3);}
+.sns.tk{color:var(--tk);border-color:rgba(255,0,80,.3);}
+.sns.yt{color:var(--yt);border-color:rgba(255,0,0,.3);}
+.sns.xtw{color:#e0e0e0;border-color:rgba(224,224,224,.2);}
+.sns.on.ig{background:rgba(193,53,132,.1);}
+.sns.on.tk{background:rgba(255,0,80,.08);}
+.sns.on.yt{background:rgba(255,0,0,.08);}
+.sns.on.xtw{background:rgba(224,224,224,.05);}
+.pr{display:flex;flex-direction:column;gap:8px;}
+.ph2{display:flex;justify-content:space-between;margin-bottom:3px;}
+.pk{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);}
+.pv{font-family:'DM Mono',monospace;font-size:7px;color:var(--accent);}
+.pb2{height:2px;background:var(--border);overflow:hidden;}
+.pf{height:100%;background:var(--accent);transition:width 1s ease;}
+.pf.green{background:var(--green);}
+.msgs{flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;gap:12px;}
+.msgs::-webkit-scrollbar{width:2px;}
+.msg{display:flex;gap:8px;animation:fu .25s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .msg.user{flex-direction:row-reverse;}
-.msg-av{width:28px;height:28px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);background:var(--surface);flex-shrink:0;}
-.msg.ai .msg-av{border-color:var(--accent-dim);color:var(--accent);background:var(--accent-glow);}
-.msg-bub{max-width:70%;background:var(--card);border:1px solid var(--border);padding:10px 14px;font-size:12px;line-height:1.8;font-weight:200;color:var(--text);}
-.msg.user .msg-bub{background:var(--accent-glow);border-color:var(--accent-dim);color:var(--white);}
-.msg-meta{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);margin-top:4px;}
-.msg.user .msg-meta{text-align:right;}
-.thinking-dots{display:flex;gap:4px;align-items:center;}
-.thinking-dots span{width:4px;height:4px;border-radius:50%;background:var(--accent);animation:blink 1.4s ease-in-out infinite;}
-.thinking-dots span:nth-child(2){animation-delay:.2s}
-.thinking-dots span:nth-child(3){animation-delay:.4s}
+.mav{width:26px;height:26px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);background:var(--surface);flex-shrink:0;}
+.msg.ai .mav{border-color:var(--accent-dim);color:var(--accent);background:var(--ag);}
+.mbub{max-width:72%;background:var(--card);border:1px solid var(--border);padding:9px 13px;font-size:11px;line-height:1.8;font-weight:200;color:var(--text);}
+.msg.user .mbub{background:var(--ag);border-color:var(--accent-dim);color:var(--white);}
+.mmeta{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);margin-top:3px;}
+.msg.user .mmeta{text-align:right;}
+.tdots{display:flex;gap:3px;align-items:center;}
+.tdots span{width:4px;height:4px;border-radius:50%;background:var(--accent);animation:blink 1.4s infinite;}
+.tdots span:nth-child(2){animation-delay:.2s}
+.tdots span:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}
-.chat-input-area{border-top:1px solid var(--border);padding:12px 24px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:var(--deep);}
-.chat-input-wrap{flex:1;}
-.chat-inp{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Noto Serif JP',serif;font-size:12px;font-weight:200;padding:10px 12px;resize:none;min-height:40px;max-height:100px;line-height:1.6;outline:none;transition:border-color .2s;}
-.chat-inp:focus{border-color:var(--accent-dim);}
-.chat-inp::placeholder{color:var(--muted);}
-.send-btn{width:40px;height:40px;background:var(--accent);border:none;color:var(--black);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
-.send-btn:disabled{background:var(--border);cursor:not-allowed;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px;}
-.chip{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);border:1px solid var(--border);padding:5px 10px;cursor:pointer;transition:all .15s;}
+.cia{border-top:1px solid var(--border);padding:10px 20px;display:flex;gap:6px;align-items:flex-end;flex-shrink:0;background:var(--deep);}
+.ciw{flex:1;}
+.ci{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Noto Serif JP',serif;font-size:11px;font-weight:200;padding:9px 11px;resize:none;min-height:38px;max-height:96px;line-height:1.6;outline:none;transition:border-color .2s;}
+.ci:focus{border-color:var(--accent-dim);}
+.ci::placeholder{color:var(--muted);}
+.sbtn{width:38px;height:38px;background:var(--accent);border:none;color:var(--black);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sbtn:disabled{background:var(--border);cursor:not-allowed;}
+.chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:10px;}
+.chip{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);border:1px solid var(--border);padding:4px 9px;cursor:pointer;transition:all .15s;}
 .chip:hover{color:var(--accent);border-color:var(--accent-dim);}
-.welcome-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px;gap:12px;}
-.w-mark{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;color:var(--accent);opacity:.2;line-height:1;}
-.w-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;letter-spacing:.1em;color:var(--white);}
-.w-sub{font-size:11px;color:var(--muted2);line-height:1.8;max-width:360px;}
-.sns-account-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);margin-bottom:6px;}
-.sa-left{display:flex;align-items:center;gap:12px;}
-.sa-icon{width:32px;height:32px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-.sa-name{font-size:12px;color:var(--text);}
-.sa-handle{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted2);}
-.sa-right{display:flex;align-items:center;gap:8px;}
-.sa-stat-v{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);}
-.sa-stat-l{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;}
-.connect-btn{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid;cursor:pointer;transition:all .2s;background:none;}
-.connect-btn.connected{color:var(--green);border-color:var(--green-dim);}
-.connect-btn.connect{color:var(--muted2);border-color:var(--border);}
-.trend-card{background:var(--card);border:1px solid var(--border);padding:12px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
-.tc-rank{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);margin-bottom:2px;}
-.tc-tag{font-size:12px;color:var(--text);}
-.tc-volume{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);margin-top:2px;}
-.algo-panel{background:var(--card);border:1px solid var(--border);padding:16px;margin-bottom:14px;}
-.algo-score-big{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--accent);line-height:1;}
-.product-card{background:var(--card);border:1px solid var(--border);overflow:hidden;transition:all .2s;cursor:pointer;}
-.product-thumb{background:var(--surface);height:120px;display:flex;align-items:center;justify-content:center;font-size:36px;opacity:.4;border-bottom:1px solid var(--border);}
-.product-info{padding:10px 12px;}
-.product-name{font-size:11px;color:var(--text);margin-bottom:2px;}
-.product-price{font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);}
-.product-stock{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);}
-.code-block{background:var(--surface);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:10px;color:#8bc4a8;padding:14px;line-height:1.7;overflow-x:auto;margin-bottom:12px;white-space:pre;}
-.video-comp-card{background:var(--card);border:1px solid var(--border);padding:14px;margin-bottom:8px;}
-.scene-row{display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;padding-bottom:4px;}
-.scene-block{flex-shrink:0;width:80px;background:var(--surface);border:1px solid var(--border);padding:6px;text-align:center;}
-.scene-num{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);margin-bottom:3px;}
-.scene-icon{font-size:20px;opacity:.4;margin-bottom:3px;}
-.scene-t{font-size:9px;color:var(--muted2);line-height:1.3;}
-.caption-result{background:var(--card);border:1px solid var(--border);padding:14px;margin-bottom:10px;}
-.cap-platform{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
-.cap-text{font-size:11px;color:var(--text);line-height:1.8;margin-bottom:8px;}
-.cap-tags{display:flex;flex-wrap:wrap;gap:4px;}
-.cap-tag{font-family:'DM Mono',monospace;font-size:8px;color:var(--blue);border:1px solid rgba(74,106,140,.3);padding:2px 6px;}
-.upload-zone{background:var(--card);border:1px dashed var(--border);padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all .2s;text-align:center;min-height:100px;}
-.upload-zone:hover{border-color:var(--accent-dim);background:var(--accent-glow);}
-.uz-icon{font-size:24px;opacity:.3;}
-.uz-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
-.gen-area{background:var(--card);border:1px solid var(--border);min-height:180px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-bottom:14px;}
-.gen-placeholder{text-align:center;}
-.gen-placeholder-icon{font-size:32px;opacity:.15;margin-bottom:8px;}
-.gen-placeholder p{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;}
-.gen-imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);width:100%;}
-.gen-slot{background:var(--surface);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;}
-.gen-slot:hover .gen-ov{opacity:1;}
-.gen-ov{position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;gap:6px;}
-.gen-ov-t{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--white);text-transform:uppercase;}
-.loading-bar{width:180px;height:1px;background:var(--border);overflow:hidden;position:relative;}
-.loading-bar::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:slide 1.4s ease-in-out infinite;}
+.ws{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:32px;gap:10px;}
+.wm{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--accent);opacity:.2;line-height:1;}
+.wt{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.1em;color:var(--white);}
+.wd{font-size:10px;color:var(--muted2);line-height:1.8;max-width:340px;}
+.sar{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface);border:1px solid var(--border);margin-bottom:5px;}
+.sal{display:flex;align-items:center;gap:10px;}
+.sai{width:28px;height:28px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.san{font-size:11px;color:var(--text);}
+.sah{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);}
+.cbtn{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid;cursor:pointer;background:none;}
+.cbtn.conn{color:var(--green);border-color:var(--green-dim);}
+.cbtn.disc{color:var(--muted2);border-color:var(--border);}
+.tc{background:var(--card);border:1px solid var(--border);padding:10px 12px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;}
+.tr{font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);margin-bottom:2px;}
+.tt{font-size:11px;color:var(--text);}
+.tv{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-top:2px;}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px;}
+.calh{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);text-align:center;padding:3px 0;text-transform:uppercase;}
+.cald{background:var(--surface);border:1px solid var(--border);min-height:52px;padding:4px;cursor:pointer;}
+.cald.hp{border-color:var(--accent-dim);background:var(--ag);}
+.caln{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);margin-bottom:2px;}
+.caldo{width:4px;height:4px;border-radius:50%;margin:1px 0;}
+.caldo.ig{background:var(--ig);}
+.caldo.tk{background:var(--tk);}
+.caldo.xtw{background:#e0e0e0;}
+.caldo.yt{background:var(--yt);}
+.pcard{background:var(--card);border:1px solid var(--border);overflow:hidden;cursor:pointer;}
+.pthumb{background:var(--surface);height:100px;display:flex;align-items:center;justify-content:center;font-size:30px;opacity:.4;border-bottom:1px solid var(--border);}
+.pinfo{padding:8px 10px;}
+.pname{font-size:10px;color:var(--text);margin-bottom:2px;}
+.pprice{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);}
+.pstock{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);}
+.pid{font-family:'DM Mono',monospace;font-size:6px;color:var(--muted);}
+.codeblock{background:var(--surface);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;color:#8bc4a8;padding:12px;line-height:1.7;overflow-x:auto;margin-bottom:10px;white-space:pre;}
+.scenes{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px;}
+.scn{flex-shrink:0;width:72px;background:var(--surface);border:1px solid var(--border);padding:5px;text-align:center;}
+.scnn{font-family:'DM Mono',monospace;font-size:6px;color:var(--muted);margin-bottom:2px;}
+.scni{font-size:18px;opacity:.4;margin-bottom:2px;}
+.scnt{font-size:8px;color:var(--muted2);line-height:1.3;}
+.capr{background:var(--card);border:1px solid var(--border);padding:12px;margin-bottom:8px;}
+.capp{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;}
+.capt{font-size:10px;color:var(--text);line-height:1.8;margin-bottom:6px;}
+.captags{display:flex;flex-wrap:wrap;gap:3px;}
+.captag{font-family:'DM Mono',monospace;font-size:7px;color:#4a6a8c;border:1px solid rgba(74,106,140,.3);padding:2px 5px;}
+.uz{background:var(--card);border:1px dashed var(--border);padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .2s;text-align:center;min-height:90px;}
+.uz:hover{border-color:var(--accent-dim);background:var(--ag);}
+.base-summary{display:flex;background:var(--card);border:1px solid var(--border);overflow:hidden;margin-bottom:12px;}
+.bss{flex:1;padding:10px;text-align:center;border-right:1px solid var(--border);}
+.bss:last-child{border-right:none;}
+.bssv{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--accent);}
+.bssl{font-family:'DM Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.brr{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface);border:1px solid var(--border);margin-bottom:4px;}
+.brn{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);width:14px;flex-shrink:0;}
+.bri{font-size:16px;flex-shrink:0;}
+.brinf{flex:1;}
+.brnm{font-size:10px;color:var(--text);}
+.brpr{font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);}
+.brst{font-family:'DM Mono',monospace;font-size:8px;flex-shrink:0;}
+.bcbanner{display:flex;align-items:center;justify-content:space-between;background:var(--ag);border:1px solid var(--accent-dim);padding:10px 14px;margin-bottom:14px;gap:10px;}
+.bov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;}
+.bov.show{display:flex;}
+.bom{background:var(--deep);border:1px solid var(--border2);width:min(580px,95vw);max-height:88vh;overflow-y:auto;}
+.bomh{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--deep);}
+.bomt{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;color:var(--white);}
+.bomc{width:26px;height:26px;background:none;border:1px solid var(--border);color:var(--muted2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.bodb{padding:20px;}
+.bstep{background:var(--card);border:1px solid var(--border);padding:14px;margin-bottom:10px;}
+.bsn{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.bst2{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:300;color:var(--white);margin-bottom:4px;}
+.bsd{font-size:9px;color:var(--muted2);line-height:1.7;margin-bottom:8px;}
+.bstat{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border:1px solid;}
+.bstat.conn{color:var(--green);border-color:var(--green-dim);}
+.bstat.disc{color:var(--muted);border-color:var(--border);}
+.blog{background:var(--surface);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;padding:8px;max-height:90px;overflow-y:auto;margin-top:8px;color:var(--muted2);}
+.bsbar{background:var(--border);height:2px;margin:6px 0;overflow:hidden;}
+.bsprog{height:100%;background:var(--accent);transition:width .8s ease;width:0%;}
+.binr{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);padding:3px 0;border-bottom:1px solid var(--border);}
+.binr:last-child{border-bottom:none;}
+.balink{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);border:1px solid var(--accent-dim);padding:5px 10px;text-decoration:none;margin-top:6px;}
+.divider{border:none;border-top:1px solid var(--border);margin:12px 0;}
+.flex-b{display:flex;justify-content:space-between;align-items:center;}
+.gap-r{display:flex;gap:6px;align-items:center;}
+.mt6{margin-top:6px;}.mt10{margin-top:10px;}.mb10{margin-bottom:10px;}.mb12{margin-bottom:12px;}
+.tmuted{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.gen-area{background:var(--card);border:1px solid var(--border);min-height:160px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-bottom:12px;}
+.gph{text-align:center;}
+.gphicon{font-size:28px;opacity:.15;margin-bottom:6px;}
+.gph p{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;}
+.gimgs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);width:100%;}
+.gslot{background:var(--surface);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;}
+.gov{position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;gap:5px;}
+.gslot:hover .gov{opacity:1;}
+.govt{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;color:var(--white);text-transform:uppercase;}
+.lbar{width:160px;height:1px;background:var(--border);overflow:hidden;position:relative;}
+.lbar::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:slide 1.4s infinite;}
 @keyframes slide{to{left:100%;}}
-.loading-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:32px;}
-.loading-t{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--card2);border:1px solid var(--accent-dim);padding:10px 16px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--accent);z-index:9999;animation:fadeUp .25s ease;display:none;}
-.divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
-.flex-between{display:flex;justify-content:space-between;align-items:center;}
-.gap-row{display:flex;gap:8px;align-items:center;}
-.mt8{margin-top:8px;}.mt14{margin-top:14px;}.mb14{margin-bottom:14px;}
-.text-muted{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
-.text-accent{color:var(--accent);}.text-green{color:var(--green);}.text-white{color:var(--white);}
-.base-item-id{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);margin-top:2px;}
-.base-connect-banner{display:flex;align-items:center;justify-content:space-between;background:rgba(200,169,110,.08);border:1px solid var(--accent-dim);padding:12px 16px;margin-bottom:16px;gap:12px;}
-.base-summary{display:flex;gap:0;background:var(--card);border:1px solid var(--border);overflow:hidden;margin-bottom:14px;}
-.base-summary-stat{flex:1;padding:12px;text-align:center;border-right:1px solid var(--border);}
-.base-summary-stat:last-child{border-right:none;}
-.base-summary-v{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--accent);}
-.base-summary-l{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
-.base-rank-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);margin-bottom:4px;}
-.base-rank-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);width:16px;flex-shrink:0;}
-.base-rank-icon{font-size:18px;flex-shrink:0;}
-.base-rank-info{flex:1;}
-.base-rank-name{font-size:11px;color:var(--text);}
-.base-rank-price{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);}
-.base-rank-stock{font-family:'DM Mono',monospace;font-size:9px;flex-shrink:0;}
-.base-setup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;}
-.base-setup-overlay.show{display:flex;}
-.base-setup-modal{background:var(--deep);border:1px solid var(--border2);width:min(640px,95vw);max-height:90vh;overflow-y:auto;animation:fadeUp .25s ease;}
-.base-modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--deep);z-index:10;}
-.base-modal-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;letter-spacing:.08em;color:var(--white);}
-.base-modal-close{width:28px;height:28px;background:none;border:1px solid var(--border);color:var(--muted2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.base-modal-body{padding:24px;}
-.base-status-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid;}
-.base-status-badge.connected{color:var(--green);border-color:var(--green-dim);}
-.base-status-badge.disconnected{color:var(--muted);border-color:var(--border);}
-.base-step{background:var(--card);border:1px solid var(--border);padding:16px;margin-bottom:12px;}
-.base-step-num{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
-.base-step-title{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;color:var(--white);margin-bottom:6px;}
-.base-step-desc{font-size:10px;color:var(--muted2);line-height:1.7;margin-bottom:10px;}
-.base-log{background:var(--surface);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:10px;padding:10px;max-height:100px;overflow-y:auto;margin-top:10px;color:var(--muted2);}
-.base-log-line{padding:1px 0;line-height:1.6;}
-.base-sync-bar-wrap{background:var(--border);height:2px;margin:8px 0;overflow:hidden;}
-.base-sync-bar{height:100%;background:var(--accent);transition:width .8s ease;width:0%;}
-.base-info-row{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted2);padding:4px 0;border-bottom:1px solid var(--border);}
-.base-info-row:last-child{border-bottom:none;}
-.base-auth-link{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--accent-dim);padding:6px 12px;text-decoration:none;margin-top:8px;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px;}
-.cal-header{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--muted);text-align:center;padding:4px 0;text-transform:uppercase;}
-.cal-day{background:var(--surface);border:1px solid var(--border);min-height:64px;padding:5px;cursor:pointer;transition:all .2s;}
-.cal-day.has-post{border-color:var(--accent-dim);background:var(--accent-glow);}
-.cal-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted2);margin-bottom:3px;}
-.cal-dot{width:5px;height:5px;border-radius:50%;margin:1px 0;}
-.cal-dot.ig{background:var(--ig);}
-.cal-dot.tk{background:var(--tk);}
-.cal-dot.x-tw{background:var(--x);}
-.cal-dot.yt{background:var(--yt);}
-::-webkit-scrollbar{width:3px;height:3px;}
-::-webkit-scrollbar-thumb{background:var(--border);}
+.lwrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px;}
+.lt{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;}
+.toast{position:fixed;bottom:16px;right:16px;background:var(--card);border:1px solid var(--accent-dim);padding:9px 14px;font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);z-index:9999;display:none;animation:fu .25s ease;}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="topbar">
-  <div class="logo">ADWENS <em>AI</em><div style="width:1px;height:18px;background:var(--border2)"></div><div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--muted2);text-transform:uppercase">Brand Intelligence Studio</div></div>
+  <div class="logo">ADWENS <em>AI</em><span style="width:1px;height:16px;background:var(--border2);display:inline-block;margin:0 8px"></span><span style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--muted2);text-transform:uppercase">Brand Intelligence Studio</span></div>
   <div class="topbar-right">
-    <div class="tb-badge" id="base-topbar-badge">Shop: <span>BASE未接続</span></div>
-    <div class="tb-badge">Brand: <span>ADWENS</span></div>
+    <div class="tb-badge" id="base-tb">Shop: <span>BASE未接続</span></div>
+    <div class="tb-badge">Brand: <span style="color:var(--text)">ADWENS</span></div>
     <div class="pulse"></div>
   </div>
 </header>
 <nav class="icon-nav">
-  <button class="icon-nav-btn active" onclick="switchModule('agents',this)">✦</button>
-  <button class="icon-nav-btn" onclick="switchModule('sns',this)">◎</button>
-  <button class="icon-nav-btn" onclick="switchModule('vision',this)">◈</button>
-  <button class="icon-nav-btn" onclick="switchModule('shop',this)">▤</button>
-  <div class="nav-divider"></div>
-  <button class="icon-nav-btn" onclick="switchModule('model',this)">◯</button>
+  <button class="inb active" onclick="switchMod('agents',this)">✦</button>
+  <button class="inb" onclick="switchMod('sns',this)">◎</button>
+  <button class="inb" onclick="switchMod('vision',this)">◈</button>
+  <button class="inb" onclick="switchMod('shop',this)">▤</button>
+  <div class="ndiv"></div>
+  <button class="inb" onclick="switchMod('model',this)">◯</button>
 </nav>
-<aside class="sidebar" id="sidebar">
-  <div class="sb-section" id="sb-agents">
+<aside class="sidebar">
+  <div id="sb-agents">
     <div class="sb-label">AIエージェント</div>
-    <button class="sb-btn active" onclick="selectAgent(this,'director')"><div class="sb-icon">✦</div>ディレクター</button>
-    <button class="sb-btn" onclick="selectAgent(this,'designer')"><div class="sb-icon">✐</div>デザイナー</button>
-    <button class="sb-btn" onclick="selectAgent(this,'md')"><div class="sb-icon">▤</div>MD</button>
-    <button class="sb-btn" onclick="selectAgent(this,'production')"><div class="sb-icon">◈</div>生産管理</button>
-    <button class="sb-btn" onclick="selectAgent(this,'vmd')"><div class="sb-icon">◻</div>VMD</button>
-    <button class="sb-btn" onclick="selectAgent(this,'press')"><div class="sb-icon">◉</div>プレス</button>
-    <button class="sb-btn" onclick="selectAgent(this,'buyer')"><div class="sb-icon">◎</div>バイヤー</button>
-    <button class="sb-btn" onclick="selectAgent(this,'crm')"><div class="sb-icon">◍</div>CRM</button>
-    <div class="sb-label" style="margin-top:14px">SNSエージェント</div>
-    <button class="sb-btn" onclick="selectAgent(this,'sns_strategist')"><div class="sb-icon">◈</div>SNS戦略<div class="sb-badge">NEW</div></button>
-    <button class="sb-btn" onclick="selectAgent(this,'content')"><div class="sb-icon">◎</div>コンテンツ制作</button>
-    <button class="sb-btn" onclick="selectAgent(this,'algo')"><div class="sb-icon">◉</div>アルゴリズム</button>
+    <button class="sbb active" onclick="selAgent(this,'director')"><div class="sbi">✦</div>ディレクター</button>
+    <button class="sbb" onclick="selAgent(this,'designer')"><div class="sbi">✐</div>デザイナー</button>
+    <button class="sbb" onclick="selAgent(this,'md')"><div class="sbi">▤</div>MD</button>
+    <button class="sbb" onclick="selAgent(this,'production')"><div class="sbi">◈</div>生産管理</button>
+    <button class="sbb" onclick="selAgent(this,'vmd')"><div class="sbi">◻</div>VMD</button>
+    <button class="sbb" onclick="selAgent(this,'press')"><div class="sbi">◉</div>プレス</button>
+    <button class="sbb" onclick="selAgent(this,'buyer')"><div class="sbi">◎</div>バイヤー</button>
+    <button class="sbb" onclick="selAgent(this,'crm')"><div class="sbi">◍</div>CRM</button>
+    <div class="sb-label" style="margin-top:10px">SNSエージェント</div>
+    <button class="sbb" onclick="selAgent(this,'sns_str')"><div class="sbi">◈</div>SNS戦略<div class="sbbadge">NEW</div></button>
+    <button class="sbb" onclick="selAgent(this,'content')"><div class="sbi">◎</div>コンテンツ制作</button>
+    <button class="sbb" onclick="selAgent(this,'algo')"><div class="sbi">◉</div>アルゴリズム</button>
   </div>
-  <div class="sb-section" id="sb-sns" style="display:none">
+  <div id="sb-sns" style="display:none">
     <div class="sb-label">SNS管理</div>
-    <button class="sb-btn" onclick="showSnsPanel('accounts',this)"><div class="sb-icon">◎</div>アカウント連携</button>
-    <button class="sb-btn" onclick="showSnsPanel('trend',this)"><div class="sb-icon">↑</div>トレンドリサーチ</button>
-    <button class="sb-btn" onclick="showSnsPanel('schedule',this)"><div class="sb-icon">▦</div>投稿スケジュール</button>
-    <button class="sb-btn" onclick="showSnsPanel('analytics',this)"><div class="sb-icon">◈</div>アナリティクス</button>
-    <button class="sb-btn" onclick="showSnsPanel('video',this)"><div class="sb-icon">▶</div>動画構成<div class="sb-badge">AI</div></button>
-    <button class="sb-btn" onclick="showSnsPanel('caption',this)"><div class="sb-icon">✐</div>キャプション生成</button>
-    <button class="sb-btn" onclick="showSnsPanel('algorithm',this)"><div class="sb-icon">◉</div>アルゴリズム最適化</button>
+    <button class="sbb" onclick="showSns('accounts',this)"><div class="sbi">◎</div>アカウント連携</button>
+    <button class="sbb" onclick="showSns('trend',this)"><div class="sbi">↑</div>トレンドリサーチ</button>
+    <button class="sbb" onclick="showSns('schedule',this)"><div class="sbi">▦</div>投稿スケジュール</button>
+    <button class="sbb" onclick="showSns('analytics',this)"><div class="sbi">◈</div>アナリティクス</button>
+    <button class="sbb" onclick="showSns('video',this)"><div class="sbi">▶</div>動画構成<div class="sbbadge">AI</div></button>
+    <button class="sbb" onclick="showSns('caption',this)"><div class="sbi">✐</div>キャプション生成</button>
+    <button class="sbb" onclick="showSns('algorithm',this)"><div class="sbi">◉</div>アルゴリズム最適化</button>
   </div>
-  <div class="sb-section" id="sb-vision" style="display:none">
+  <div id="sb-vision" style="display:none">
     <div class="sb-label">ビジョン生成</div>
-    <button class="sb-btn" onclick="showVisionPanel('feed',this)"><div class="sb-icon">⊞</div>フィード画像<div class="sb-badge">AI</div></button>
-    <button class="sb-btn" onclick="showVisionPanel('tryon',this)"><div class="sb-icon">◈</div>Try-On</button>
-    <button class="sb-btn" onclick="showVisionPanel('video_gen',this)"><div class="sb-icon">▶</div>動画生成<div class="sb-badge">AI</div></button>
+    <button class="sbb" onclick="showVis('feed',this)"><div class="sbi">⊞</div>フィード画像<div class="sbbadge">AI</div></button>
+    <button class="sbb" onclick="showVis('tryon',this)"><div class="sbi">◈</div>Try-On</button>
+    <button class="sbb" onclick="showVis('videogen',this)"><div class="sbi">▶</div>動画生成<div class="sbbadge">AI</div></button>
   </div>
-  <div class="sb-section" id="sb-shop" style="display:none">
+  <div id="sb-shop" style="display:none">
     <div class="sb-label">ショップ連携</div>
-    <button class="sb-btn" onclick="showShopPanel('products',this)"><div class="sb-icon">▤</div>商品一覧</button>
-    <button class="sb-btn" onclick="showShopPanel('advice',this)"><div class="sb-icon">✦</div>ショップ改善AI<div class="sb-badge">AI</div></button>
-    <button class="sb-btn" onclick="showShopPanel('base_code',this)"><div class="sb-icon">◉</div>BASEコード生成</button>
-    <button class="sb-btn" onclick="showShopPanel('sns_link',this)"><div class="sb-icon">◎</div>SNS×商品連携</button>
+    <button class="sbb" onclick="showShop('products',this)"><div class="sbi">▤</div>商品一覧</button>
+    <button class="sbb" onclick="showShop('advice',this)"><div class="sbi">✦</div>ショップ改善AI<div class="sbbadge">AI</div></button>
+    <button class="sbb" onclick="showShop('basecode',this)"><div class="sbi">◉</div>BASEコード生成</button>
+    <button class="sbb" onclick="showShop('snslink',this)"><div class="sbi">◎</div>SNS×商品連携</button>
   </div>
-  <div class="sb-section" id="sb-model" style="display:none">
+  <div id="sb-model" style="display:none">
     <div class="sb-label">AIモデル管理</div>
-    <button class="sb-btn" onclick="showModelPanel('list')"><div class="sb-icon">◯</div>モデル一覧</button>
-    <button class="sb-btn" onclick="showModelPanel('train')"><div class="sb-icon">◈</div>新規学習</button>
+    <button class="sbb" onclick="showModel('list')"><div class="sbi">◯</div>モデル一覧</button>
+    <button class="sbb" onclick="showModel('dna')"><div class="sbi">✦</div>Brand DNA</button>
   </div>
 </aside>
 <main class="main">
-  <!-- AGENT PANEL -->
-  <div class="panel active" id="panel-agent">
-    <div class="ph">
-      <div class="ph-left">
-        <div class="ph-cat" id="agent-role">CREATIVE DIRECTOR</div>
-        <div class="ph-title" id="agent-name">ADWENS Director AI</div>
-        <div class="ph-desc" id="agent-desc">ブランド戦略・コレクション方向性・クリエイティブ判断を担当</div>
+<div class="panel active" id="panel-agent">
+  <div class="ph">
+    <div><div class="ph-cat" id="ar">CREATIVE DIRECTOR</div><div class="ph-title" id="an">ADWENS Director AI</div><div class="ph-desc" id="ad">ブランド戦略・コレクション方向性・クリエイティブ判断を担当</div></div>
+    <div class="ph-right"><div class="ph-tag on">ADWENS Brand Loaded</div></div>
+  </div>
+  <div class="msgs" id="msgs">
+    <div class="ws" id="ws">
+      <div class="wm">A</div>
+      <div class="wt" id="wt">ADWENS Director AI</div>
+      <div class="wd" id="wd">ブランドコンセプト「憧れを、現実に。」を軸に、コレクション戦略・クリエイティブ方針についてご相談ください。</div>
+      <div class="chips" id="wc">
+        <div class="chip" onclick="sendChip(this)">SS26のコンセプトを整理したい</div>
+        <div class="chip" onclick="sendChip(this)">SNS戦略を立てたい</div>
+        <div class="chip" onclick="sendChip(this)">BASEショップを改善したい</div>
+        <div class="chip" onclick="sendChip(this)">競合ブランドを分析したい</div>
       </div>
-      <div class="ph-right"><div class="ph-tag on">ADWENS Brand Loaded</div></div>
-    </div>
-    <div class="messages" id="messages">
-      <div class="welcome-screen" id="welcome-sc">
-        <div class="w-mark">A</div>
-        <div class="w-title" id="w-title">ADWENS Director AI</div>
-        <div class="w-sub" id="w-sub">ブランドコンセプト「憧れを、現実に。」を軸に、コレクション戦略・クリエイティブ方針についてご相談ください。</div>
-        <div class="chips" id="agent-chips">
-          <div class="chip" onclick="sendChip(this)">SS26のコンセプトを整理したい</div>
-          <div class="chip" onclick="sendChip(this)">ターゲット像を深掘りしたい</div>
-          <div class="chip" onclick="sendChip(this)">SNS戦略を立てたい</div>
-          <div class="chip" onclick="sendChip(this)">BASEショップを改善したい</div>
-        </div>
-      </div>
-    </div>
-    <div class="chat-input-area">
-      <div class="chat-input-wrap"><textarea class="chat-inp" id="chat-inp" placeholder="AIエージェントに相談する..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea></div>
-      <button class="send-btn" id="send-btn" onclick="sendMsg()">→</button>
     </div>
   </div>
-  <!-- SNS PANEL -->
-  <div class="panel" id="panel-sns">
-    <div class="panel active" id="sns-accounts" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">SNS MANAGEMENT</div><div class="ph-title">アカウント連携</div><div class="ph-desc">ADWENSの各SNSアカウントを連携・管理</div></div><div class="ph-right"><button class="btn-sm btn-p" onclick="showToast('全アカウントを同期中...')">全て同期</button></div></div>
-      <div class="scroll-body">
-        <div class="sec-title">連携アカウント</div>
-        <div class="sns-account-row"><div class="sa-left"><div class="sa-icon" style="background:rgba(193,53,132,.15)">📷</div><div><div class="sa-name">Instagram</div><div class="sa-handle">@adwens_official</div></div></div><div class="sa-right"><button class="connect-btn connect" onclick="connectSNS(this,'Instagram')">Connect</button></div></div>
-        <div class="sns-account-row"><div class="sa-left"><div class="sa-icon" style="background:rgba(255,0,80,.1)">🎵</div><div><div class="sa-name">TikTok</div><div class="sa-handle">@adwens</div></div></div><div class="sa-right"><button class="connect-btn connect" onclick="connectSNS(this,'TikTok')">Connect</button></div></div>
-        <div class="sns-account-row"><div class="sa-left"><div class="sa-icon" style="background:rgba(255,0,0,.1)">▶</div><div><div class="sa-name">YouTube</div><div class="sa-handle">@ADWENS</div></div></div><div class="sa-right"><button class="connect-btn connect" onclick="connectSNS(this,'YouTube')">Connect</button></div></div>
-        <div class="sns-account-row"><div class="sa-left"><div class="sa-icon" style="background:rgba(224,224,224,.07)">✕</div><div><div class="sa-name">X (Twitter)</div><div class="sa-handle">@adwens_jp</div></div></div><div class="sa-right"><button class="connect-btn connect" onclick="connectSNS(this,'X')">Connect</button></div></div>
-        <div class="sns-account-row"><div class="sa-left"><div class="sa-icon">◎</div><div><div class="sa-name">Threads</div><div class="sa-handle">@adwens_official</div></div></div><div class="sa-right"><button class="connect-btn connect" onclick="connectSNS(this,'Threads')">Connect</button></div></div>
-        <div class="divider"></div>
-        <div class="sec-title">動画パフォーマンス検証</div>
-        <div class="card" style="margin-bottom:14px">
-          <div class="card-label">過去の投稿を分析して再生数を伸ばすための改善点をAIが提案</div>
-          <div class="mt8 btn-row"><button class="btn-p" onclick="analyzeVideos()">動画を検証する</button></div>
-          <div id="video-analysis" style="margin-top:12px;display:none">
-            <div class="loading-wrap" id="va-loading"><div class="loading-bar"></div><div class="loading-t">動画データを分析中...</div></div>
-            <div id="va-result" style="display:none">
-              <div class="progress-row">
-                <div class="prog-item"><div class="prog-header"><span class="prog-key">フック強度（冒頭3秒）</span><span class="prog-val">62%</span></div><div class="prog-bar"><div class="prog-fill" style="width:62%"></div></div></div>
-                <div class="prog-item"><div class="prog-header"><span class="prog-key">視聴維持率</span><span class="prog-val">48%</span></div><div class="prog-bar"><div class="prog-fill" style="width:48%"></div></div></div>
-                <div class="prog-item"><div class="prog-header"><span class="prog-key">エンゲージメント率</span><span class="prog-val">3.2%</span></div><div class="prog-bar"><div class="prog-fill green" style="width:32%"></div></div></div>
-              </div>
-              <div class="card mt8" style="border-color:var(--accent-dim);background:var(--accent-glow)"><div class="card-label" style="color:var(--accent)">AI改善提案</div><div style="font-size:11px;color:var(--text);line-height:1.8;margin-top:6px">冒頭1秒でブランドの世界観を提示してください。ダークでエッジの立ったビジュアルのフックから入ることで視聴維持率が推定+18%改善します。</div></div>
+  <div class="cia">
+    <div class="ciw"><textarea class="ci" id="ci" placeholder="AIエージェントに相談する..." rows="1" onkeydown="hk(event)" oninput="ar2(this)"></textarea></div>
+    <button class="sbtn" id="sb2" onclick="sendMsg()">→</button>
+  </div>
+</div>
+<div class="panel" id="panel-sns">
+  <div class="panel active" id="sns-accounts" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">SNS MANAGEMENT</div><div class="ph-title">アカウント連携</div><div class="ph-desc">ADWENSの各SNSアカウントを連携・管理</div></div><div class="ph-right"><button class="bp bsm" onclick="toast('全アカウントを同期中...')">全て同期</button></div></div>
+    <div class="sb">
+      <div class="st">連携アカウント</div>
+      <div class="sar"><div class="sal"><div class="sai" style="background:rgba(193,53,132,.15)">📷</div><div><div class="san">Instagram</div><div class="sah">@adwens_official</div></div></div><button class="cbtn disc" onclick="connSNS(this,'Instagram')">Connect</button></div>
+      <div class="sar"><div class="sal"><div class="sai" style="background:rgba(255,0,80,.1)">🎵</div><div><div class="san">TikTok</div><div class="sah">@adwens</div></div></div><button class="cbtn disc" onclick="connSNS(this,'TikTok')">Connect</button></div>
+      <div class="sar"><div class="sal"><div class="sai" style="background:rgba(255,0,0,.1)">▶</div><div><div class="san">YouTube</div><div class="sah">@ADWENS</div></div></div><button class="cbtn disc" onclick="connSNS(this,'YouTube')">Connect</button></div>
+      <div class="sar"><div class="sal"><div class="sai">✕</div><div><div class="san">X (Twitter)</div><div class="sah">@adwens_jp</div></div></div><button class="cbtn disc" onclick="connSNS(this,'X')">Connect</button></div>
+      <div class="sar"><div class="sal"><div class="sai">◎</div><div><div class="san">Threads</div><div class="sah">@adwens_official</div></div></div><button class="cbtn disc" onclick="connSNS(this,'Threads')">Connect</button></div>
+      <div class="divider"></div>
+      <div class="st">動画パフォーマンス検証</div>
+      <div class="card mb10"><div class="cl">過去の投稿を分析して再生数を伸ばすための改善点をAIが提案</div>
+        <div class="br mt6"><button class="bp" onclick="analyzeVid()">動画を検証する</button></div>
+        <div id="va" style="display:none;margin-top:10px">
+          <div class="lwrap" id="val"><div class="lbar"></div><div class="lt">動画データを分析中...</div></div>
+          <div id="var2" style="display:none">
+            <div class="pr">
+              <div><div class="ph2"><span class="pk">フック強度（冒頭3秒）</span><span class="pv">62%</span></div><div class="pb2"><div class="pf" style="width:62%"></div></div></div>
+              <div><div class="ph2"><span class="pk">視聴維持率</span><span class="pv">48%</span></div><div class="pb2"><div class="pf" style="width:48%"></div></div></div>
+              <div><div class="ph2"><span class="pk">エンゲージメント率</span><span class="pv">3.2%</span></div><div class="pb2"><div class="pf green" style="width:32%"></div></div></div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="panel" id="sns-trend" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">SNS RESEARCH</div><div class="ph-title">トレンドリサーチ</div><div class="ph-desc">各SNSのリアルタイムトレンドをAIが収集・分析</div></div><div class="ph-right"><button class="btn-sm btn-p" onclick="loadTrends()">更新</button></div></div>
-      <div class="scroll-body">
-        <div class="grid-2 mb14"><div><div class="sec-title">Instagram</div><div id="ig-trends"></div></div><div><div class="sec-title">TikTok</div><div id="tk-trends"></div></div></div>
-        <div class="grid-2"><div><div class="sec-title">X (Twitter)</div><div id="x-trends"></div></div><div><div class="sec-title">YouTube</div><div id="yt-trends"></div></div></div>
-      </div>
-    </div>
-    <div class="panel" id="sns-schedule" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">POST SCHEDULING</div><div class="ph-title">投稿スケジュール</div><div class="ph-desc">全SNSへ一括投稿予約・カレンダー管理</div></div><div class="ph-right"><button class="btn-sm btn-p" onclick="showToast('新規投稿予約')">+ 新規予約</button></div></div>
-      <div class="scroll-body">
-        <div class="cal-grid"><div class="cal-header">日</div><div class="cal-header">月</div><div class="cal-header">火</div><div class="cal-header">水</div><div class="cal-header">木</div><div class="cal-header">金</div><div class="cal-header">土</div></div>
-        <div class="cal-grid" id="cal-days"></div>
-        <div class="divider"></div>
-        <div class="sec-title">一括投稿設定</div>
-        <div class="form-block">
-          <div class="fb-label">投稿内容</div>
-          <textarea class="inp inp-ta" id="bulk-content" placeholder="全SNSに投稿するキャプション..."></textarea>
-          <div class="mt8 fb-label">投稿先SNS</div>
-          <div class="gap-row mt8" style="flex-wrap:wrap;gap:6px">
-            <div class="sns-badge ig on" onclick="toggleBadge(this)">📷 Instagram</div>
-            <div class="sns-badge tk on" onclick="toggleBadge(this)">🎵 TikTok</div>
-            <div class="sns-badge yt on" onclick="toggleBadge(this)">▶ YouTube</div>
-            <div class="sns-badge x-tw on" onclick="toggleBadge(this)">✕ X</div>
-          </div>
-          <div class="mt8 fb-label">投稿日時</div>
-          <input type="datetime-local" class="inp" id="post-datetime" style="color:var(--text)">
-          <div class="btn-row mt8"><button class="btn-p" onclick="schedulePost()">投稿を予約する</button></div>
-        </div>
-        <div class="sec-title">予約済み投稿</div>
-        <div id="scheduled-posts"></div>
-      </div>
-    </div>
-    <div class="panel" id="sns-analytics" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">ANALYTICS</div><div class="ph-title">アナリティクス</div><div class="ph-desc">再生数・エンゲージメント・フォロワー推移をAI分析</div></div></div>
-      <div class="scroll-body">
-        <div class="grid-4 mb14">
-          <div class="card card-sm"><div class="card-label">総リーチ</div><div class="card-value">—</div><div class="card-sub">SNS接続後に表示</div></div>
-          <div class="card card-sm"><div class="card-label">エンゲージメント率</div><div class="card-value">—</div></div>
-          <div class="card card-sm"><div class="card-label">フォロワー増減</div><div class="card-value">—</div></div>
-          <div class="card card-sm"><div class="card-label">最高再生数</div><div class="card-value">—</div></div>
-        </div>
-        <div class="card" style="border-color:var(--accent-dim);background:var(--accent-glow)"><div class="card-label" style="color:var(--accent)">AIインサイト</div><div style="font-size:11px;color:var(--text);line-height:1.8;margin-top:6px">SNSアカウントを連携すると、AIがリアルタイムでデータを分析し、最適な投稿時間・コンテンツ形式・ハッシュタグ戦略を提案します。</div></div>
-      </div>
-    </div>
-    <div class="panel" id="sns-video" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">VIDEO COMPOSITION</div><div class="ph-title">動画構成 AI</div><div class="ph-desc">ADWENSの商品を使った動画構成をAIが自動生成</div></div></div>
-      <div class="scroll-body">
-        <div class="form-block">
-          <div class="fb-label">使用商品</div>
-          <select class="inp" id="video-product" style="cursor:pointer"><option value="">商品を選択...</option><option>オーバーサイズコート — ¥38,000</option><option>モノトーンセットアップ — ¥28,000</option><option>ワイドデニム — ¥18,000</option></select>
-          <div class="mt8 fb-label">動画スタイル</div>
-          <div class="grid-2 mt8" style="gap:8px">
-            <div class="sel-card on" onclick="selectCard(this)"><div class="sc-label">Style 01</div><div class="sc-title">ルックブック型</div></div>
-            <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">Style 02</div><div class="sc-title">GRWM型</div></div>
-            <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">Style 03</div><div class="sc-title">トレンド乗り型</div></div>
-            <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">Style 04</div><div class="sc-title">ストリート型</div></div>
-          </div>
-          <div class="btn-row mt8"><button class="btn-p" onclick="generateVideoComp()">動画構成を生成</button></div>
-        </div>
-        <div id="video-comp-result" style="display:none">
-          <div class="sec-title">生成された動画構成</div>
-          <div class="video-comp-card">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;color:var(--white)">ADWENS SS26 — ルックブック Reels</div><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2)">推奨尺: 30sec</div></div>
-            <div class="scene-row" id="scene-row"></div>
-            <div class="card" style="background:var(--accent-glow);border-color:var(--accent-dim)"><div class="card-label" style="color:var(--accent)">AI補足</div><div id="vc-ai-note" style="font-size:11px;color:var(--text);line-height:1.8;margin-top:4px"></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="panel" id="sns-caption" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">CAPTION & TAG</div><div class="ph-title">キャプション & タグ生成</div><div class="ph-desc">動画・画像に最適なキャプションとハッシュタグをAIが提案</div></div></div>
-      <div class="scroll-body">
-        <div class="form-block">
-          <div class="fb-label">コンテンツ説明</div>
-          <textarea class="inp inp-ta" id="cap-desc" placeholder="例: SS26オーバーサイズコートのルックブック..."></textarea>
-          <div class="mt8 fb-label">生成対象SNS</div>
-          <div class="gap-row mt8" style="gap:6px;flex-wrap:wrap">
-            <div class="sns-badge ig on" onclick="toggleBadge(this)">Instagram</div>
-            <div class="sns-badge tk on" onclick="toggleBadge(this)">TikTok</div>
-            <div class="sns-badge x-tw on" onclick="toggleBadge(this)">X</div>
-          </div>
-          <div class="btn-row mt8"><button class="btn-p" onclick="generateCaption()">AIでキャプション生成</button></div>
-        </div>
-        <div id="caption-results" style="display:none">
-          <div class="sec-title">生成結果</div>
-          <div class="caption-result"><div class="cap-platform">📷 Instagram</div><div class="cap-text" id="cap-ig-text"></div><div class="cap-tags" id="cap-ig-tags"></div><div class="btn-row mt8"><button class="btn-sm btn-o" onclick="copyCaption('cap-ig-text')">コピー</button><button class="btn-sm btn-o" onclick="showToast('Instagramへ投稿予約しました')">予約投稿</button></div></div>
-          <div class="caption-result"><div class="cap-platform">🎵 TikTok</div><div class="cap-text" id="cap-tk-text"></div><div class="cap-tags" id="cap-tk-tags"></div><div class="btn-row mt8"><button class="btn-sm btn-o" onclick="copyCaption('cap-tk-text')">コピー</button><button class="btn-sm btn-o" onclick="showToast('TikTokへ投稿予約しました')">予約投稿</button></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="panel" id="sns-algorithm" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">ALGORITHM OPTIMIZATION</div><div class="ph-title">アルゴリズム最適化</div><div class="ph-desc">各SNSの最新アルゴリズムに基づいたコンテンツ戦略を提案</div></div></div>
-      <div class="scroll-body">
-        <div class="grid-2 mb14">
-          <div><div class="sec-title">Instagram 2026</div><div class="algo-panel"><div style="display:flex;align-items:center;gap:16px;margin-bottom:12px"><div><div class="algo-score-big">A</div><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">推奨度スコア</div></div><div style="flex:1"><div class="progress-row"><div class="prog-item"><div class="prog-header"><span class="prog-key">Reels優先度</span><span class="prog-val">92%</span></div><div class="prog-bar"><div class="prog-fill" style="width:92%"></div></div></div><div class="prog-item"><div class="prog-header"><span class="prog-key">シェア率重要性</span><span class="prog-val">88%</span></div><div class="prog-bar"><div class="prog-fill" style="width:88%"></div></div></div></div></div></div><div class="card-label">2026年4月 更新ポイント</div><div style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px">• コレクション機能での保存がリーチに直結<br>• 字幕入り動画の露出が+34%<br>• 最適投稿時間: 20:00-22:00</div></div></div>
-          <div><div class="sec-title">TikTok 2026</div><div class="algo-panel"><div style="display:flex;align-items:center;gap:16px;margin-bottom:12px"><div><div class="algo-score-big">S</div><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">拡散ポテンシャル</div></div><div style="flex:1"><div class="progress-row"><div class="prog-item"><div class="prog-header"><span class="prog-key">視聴完了率</span><span class="prog-val">96%</span></div><div class="prog-bar"><div class="prog-fill" style="width:96%"></div></div></div><div class="prog-item"><div class="prog-header"><span class="prog-key">コメント率</span><span class="prog-val">90%</span></div><div class="prog-bar"><div class="prog-fill" style="width:90%"></div></div></div></div></div></div><div class="card-label">2026年4月 更新ポイント</div><div style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px">• 1秒以内のフックが必須<br>• 最適尺: 21〜34秒<br>• トレンドサウンドは72時間以内</div></div></div>
-        </div>
-        <div class="sec-title">ADWENS向け最適化チェックリスト</div>
-        <div class="card"><div id="algo-checklist"></div><div class="btn-row mt8"><button class="btn-p" onclick="runAlgoCheck()">AIでスコアを計算</button></div></div>
-      </div>
-    </div>
-  </div>  <!-- VISION PANEL -->
-  <div class="panel" id="panel-vision">
-    <div class="panel active" id="vision-feed" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">FEED IMAGE GENERATION</div><div class="ph-title">フィード画像生成</div><div class="ph-desc">ADWENSブランドのSNSフィード画像をAIが生成</div></div><div class="ph-right"><div class="ph-tag on">AW-01 LoRA Active</div></div></div>
-      <div class="scroll-body">
-        <div class="sec-title">生成タイプ</div>
-        <div class="grid-4 mb14">
-          <div class="sel-card on" onclick="selectCard(this)"><div class="sc-label">01</div><div class="sc-title">ルックブック</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">02</div><div class="sc-title">商品スチール</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">03</div><div class="sc-title">ムードボード</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">04</div><div class="sc-title">ストーリーズ</div></div>
-        </div>
-        <div class="form-block">
-          <div class="fb-label">プロンプト</div>
-          <textarea class="inp inp-ta" id="feed-prompt" placeholder="例: モノトーンのオーバーサイズコート、都市夜景、エディトリアル..."></textarea>
-          <div class="tag-row">
-            <div class="tag" onclick="addTagToPrompt(this,'Dark street','feed-prompt')">Dark street</div>
-            <div class="tag" onclick="addTagToPrompt(this,'Mode','feed-prompt')">Mode</div>
-            <div class="tag" onclick="addTagToPrompt(this,'Editorial','feed-prompt')">Editorial</div>
-            <div class="tag" onclick="addTagToPrompt(this,'Night shot','feed-prompt')">Night shot</div>
-            <div class="tag" onclick="addTagToPrompt(this,'Monochrome','feed-prompt')">Monochrome</div>
-            <div class="tag" onclick="addTagToPrompt(this,'Urban Tokyo','feed-prompt')">Urban Tokyo</div>
-            <div class="tag" onclick="addTagToPrompt(this,'SS26','feed-prompt')">SS26</div>
-          </div>
-          <div class="btn-row mt8">
-            <button class="btn-p" onclick="generateFeedImages('3')" id="feed-gen-btn">Generate — 3枚生成</button>
-            <button class="btn-o" onclick="generateFeedImages('6')">6枚生成</button>
-            <button class="btn-o" onclick="clearFeedGen()">クリア</button>
-          </div>
-        </div>
-        <div class="sec-title">生成結果</div>
-        <div class="gen-area" id="feed-result">
-          <div class="gen-placeholder" id="feed-placeholder"><div class="gen-placeholder-icon">◈</div><p>プロンプトを入力して生成</p></div>
-          <div class="loading-wrap" id="feed-loading" style="display:none"><div class="loading-bar"></div><div class="loading-t" id="feed-loading-t">AW-01 LoRA を初期化中...</div></div>
-          <div class="gen-imgs" id="feed-imgs" style="display:none"></div>
-        </div>
-        <div class="btn-row mb14">
-          <button class="btn-o btn-sm" onclick="showToast('Instagramへ投稿予約します')">Instagramへ投稿予約</button>
-          <button class="btn-o btn-sm" onclick="generateCaption()">キャプションを生成</button>
-        </div>
-      </div>
-    </div>
-    <div class="panel" id="vision-tryon" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">VIRTUAL TRY-ON</div><div class="ph-title">着せ付け生成</div><div class="ph-desc">AIモデルAW-01にADWENS商品を着用させたビジュアルを生成</div></div><div class="ph-right"><div class="ph-tag on">Model: AW-01</div></div></div>
-      <div class="scroll-body">
-        <div class="grid-2 mb14">
-          <div><div class="sec-title">AIモデル選択</div><div class="upload-zone" onclick="showToast('AW-01を選択しました')"><div class="uz-icon">◯</div><div class="uz-label">AW-01 を使用</div><div style="font-size:9px;color:var(--accent);margin-top:4px">ブランド専属モデル</div></div></div>
-          <div><div class="sec-title">商品画像</div><div class="upload-zone" onclick="showToast('画像をアップロードしてください')"><div class="uz-icon">↑</div><div class="uz-label">画像をアップロード</div></div></div>
-        </div>
-        <div class="form-block"><div class="fb-label">スタイリング指示</div><textarea class="inp inp-ta inp-ta-sm" id="tryon-prompt" placeholder="例: ストリートスタイル、夜の都市..."></textarea></div>
-        <div class="btn-row mb14"><button class="btn-p" onclick="showToast('Try-On生成を開始します')">Try-On 生成 →</button></div>
-        <div class="gen-area"><div class="gen-placeholder"><div class="gen-placeholder-icon">◎</div><p>モデルと商品を選択して生成</p></div></div>
-      </div>
-    </div>
-    <div class="panel" id="vision-video_gen" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">AI VIDEO GENERATION</div><div class="ph-title">動画自動生成</div><div class="ph-desc">AW-01モデルを使用したSNS向け動画をAIが自動生成</div></div><div class="ph-right"><div class="ph-tag on">AW-01 + Kling AI</div></div></div>
-      <div class="scroll-body">
-        <div class="form-block">
-          <div class="fb-label">動画スクリプト / 指示</div>
-          <textarea class="inp inp-ta" id="video-gen-prompt" placeholder="例: モノトーンコートを着たAW-01が都市の夜を歩くシーン..."></textarea>
-          <div class="mt8 fb-label">動画形式</div>
-          <div class="grid-3 mt8" style="gap:8px">
-            <div class="sel-card on" onclick="selectCard(this)"><div class="sc-label">9:16</div><div class="sc-title">Reels / Shorts</div></div>
-            <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">1:1</div><div class="sc-title">フィード動画</div></div>
-            <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">16:9</div><div class="sc-title">YouTube</div></div>
-          </div>
-          <div class="btn-row mt8"><button class="btn-p" onclick="showToast('動画生成を開始します（Kling AI API接続が必要です）')">動画を生成する</button></div>
-        </div>
-        <div class="gen-area"><div class="gen-placeholder"><div class="gen-placeholder-icon">▶</div><p>動画生成後にここに表示されます</p></div></div>
-      </div>
-    </div>
-  </div>
-  <!-- SHOP PANEL -->
-  <div class="panel" id="panel-shop">
-    <div class="panel active" id="shop-products" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">BASE SHOP</div><div class="ph-title">商品一覧</div><div class="ph-desc">BASEオンラインショップと連携した商品管理</div></div><div class="ph-right"><div class="ph-tag on" id="base-topbar-badge2">BASE Connected</div><button class="btn-sm btn-p" onclick="baseSyncProducts()">同期</button></div></div>
-      <div class="scroll-body">
-        <div id="products-base-banner" class="base-connect-banner" style="display:none"><div style="font-size:11px;color:var(--text);line-height:1.7"><strong style="color:var(--accent)">BASEショップと連携</strong>すると商品データがリアルタイムで同期されます。</div><button class="btn-p btn-sm" onclick="openBaseSetup()">BASEを連携する →</button></div>
-        <div class="base-summary" id="base-stock-summary">
-          <div class="base-summary-stat"><div class="base-summary-v">—</div><div class="base-summary-l">総商品数</div></div>
-          <div class="base-summary-stat"><div class="base-summary-v">—</div><div class="base-summary-l">残少</div></div>
-          <div class="base-summary-stat"><div class="base-summary-v">—</div><div class="base-summary-l">在庫切れ</div></div>
-          <div class="base-summary-stat"><div class="base-summary-v">—</div><div class="base-summary-l">総在庫数</div></div>
-        </div>
-        <div class="sec-title">登録商品</div>
-        <div class="grid-4" id="products-grid"></div>
-        <div class="divider"></div>
-        <div class="sec-title">売上ランキング</div>
-        <div id="base-ranking"></div>
-        <div class="divider"></div>
-        <div class="sec-title">商品説明文 AI最適化・自動反映</div>
-        <div class="form-block">
-          <div class="fb-label">商品を選択</div>
-          <select class="inp" id="prod-select" style="cursor:pointer"><option value="">商品を選択...</option><option>オーバーサイズコート — ¥38,000</option><option>モノトーンセットアップ — ¥28,000</option><option>ワイドデニム — ¥18,000</option></select>
-          <div class="mt8 fb-label">既存の説明文（任意）</div>
-          <textarea class="inp inp-ta-sm inp-ta" id="prod-desc" placeholder="既存の説明文を貼り付けるか空欄でもOK..."></textarea>
-          <div class="btn-row mt8">
-            <button class="btn-p" onclick="optimizeProdDesc()">AIで説明文を生成</button>
-            <button class="btn-o" onclick="showToast('商品名もAIで生成します')">商品名も生成</button>
-          </div>
-          <div id="prod-desc-result" style="display:none;margin-top:12px">
-            <div class="card" style="border-color:var(--accent-dim);background:var(--accent-glow)">
-              <div class="card-label" style="color:var(--accent)">AI生成 — 商品説明文</div>
-              <div id="prod-desc-text" style="font-size:11px;color:var(--text);line-height:1.8;margin-top:6px"></div>
-              <div class="btn-row mt8">
-                <button class="btn-green" onclick="applyToBase()">BASEに自動反映 →</button>
-                <button class="btn-sm btn-o" onclick="copyText('prod-desc-text')">コピー</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="sec-title">BASE連携設定</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);padding:14px">
-          <div><div class="card-label">BASEショップ連携</div><div class="card-sub" style="margin-top:2px">商品データ・在庫・注文情報の自動同期</div></div>
-          <button class="btn-o" onclick="openBaseSetup()">設定を開く</button>
-        </div>
-      </div>
-    </div>
-    <div class="panel" id="shop-advice" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">SHOP AI ADVISOR</div><div class="ph-title">ショップ改善 AI</div><div class="ph-desc">BASEショップの構成・CVR改善をAIがアドバイス</div></div></div>
-      <div class="messages" id="shop-messages">
-        <div class="welcome-screen">
-          <div class="w-mark">▤</div>
-          <div class="w-title">ショップ改善 AI</div>
-          <div class="w-sub">BASEショップのUI構成・商品陳列・価格設定・CVR改善について、AIがアドバイスします。</div>
-          <div class="chips">
-            <div class="chip" onclick="sendShopChip(this)">トップページの構成を改善したい</div>
-            <div class="chip" onclick="sendShopChip(this)">商品の見せ方を最適化したい</div>
-            <div class="chip" onclick="sendShopChip(this)">カゴ落ち率を下げたい</div>
-            <div class="chip" onclick="sendShopChip(this)">価格設定のアドバイスが欲しい</div>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-area">
-        <div class="chat-input-wrap"><textarea class="chat-inp" id="shop-inp" placeholder="ショップについて相談する..." rows="1" onkeydown="handleShopKey(event)" oninput="autoResize(this)"></textarea></div>
-        <button class="send-btn" id="shop-send-btn" onclick="sendShopMsg()">→</button>
-      </div>
-    </div>
-    <div class="panel" id="shop-base_code" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">BASE CODE GENERATOR</div><div class="ph-title">BASEコード生成</div><div class="ph-desc">BASEショッピングカートに追加できるHTMLコードをAIが生成</div></div></div>
-      <div class="scroll-body">
-        <div class="sec-title">生成するコンポーネント</div>
-        <div class="grid-2 mb14">
-          <div class="sel-card on" onclick="selectCard(this)"><div class="sc-label">01</div><div class="sc-title">商品カードバナー</div><div class="sc-desc">商品ページ上部のブランドバナー</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">02</div><div class="sc-title">SNSフォローボタン</div><div class="sc-desc">各SNSへのフォローを促すUI</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">03</div><div class="sc-title">コーディネート提案</div><div class="sc-desc">商品ページ内のスタイリング提案</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">04</div><div class="sc-title">カウントダウンタイマー</div><div class="sc-desc">セール終了までのカウントダウン</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">05</div><div class="sc-title">カスタムフッター</div><div class="sc-desc">ブランドカラーのフッターデザイン</div></div>
-          <div class="sel-card" onclick="selectCard(this)"><div class="sc-label">06</div><div class="sc-title">ポップアップ告知</div><div class="sc-desc">新作・セール告知のモーダル</div></div>
-        </div>
-        <div class="form-block">
-          <div class="fb-label">カスタマイズ指示</div>
-          <textarea class="inp inp-ta-sm inp-ta" id="base-code-prompt" placeholder="例: ADWENSのブランドカラー（黒・ゴールド）で、SS26新作を告知するバナー..."></textarea>
-          <div class="btn-row mt8"><button class="btn-p" onclick="generateBaseCode()">コードを生成</button></div>
-        </div>
-        <div id="base-code-result" style="display:none">
-          <div class="sec-title">生成されたコード</div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px"><span>HTML / CSS — BASE Custom Section</span><button class="btn-sm btn-o" onclick="copyCode()">コピー</button></div>
-          <div class="code-block" id="generated-code"></div>
-          <div class="btn-row"><button class="btn-green" onclick="showToast('BASEのカスタムセクションに貼り付けてください')">BASEに適用する手順を見る</button></div>
-        </div>
-      </div>
-    </div>
-    <div class="panel" id="shop-sns_link" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">SNS × SHOP</div><div class="ph-title">SNS × 商品連携</div><div class="ph-desc">SNS投稿に商品をタグ付けし、購買につなげる戦略をAIが提案</div></div></div>
-      <div class="scroll-body">
-        <div class="sec-title">商品 × SNS連携マップ</div>
-        <div class="grid-2 mb14">
-          <div class="card"><div class="card-label">Instagram Shopping</div><div style="font-size:11px;color:var(--text);line-height:1.8;margin-top:6px">投稿・リール・ストーリーズに商品をタグ付け。フィードから直接購買を促進します。</div><div class="btn-row mt8"><button class="btn-sm btn-o" onclick="showToast('Instagram Shopping設定を開きます')">設定する</button></div></div>
-          <div class="card"><div class="card-label">TikTok Shop</div><div style="font-size:11px;color:var(--text);line-height:1.8;margin-top:6px">動画内に商品リンクを設置。視聴から購買まで動画内で完結させます。</div><div class="btn-row mt8"><button class="btn-sm btn-o" onclick="showToast('TikTok Shop設定を開きます')">設定する</button></div></div>
-        </div>
-        <div class="sec-title">商品別 SNS投稿戦略 AI生成</div>
-        <div class="form-block">
-          <div class="fb-label">商品を選択</div>
-          <select class="inp" style="cursor:pointer" id="sns-shop-product"><option>オーバーサイズコート — ¥38,000</option><option>モノトーンセットアップ — ¥28,000</option><option>ワイドデニム — ¥18,000</option></select>
-          <div class="btn-row mt8"><button class="btn-p" onclick="generateSnsShopStrategy()">SNS投稿戦略を生成</button></div>
-          <div id="sns-shop-result" style="display:none;margin-top:12px"><div class="card" style="border-color:var(--accent-dim);background:var(--accent-glow)"><div class="card-label" style="color:var(--accent)">AI戦略提案</div><div id="sns-shop-text" style="font-size:11px;color:var(--text);line-height:1.8;margin-top:6px"></div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- MODEL PANEL -->
-  <div class="panel" id="panel-model">
-    <div class="panel active" id="model-list" style="height:100%">
-      <div class="ph"><div class="ph-left"><div class="ph-cat">BRAND AI MODEL</div><div class="ph-title">AIモデル管理</div><div class="ph-desc">ADWENSブランド専属AIモデルの管理・学習・展開</div></div><div class="ph-right"><div class="ph-tag on">AW-01 Active</div></div></div>
-      <div class="scroll-body">
-        <div class="grid-4 mb14">
-          <div class="card card-sm"><div class="card-label">登録モデル</div><div class="card-value">1</div><div class="card-sub">AW-01 稼働中</div></div>
-          <div class="card card-sm"><div class="card-label">LoRAステータス</div><div class="card-value" style="font-size:14px;color:var(--green)">完了</div><div class="card-sub">2026.04.10 学習完了</div></div>
-          <div class="card card-sm"><div class="card-label">対応機能</div><div class="card-value" style="font-size:14px">3</div><div class="card-sub">Gen / Try-On / Video</div></div>
-          <div class="card card-sm"><div class="card-label">総生成数</div><div class="card-value">—</div></div>
-        </div>
-        <div class="sec-title">登録済みモデル</div>
-        <div style="background:var(--card);border:1px solid var(--border);display:flex;overflow:hidden;margin-bottom:14px">
-          <div style="width:160px;height:200px;background:var(--surface);display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border);flex-shrink:0;flex-direction:column;gap:8px"><div style="font-size:48px;opacity:.3">🧍</div><div class="text-muted" style="font-size:8px">AW-01</div></div>
-          <div style="padding:20px;flex:1">
-            <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;letter-spacing:.08em;color:var(--white)">AW — 01</div>
-            <div class="text-muted" style="margin-bottom:14px">ADWENS-LORA-V1.0 / 2026.04</div>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <div class="flex-between"><span class="text-muted">性別</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text)">Male</span></div>
-              <div class="flex-between"><span class="text-muted">体型</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text)">183cm / スリム</span></div>
-              <div class="flex-between"><span class="text-muted">テイスト</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text)">Mode × Street</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="btn-row mb14">
-          <button class="btn-p" onclick="showToast('新規モデル登録フローを開始します')">+ 新規モデルを登録</button>
-          <button class="btn-o" onclick="showToast('AW-01の詳細設定を開きます')">AW-01 設定</button>
-        </div>
-        <div class="sec-title">Brand DNA 学習状況</div>
-        <div class="card">
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div class="flex-between"><span class="text-muted">ブランドガイドライン</span><button class="btn-sm btn-o" onclick="showToast('ファイルをアップロードしてください')">+ 追加</button></div>
-            <div class="flex-between"><span class="text-muted">過去コレクション資料</span><button class="btn-sm btn-o" onclick="showToast('ファイルをアップロードしてください')">+ 追加</button></div>
-            <div class="flex-between"><span class="text-muted">プレスリリース</span><button class="btn-sm btn-o" onclick="showToast('ファイルをアップロードしてください')">+ 追加</button></div>
-            <div class="flex-between"><span class="text-muted">SNS過去投稿データ</span><button class="btn-sm btn-o" onclick="showToast('SNSアカウントを連携してください')">SNS連携</button></div>
+            <div class="card mt6" style="border-color:var(--accent-dim);background:var(--ag)"><div class="cl" style="color:var(--accent)">AI改善提案</div><div style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px">冒頭1秒でブランドの世界観を提示してください。ダークでエッジの立ったビジュアルのフックから入ることで視聴維持率が推定+18%改善します。</div></div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="panel" id="sns-trend" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">SNS RESEARCH</div><div class="ph-title">トレンドリサーチ</div><div class="ph-desc">各SNSのリアルタイムトレンドをAIが収集・分析</div></div><div class="ph-right"><button class="bp bsm" onclick="loadTrends()">更新</button></div></div>
+    <div class="sb"><div class="g2 mb12"><div><div class="st">Instagram</div><div id="igt"></div></div><div><div class="st">TikTok</div><div id="tkt"></div></div></div><div class="g2"><div><div class="st">X (Twitter)</div><div id="xt"></div></div><div><div class="st">YouTube</div><div id="ytt"></div></div></div></div>
+  </div>
+  <div class="panel" id="sns-schedule" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">POST SCHEDULING</div><div class="ph-title">投稿スケジュール</div><div class="ph-desc">全SNSへ一括投稿予約・カレンダー管理</div></div><div class="ph-right"><button class="bp bsm" onclick="toast('新規投稿予約')">+ 新規予約</button></div></div>
+    <div class="sb">
+      <div class="cal"><div class="calh">日</div><div class="calh">月</div><div class="calh">火</div><div class="calh">水</div><div class="calh">木</div><div class="calh">金</div><div class="calh">土</div></div>
+      <div class="cal" id="cal-days"></div>
+      <div class="divider"></div>
+      <div class="st">一括投稿設定</div>
+      <div class="fb">
+        <div class="fl">投稿内容</div><textarea class="inp ta" id="bulk" placeholder="全SNSに投稿するキャプション..."></textarea>
+        <div class="fl mt6">投稿先SNS</div>
+        <div class="gap-r mt6" style="flex-wrap:wrap;gap:5px">
+          <div class="sns ig on" onclick="this.classList.toggle('on')">📷 Instagram</div>
+          <div class="sns tk on" onclick="this.classList.toggle('on')">🎵 TikTok</div>
+          <div class="sns yt on" onclick="this.classList.toggle('on')">▶ YouTube</div>
+          <div class="sns xtw on" onclick="this.classList.toggle('on')">✕ X</div>
+        </div>
+        <div class="fl mt6">投稿日時</div><input type="datetime-local" class="inp" id="pdt" style="color:var(--text)">
+        <div class="br mt6"><button class="bp" onclick="schedPost()">投稿を予約する</button></div>
+      </div>
+      <div class="st">予約済み投稿</div>
+      <div id="sched-posts"></div>
+    </div>
+  </div>
+  <div class="panel" id="sns-analytics" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">ANALYTICS</div><div class="ph-title">アナリティクス</div><div class="ph-desc">再生数・エンゲージメント・フォロワー推移をAI分析</div></div></div>
+    <div class="sb">
+      <div class="g4 mb12"><div class="card card-sm"><div class="cl">総リーチ</div><div class="cv">—</div><div class="cs">SNS接続後に表示</div></div><div class="card card-sm"><div class="cl">エンゲージメント率</div><div class="cv">—</div></div><div class="card card-sm"><div class="cl">フォロワー増減</div><div class="cv">—</div></div><div class="card card-sm"><div class="cl">最高再生数</div><div class="cv">—</div></div></div>
+      <div class="card" style="border-color:var(--accent-dim);background:var(--ag)"><div class="cl" style="color:var(--accent)">AIインサイト</div><div style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px">SNSアカウントを連携すると、AIがリアルタイムでデータを分析し、最適な投稿時間・コンテンツ形式・ハッシュタグ戦略を提案します。</div></div>
+    </div>
+  </div>
+  <div class="panel" id="sns-video" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">VIDEO COMPOSITION</div><div class="ph-title">動画構成 AI</div><div class="ph-desc">ADWENSの商品を使った動画構成をAIが自動生成</div></div></div>
+    <div class="sb">
+      <div class="fb">
+        <div class="fl">使用商品</div>
+        <select class="inp" id="vprod" style="cursor:pointer"><option value="">商品を選択...</option><option>オーバーサイズコート — ¥38,000</option><option>モノトーンセットアップ — ¥28,000</option><option>ワイドデニム — ¥18,000</option></select>
+        <div class="fl mt6">動画スタイル</div>
+        <div class="g2 mt6" style="gap:6px">
+          <div class="sc on" onclick="selCard(this)"><div class="sc-l">Style 01</div><div class="sc-t">ルックブック型</div></div>
+          <div class="sc" onclick="selCard(this)"><div class="sc-l">Style 02</div><div class="sc-t">GRWM型</div></div>
+          <div class="sc" onclick="selCard(this)"><div class="sc-l">Style 03</div><div class="sc-t">トレンド乗り型</div></div>
+          <div class="sc" onclick="selCard(this)"><div class="sc-l">Style 04</div><div class="sc-t">ストリート型</div></div>
+        </div>
+        <div class="br mt6"><button class="bp" onclick="genVideoComp()">動画構成を生成</button></div>
+      </div>
+      <div id="vcr" style="display:none">
+        <div class="st">生成された動画構成</div>
+        <div style="background:var(--card);border:1px solid var(--border);padding:12px">
+          <div class="flex-b mb10"><div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:300;color:var(--white)">ADWENS SS26 — ルックブック Reels</div><div class="tmuted">推奨尺: 30sec</div></div>
+          <div class="scenes" id="scenes"></div>
+          <div class="card" style="background:var(--ag);border-color:var(--accent-dim)"><div class="cl" style="color:var(--accent)">AI補足</div><div id="vcnote" style="font-size:10px;color:var(--text);line-height:1.8;margin-top:3px"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel" id="sns-caption" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">CAPTION & TAG</div><div class="ph-title">キャプション & タグ生成</div><div class="ph-desc">動画・画像に最適なキャプションとハッシュタグをAIが提案</div></div></div>
+    <div class="sb">
+      <div class="fb">
+        <div class="fl">コンテンツ説明</div><textarea class="inp ta" id="capdesc" placeholder="例: SS26オーバーサイズコートのルックブック..."></textarea>
+        <div class="fl mt6">生成対象SNS</div>
+        <div class="gap-r mt6" style="gap:5px;flex-wrap:wrap">
+          <div class="sns ig on" onclick="this.classList.toggle('on')">Instagram</div>
+          <div class="sns tk on" onclick="this.classList.toggle('on')">TikTok</div>
+          <div class="sns xtw on" onclick="this.classList.toggle('on')">X</div>
+        </div>
+        <div class="br mt6"><button class="bp" onclick="genCaption()">AIでキャプション生成</button></div>
+      </div>
+      <div id="capres" style="display:none">
+        <div class="st">生成結果</div>
+        <div class="capr"><div class="capp">📷 Instagram</div><div class="capt" id="capig"></div><div class="captags" id="capigt"></div><div class="br mt6"><button class="bsm bo" onclick="copyEl('capig')">コピー</button><button class="bsm bo" onclick="toast('Instagramへ投稿予約しました')">予約投稿</button></div></div>
+        <div class="capr"><div class="capp">🎵 TikTok</div><div class="capt" id="captk"></div><div class="captags" id="captkt"></div><div class="br mt6"><button class="bsm bo" onclick="copyEl('captk')">コピー</button><button class="bsm bo" onclick="toast('TikTokへ投稿予約しました')">予約投稿</button></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel" id="sns-algorithm" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">ALGORITHM OPTIMIZATION</div><div class="ph-title">アルゴリズム最適化</div><div class="ph-desc">各SNSの最新アルゴリズムに基づいたコンテンツ戦略を提案</div></div></div>
+    <div class="sb">
+      <div class="g2 mb12">
+        <div><div class="st">Instagram 2026</div><div class="card"><div style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--accent)">A</div><div class="pr mt6"><div><div class="ph2"><span class="pk">Reels優先度</span><span class="pv">92%</span></div><div class="pb2"><div class="pf" style="width:92%"></div></div></div><div><div class="ph2"><span class="pk">シェア率重要性</span><span class="pv">88%</span></div><div class="pb2"><div class="pf" style="width:88%"></div></div></div></div><div style="font-size:9px;color:var(--text);line-height:1.8;margin-top:8px">• 字幕入り動画の露出+34%<br>• 最適投稿時間: 20:00-22:00<br>• 保存率がリーチに直結</div></div></div>
+        <div><div class="st">TikTok 2026</div><div class="card"><div style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--accent)">S</div><div class="pr mt6"><div><div class="ph2"><span class="pk">視聴完了率</span><span class="pv">96%</span></div><div class="pb2"><div class="pf" style="width:96%"></div></div></div><div><div class="ph2"><span class="pk">コメント率</span><span class="pv">90%</span></div><div class="pb2"><div class="pf" style="width:90%"></div></div></div></div><div style="font-size:9px;color:var(--text);line-height:1.8;margin-top:8px">• 1秒以内のフックが必須<br>• 最適尺: 21〜34秒<br>• トレンドサウンドは72時間以内</div></div></div>
+      </div>
+      <div class="st">ADWENS向け最適化チェックリスト</div>
+      <div class="card"><div id="algoc"><div class="tmuted" style="text-align:center;padding:12px">"AIでスコアを計算"を押すとチェックリストが表示されます</div></div><div class="br mt6"><button class="bp" onclick="runAlgo()">AIでスコアを計算</button></div></div>
+    </div>
+  </div>
+</div>
+<div class="panel" id="panel-vision">
+  <div class="panel active" id="vision-feed" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">FEED IMAGE GENERATION</div><div class="ph-title">フィード画像生成</div><div class="ph-desc">ADWENSブランドのSNSフィード画像をAIが生成</div></div><div class="ph-right"><div class="ph-tag on">AW-01 LoRA Active</div></div></div>
+    <div class="sb">
+      <div class="g4 mb12">
+        <div class="sc on" onclick="selCard(this)"><div class="sc-l">01</div><div class="sc-t">ルックブック</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">02</div><div class="sc-t">商品スチール</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">03</div><div class="sc-t">ムードボード</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">04</div><div class="sc-t">ストーリーズ</div></div>
+      </div>
+      <div class="fb">
+        <div class="fl">プロンプト</div><textarea class="inp ta" id="fprompt" placeholder="例: モノトーンのオーバーサイズコート、都市夜景、エディトリアル..."></textarea>
+        <div class="tag-row">
+          <div class="tag" onclick="addTag(this,'Dark street','fprompt')">Dark street</div>
+          <div class="tag" onclick="addTag(this,'Mode','fprompt')">Mode</div>
+          <div class="tag" onclick="addTag(this,'Editorial','fprompt')">Editorial</div>
+          <div class="tag" onclick="addTag(this,'Night shot','fprompt')">Night shot</div>
+          <div class="tag" onclick="addTag(this,'Monochrome','fprompt')">Monochrome</div>
+          <div class="tag" onclick="addTag(this,'Urban Tokyo','fprompt')">Urban Tokyo</div>
+          <div class="tag" onclick="addTag(this,'SS26','fprompt')">SS26</div>
+        </div>
+        <div class="br mt6">
+          <button class="bp" onclick="genFeed('3')">Generate — 3枚生成</button>
+          <button class="bo" onclick="genFeed('6')">6枚生成</button>
+          <button class="bo" onclick="clearFeed()">クリア</button>
+        </div>
+      </div>
+      <div class="st">生成結果</div>
+      <div class="gen-area" id="fres">
+        <div class="gph" id="fph"><div class="gphicon">◈</div><p>プロンプトを入力して生成</p></div>
+        <div class="lwrap" id="fload" style="display:none"><div class="lbar"></div><div class="lt" id="fltext">AW-01 LoRA を初期化中...</div></div>
+        <div class="gimgs" id="fimgs" style="display:none"></div>
+      </div>
+      <div class="br mb10"><button class="bsm bo" onclick="toast('Instagramへ投稿予約します')">Instagramへ投稿予約</button><button class="bsm bo" onclick="genCaption()">キャプションを生成</button></div>
+    </div>
+  </div>
+  <div class="panel" id="vision-tryon" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">VIRTUAL TRY-ON</div><div class="ph-title">着せ付け生成</div><div class="ph-desc">AIモデルAW-01にADWENS商品を着用させたビジュアルを生成</div></div><div class="ph-right"><div class="ph-tag on">Model: AW-01</div></div></div>
+    <div class="sb">
+      <div class="g2 mb12">
+        <div><div class="st">AIモデル</div><div class="uz" onclick="toast('AW-01を選択しました')"><div style="font-size:22px;opacity:.3">◯</div><div class="tmuted">AW-01 を使用</div><div style="font-size:8px;color:var(--accent);margin-top:3px">ブランド専属モデル</div></div></div>
+        <div><div class="st">商品画像</div><div class="uz" onclick="toast('画像をアップロードしてください')"><div style="font-size:22px;opacity:.3">↑</div><div class="tmuted">画像をアップロード</div></div></div>
+      </div>
+      <div class="fb"><div class="fl">スタイリング指示</div><textarea class="inp ta ta-sm" placeholder="例: ストリートスタイル、夜の都市..."></textarea></div>
+      <div class="br mb12"><button class="bp" onclick="toast('Try-On生成を開始します')">Try-On 生成 →</button></div>
+      <div class="gen-area"><div class="gph"><div class="gphicon">◎</div><p>モデルと商品を選択して生成</p></div></div>
+    </div>
+  </div>
+  <div class="panel" id="vision-videogen" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">AI VIDEO GENERATION</div><div class="ph-title">動画自動生成</div><div class="ph-desc">AW-01モデルを使用したSNS向け動画をAIが自動生成</div></div><div class="ph-right"><div class="ph-tag on">AW-01 + Kling AI</div></div></div>
+    <div class="sb">
+      <div class="fb">
+        <div class="fl">動画スクリプト / 指示</div><textarea class="inp ta" placeholder="例: モノトーンコートを着たAW-01が都市の夜を歩くシーン..."></textarea>
+        <div class="fl mt6">動画形式</div>
+        <div class="g3 mt6" style="gap:6px">
+          <div class="sc on" onclick="selCard(this)"><div class="sc-l">9:16</div><div class="sc-t">Reels / Shorts</div></div>
+          <div class="sc" onclick="selCard(this)"><div class="sc-l">1:1</div><div class="sc-t">フィード動画</div></div>
+          <div class="sc" onclick="selCard(this)"><div class="sc-l">16:9</div><div class="sc-t">YouTube</div></div>
+        </div>
+        <div class="br mt6"><button class="bp" onclick="toast('動画生成を開始します（Kling AI API接続が必要です）')">動画を生成する</button></div>
+      </div>
+      <div class="gen-area"><div class="gph"><div class="gphicon">▶</div><p>動画生成後にここに表示されます</p></div></div>
+    </div>
+  </div>
+</div>
+<div class="panel" id="panel-shop">
+  <div class="panel active" id="shop-products" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">BASE SHOP</div><div class="ph-title">商品一覧</div><div class="ph-desc">BASEオンラインショップと連携した商品管理</div></div><div class="ph-right"><div class="ph-tag on">BASE Linked</div><button class="bp bsm" onclick="syncProducts()">同期</button></div></div>
+    <div class="sb">
+      <div id="base-banner" class="bcbanner" style="display:none"><div style="font-size:10px;color:var(--text);line-height:1.7"><strong style="color:var(--accent)">BASEショップと連携</strong>すると商品データがリアルタイムで同期されます。</div><button class="bp bsm" onclick="openBase()">BASEを連携する →</button></div>
+      <div class="base-summary" id="bsum"><div class="bss"><div class="bssv">—</div><div class="bssl">総商品数</div></div><div class="bss"><div class="bssv">—</div><div class="bssl">残少</div></div><div class="bss"><div class="bssv">—</div><div class="bssl">在庫切れ</div></div><div class="bss"><div class="bssv">—</div><div class="bssl">総在庫数</div></div></div>
+      <div class="st">登録商品</div>
+      <div class="g4" id="pgrid"></div>
+      <div class="divider"></div>
+      <div class="st">売上ランキング</div>
+      <div id="prank"></div>
+      <div class="divider"></div>
+      <div class="st">商品説明文 AI最適化・BASE自動反映</div>
+      <div class="fb">
+        <div class="fl">商品を選択</div>
+        <select class="inp" id="psel" style="cursor:pointer"><option value="">商品を選択...</option><option>オーバーサイズコート — ¥38,000</option><option>モノトーンセットアップ — ¥28,000</option><option>ワイドデニム — ¥18,000</option></select>
+        <div class="fl mt6">既存の説明文（任意）</div>
+        <textarea class="inp ta ta-sm" id="pdesc" placeholder="既存の説明文を貼り付けるか空欄でもOK..."></textarea>
+        <div class="br mt6"><button class="bp" onclick="optProd()">AIで説明文を生成</button><button class="bo" onclick="toast('商品名もAIで生成します')">商品名も生成</button></div>
+        <div id="pdres" style="display:none;margin-top:10px">
+          <div class="card" style="border-color:var(--accent-dim);background:var(--ag)">
+            <div class="cl" style="color:var(--accent)">AI生成 — 商品説明文</div>
+            <div id="pdtext" style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px"></div>
+            <div class="br mt6"><button class="bg" onclick="applyBase()">BASEに自動反映 →</button><button class="bsm bo" onclick="copyEl('pdtext')">コピー</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="st">BASE連携設定</div>
+      <div class="flex-b" style="background:var(--card);border:1px solid var(--border);padding:12px"><div><div class="cl">BASEショップ連携</div><div class="cs" style="margin-top:2px">商品データ・在庫・注文情報の自動同期</div></div><button class="bo" onclick="openBase()">設定を開く</button></div>
+    </div>
+  </div>
+  <div class="panel" id="shop-advice" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">SHOP AI ADVISOR</div><div class="ph-title">ショップ改善 AI</div><div class="ph-desc">BASEショップの構成・CVR改善をAIがアドバイス</div></div></div>
+    <div class="msgs" id="smsgs">
+      <div class="ws"><div class="wm">▤</div><div class="wt">ショップ改善 AI</div><div class="wd">BASEショップのUI構成・商品陳列・価格設定・CVR改善について、AIがアドバイスします。</div>
+        <div class="chips"><div class="chip" onclick="sendShopChip(this)">トップページの構成を改善したい</div><div class="chip" onclick="sendShopChip(this)">商品の見せ方を最適化したい</div><div class="chip" onclick="sendShopChip(this)">カゴ落ち率を下げたい</div><div class="chip" onclick="sendShopChip(this)">価格設定のアドバイスが欲しい</div></div>
+      </div>
+    </div>
+    <div class="cia"><div class="ciw"><textarea class="ci" id="si" placeholder="ショップについて相談する..." rows="1" onkeydown="hks(event)" oninput="ar2(this)"></textarea></div><button class="sbtn" id="ssb" onclick="sendShop()">→</button></div>
+  </div>
+  <div class="panel" id="shop-basecode" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">BASE CODE GENERATOR</div><div class="ph-title">BASEコード生成</div><div class="ph-desc">BASEショッピングカートに追加できるHTMLコードをAIが生成</div></div></div>
+    <div class="sb">
+      <div class="g2 mb12" style="gap:6px">
+        <div class="sc on" onclick="selCard(this)"><div class="sc-l">01</div><div class="sc-t">商品カードバナー</div><div class="sc-d">商品ページ上部のブランドバナー</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">02</div><div class="sc-t">SNSフォローボタン</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">03</div><div class="sc-t">コーディネート提案</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">04</div><div class="sc-t">カウントダウンタイマー</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">05</div><div class="sc-t">カスタムフッター</div></div>
+        <div class="sc" onclick="selCard(this)"><div class="sc-l">06</div><div class="sc-t">ポップアップ告知</div></div>
+      </div>
+      <div class="fb"><div class="fl">カスタマイズ指示</div><textarea class="inp ta ta-sm" id="bcp" placeholder="例: ADWENSのブランドカラー（黒・ゴールド）でSS26新作を告知するバナー..."></textarea><div class="br mt6"><button class="bp" onclick="genCode()">コードを生成</button></div></div>
+      <div id="bcres" style="display:none">
+        <div class="flex-b" style="margin-bottom:5px"><span class="tmuted">HTML / CSS — BASE Custom Section</span><button class="bsm bo" onclick="copyEl('bcode')">コピー</button></div>
+        <div class="codeblock" id="bcode"></div>
+        <div class="br"><button class="bg" onclick="toast('BASEのカスタムセクションに貼り付けてください')">BASEに適用する手順を見る</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel" id="shop-snslink" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">SNS × SHOP</div><div class="ph-title">SNS × 商品連携</div><div class="ph-desc">SNS投稿に商品をタグ付けし購買につなげる戦略をAIが提案</div></div></div>
+    <div class="sb">
+      <div class="g2 mb12"><div class="card"><div class="cl">Instagram Shopping</div><div style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px">投稿・リール・ストーリーズに商品をタグ付け。フィードから直接購買を促進します。</div><div class="br mt6"><button class="bsm bo" onclick="toast('Instagram Shopping設定を開きます')">設定する</button></div></div><div class="card"><div class="cl">TikTok Shop</div><div style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px">動画内に商品リンクを設置。視聴から購買まで動画内で完結させます。</div><div class="br mt6"><button class="bsm bo" onclick="toast('TikTok Shop設定を開きます')">設定する</button></div></div></div>
+      <div class="fb">
+        <div class="fl">商品を選択</div>
+        <select class="inp" id="slprod" style="cursor:pointer"><option>オーバーサイズコート — ¥38,000</option><option>モノトーンセットアップ — ¥28,000</option><option>ワイドデニム — ¥18,000</option></select>
+        <div class="br mt6"><button class="bp" onclick="genSnsShop()">SNS投稿戦略を生成</button></div>
+        <div id="slres" style="display:none;margin-top:10px"><div class="card" style="border-color:var(--accent-dim);background:var(--ag)"><div class="cl" style="color:var(--accent)">AI戦略提案</div><div id="sltext" style="font-size:10px;color:var(--text);line-height:1.8;margin-top:4px"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel" id="panel-model">
+  <div class="panel active" id="model-list" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">BRAND AI MODEL</div><div class="ph-title">AIモデル管理</div><div class="ph-desc">ADWENSブランド専属AIモデルの管理・学習・展開</div></div><div class="ph-right"><div class="ph-tag on">AW-01 Active</div></div></div>
+    <div class="sb">
+      <div class="g4 mb12"><div class="card card-sm"><div class="cl">登録モデル</div><div class="cv">1</div><div class="cs">AW-01 稼働中</div></div><div class="card card-sm"><div class="cl">LoRAステータス</div><div class="cv" style="font-size:14px;color:var(--green)">完了</div><div class="cs">2026.04.10</div></div><div class="card card-sm"><div class="cl">対応機能</div><div class="cv" style="font-size:14px">3</div><div class="cs">Gen/Try-On/Video</div></div><div class="card card-sm"><div class="cl">総生成数</div><div class="cv">—</div></div></div>
+      <div class="st">登録済みモデル</div>
+      <div style="background:var(--card);border:1px solid var(--border);display:flex;overflow:hidden;margin-bottom:12px">
+        <div style="width:140px;height:180px;background:var(--surface);display:flex;align-items:center;justify-content:center;border-right:1px solid var(--border);flex-shrink:0;flex-direction:column;gap:6px"><div style="font-size:40px;opacity:.3">🧍</div><div class="tmuted" style="font-size:7px">AW-01</div></div>
+        <div style="padding:16px;flex:1"><div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white)">AW — 01</div><div class="tmuted" style="margin-bottom:10px">ADWENS-LORA-V1.0 / 2026.04</div><div style="display:flex;flex-direction:column;gap:4px"><div class="flex-b"><span class="tmuted">性別</span><span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text)">Male</span></div><div class="flex-b"><span class="tmuted">体型</span><span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text)">183cm / スリム</span></div><div class="flex-b"><span class="tmuted">テイスト</span><span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text)">Mode × Street</span></div></div></div>
+      </div>
+      <div class="br mb12"><button class="bp" onclick="toast('新規モデル登録フローを開始します')">+ 新規モデルを登録</button><button class="bo" onclick="toast('AW-01の詳細設定を開きます')">AW-01 設定</button></div>
+      <div class="st">Brand DNA 学習状況</div>
+      <div class="card"><div style="display:flex;flex-direction:column;gap:8px"><div class="flex-b"><span class="tmuted">ブランドガイドライン</span><button class="bsm bo" onclick="toast('ファイルをアップロードしてください')">+ 追加</button></div><div class="flex-b"><span class="tmuted">過去コレクション資料</span><button class="bsm bo" onclick="toast('ファイルをアップロードしてください')">+ 追加</button></div><div class="flex-b"><span class="tmuted">プレスリリース</span><button class="bsm bo" onclick="toast('ファイルをアップロードしてください')">+ 追加</button></div><div class="flex-b"><span class="tmuted">SNS過去投稿データ</span><button class="bsm bo" onclick="toast('SNSアカウントを連携してください')">SNS連携</button></div></div></div>
+    </div>
+  </div>
+  <div class="panel" id="model-dna" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">BRAND DNA</div><div class="ph-title">Brand DNA 設定</div><div class="ph-desc">ADWENSのブランド情報をAIに学習させる</div></div></div>
+    <div class="sb"><div class="fb"><div class="fl">ブランドコンセプト</div><textarea class="inp ta" placeholder="憧れを、現実に。Mode×ストリートウェア..."></textarea><div class="fl mt6">ターゲット</div><textarea class="inp ta ta-sm" placeholder="20〜30代男性、都市部在住、ファッション感度が高い..."></textarea><div class="fl mt6">キーワード</div><input type="text" class="inp" placeholder="ダーク, モード, ストリート, 変革, 黒, ゴールド..."><div class="br mt6"><button class="bp" onclick="toast('Brand DNAを保存しました')">Brand DNAを保存</button></div></div></div>
+  </div>
+</div>
 </main>
 </div>
-<div class="toast" id="toast"></div>
-<!-- BASE API 設定モーダル -->
-<div class="base-setup-overlay" id="base-setup-overlay">
-  <div class="base-setup-modal">
-    <div class="base-modal-header">
-      <div><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:2px">BASE API</div><div class="base-modal-title">ショップ連携設定</div></div>
-      <div style="display:flex;align-items:center;gap:10px"><div class="base-status-badge disconnected" id="base-conn-status">○ 未接続</div><button class="base-modal-close" onclick="closeBaseSetup()">✕</button></div>
+<div class="toast" id="toast-el"></div>
+<div class="bov" id="bov">
+  <div class="bom">
+    <div class="bomh">
+      <div><div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2px">BASE API</div><div class="bomt">ショップ連携設定</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="bstat disc" id="bstat">○ 未接続</div><button class="bomc" onclick="closeBase()">✕</button></div>
     </div>
-    <div class="base-modal-body">
-      <div id="base-auth-section">
-        <div class="base-step"><div class="base-step-num">Step 01 — 事前準備</div><div class="base-step-title">BASE Developers に申請</div><div class="base-step-desc">まだ申請していない場合は以下から申請してください。申請後1〜2週間でClient IDとClient Secretが発行されます。</div><a href="https://developers.thebase.in/" target="_blank" class="base-auth-link">BASE Developers → 申請ページを開く ↗</a></div>
-        <div class="base-step">
-          <div class="base-step-num">Step 02 — 認証情報を入力</div>
-          <div class="base-step-title">Client ID / Secret を設定</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <div><div class="fb-label" style="margin-bottom:4px">Client ID</div><input type="text" class="inp" id="base-client-id" placeholder="25d51ff11f18f7006fcfc9bffde983ba" style="font-family:'DM Mono',monospace;font-size:11px"></div>
-            <div><div class="fb-label" style="margin-bottom:4px">Client Secret</div><input type="password" class="inp" id="base-client-secret" placeholder="••••••••••••••••" style="font-family:'DM Mono',monospace;font-size:11px"></div>
-            <div><div class="fb-label" style="margin-bottom:4px">Redirect URI</div><input type="text" class="inp" id="base-redirect-uri" placeholder="https://ADWENS0623.github.io/adwens/" style="font-family:'DM Mono',monospace;font-size:11px"></div>
+    <div class="bodb">
+      <div id="bauth">
+        <div class="bstep"><div class="bsn">Step 01 — 事前準備</div><div class="bst2">BASE Developers に申請</div><div class="bsd">申請後1〜2週間でClient IDとClient Secretが発行されます。</div><a href="https://developers.thebase.in/" target="_blank" class="balink">BASE Developers → 申請ページ ↗</a></div>
+        <div class="bstep">
+          <div class="bsn">Step 02 — 認証情報を入力</div><div class="bst2">Client ID / Secret を設定</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div><div class="fl" style="margin-bottom:3px">Client ID</div><input type="text" class="inp" id="bcid" placeholder="25d51ff11f18f7006fcfc9bffde983ba" style="font-family:'DM Mono',monospace;font-size:10px"></div>
+            <div><div class="fl" style="margin-bottom:3px">Client Secret</div><input type="password" class="inp" id="bcsec" placeholder="••••••••••••••••" style="font-family:'DM Mono',monospace;font-size:10px"></div>
+            <div><div class="fl" style="margin-bottom:3px">Redirect URI</div><input type="text" class="inp" id="bruri" placeholder="https://ADWENS0623.github.io/adwens/" style="font-family:'DM Mono',monospace;font-size:10px"></div>
           </div>
         </div>
-        <div class="base-step">
-          <div class="base-step-num">Step 03 — OAuth認可</div>
-          <div class="base-step-title">BASEで許可する</div>
-          <div class="base-step-desc">ボタンを押すとBASEのログイン・許可画面が開きます。</div>
-          <div class="btn-row"><button class="btn-p" onclick="baseStartOAuth()">BASEで認証する →</button></div>
-          <div id="base-auth-link-wrap" style="display:none;margin-top:8px"><a href="#" id="base-auth-link" target="_blank" class="base-auth-link">認可ページを開く ↗</a></div>
-          <div id="base-code-input-wrap" style="display:none;margin-top:12px">
-            <div style="background:var(--surface);border:1px solid var(--border);padding:12px">
-              <div class="fb-label" style="margin-bottom:6px">認可コード</div>
-              <div style="display:flex;gap:6px"><input type="text" class="inp" id="base-auth-code" placeholder="認可コードを貼り付け..." style="font-family:'DM Mono',monospace;font-size:11px;flex:1"><button class="btn-p" id="base-exchange-btn" onclick="baseExchangeCode()">トークンを取得</button></div>
-            </div>
-          </div>
+        <div class="bstep">
+          <div class="bsn">Step 03 — OAuth認可</div><div class="bst2">BASEで許可する</div><div class="bsd">ボタンを押すとBASEのログイン・許可画面が開きます。</div>
+          <div class="br"><button class="bp" onclick="baseOAuth()">BASEで認証する →</button></div>
+          <div id="blinkw" style="display:none;margin-top:6px"><a href="#" id="blink" target="_blank" class="balink">認可ページを開く ↗</a></div>
+          <div id="bcodew" style="display:none;margin-top:10px"><div style="background:var(--surface);border:1px solid var(--border);padding:10px"><div class="fl" style="margin-bottom:4px">認可コード</div><div style="display:flex;gap:5px"><input type="text" class="inp" id="bcode2" placeholder="認可コードを貼り付け..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1"><button class="bp" id="bexbtn" onclick="baseExchange()">トークンを取得</button></div></div></div>
         </div>
-        <div class="base-step">
-          <div class="base-step-num">代替方法 — アクセストークン直接入力</div>
-          <div class="base-step-desc">取得済みのアクセストークンがある場合は直接入力できます。</div>
-          <div style="display:flex;gap:6px"><input type="text" class="inp" id="base-manual-token" placeholder="アクセストークン..." style="font-family:'DM Mono',monospace;font-size:11px;flex:1"><button class="btn-o" onclick="baseSetManualToken()">設定</button></div>
-        </div>
+        <div class="bstep"><div class="bsn">代替方法 — アクセストークン直接入力</div><div class="bsd">取得済みのアクセストークンがある場合は直接入力できます。</div><div style="display:flex;gap:5px"><input type="text" class="inp" id="bmanual" placeholder="アクセストークン..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1"><button class="bo" onclick="baseManual()">設定</button></div></div>
       </div>
-      <div id="base-sync-section" style="display:none">
-        <div class="base-step"><div class="base-step-num">接続情報</div><div id="base-token-info"></div><div class="btn-row mt8"><button class="btn-o btn-sm" onclick="baseRefreshToken()">トークンを更新</button><button class="btn-o btn-sm" style="color:var(--red);border-color:rgba(140,74,74,.4)" onclick="baseDisconnect()">接続を解除</button></div></div>
-        <div class="base-step"><div class="base-step-num">商品データ同期</div><div class="base-step-title">BASEから商品を取得</div><div style="background:var(--border);height:2px;margin:8px 0;overflow:hidden"><div class="base-sync-bar" id="base-sync-progress"></div></div><div class="base-log" id="base-sync-log"></div><div class="btn-row mt8"><button class="btn-p" onclick="baseSyncProducts()">今すぐ同期する</button><div style="display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)">取得済み: <span id="base-sync-count" style="color:var(--accent)">0</span> 件</div></div></div>
-        <div class="base-step"><div class="base-step-num">許可スコープ</div><div style="display:flex;flex-direction:column;gap:5px;font-family:'DM Mono',monospace;font-size:9px"><div style="color:var(--green)">✓ read_users</div><div style="color:var(--green)">✓ read_items</div><div style="color:var(--green)">✓ read_orders</div><div style="color:var(--green)">✓ write_items</div></div></div>
+      <div id="bsync" style="display:none">
+        <div class="bstep"><div class="bsn">接続情報</div><div id="btokinfo"></div><div class="br mt6"><button class="bsm bo" onclick="baseRefresh()">トークンを更新</button><button class="bsm bo" style="color:var(--red);border-color:rgba(140,74,74,.4)" onclick="baseDisconn()">接続を解除</button></div></div>
+        <div class="bstep"><div class="bsn">商品データ同期</div><div class="bst2">BASEから商品を取得</div><div class="bsbar"><div class="bsprog" id="bprog"></div></div><div class="blog" id="blog2"></div><div class="br mt6"><button class="bp" onclick="syncProducts()">今すぐ同期する</button><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--muted)">取得済み: <span id="bcnt" style="color:var(--accent)">0</span> 件</div></div></div>
+        <div class="bstep"><div class="bsn">許可スコープ</div><div style="display:flex;flex-direction:column;gap:4px;font-family:'DM Mono',monospace;font-size:8px"><div style="color:var(--green)">✓ read_users</div><div style="color:var(--green)">✓ read_items</div><div style="color:var(--green)">✓ read_orders</div><div style="color:var(--green)">✓ write_items</div></div></div>
       </div>
     </div>
   </div>
 </div>
 <script>
-const AGENTS={
-  director:{role:'CREATIVE DIRECTOR',name:'ADWENS Director AI',desc:'ブランド戦略・コレクション方向性・クリエイティブ判断を担当',chips:['SS26のコンセプトを整理したい','SNS戦略を立てたい','BASEショップを改善したい','競合ブランドを分析したい'],sys:'あなたはADWENSというファッションブランドのクリエイティブディレクターAIです。ブランドコンセプト「憧れを、現実に。」。Mode×ストリートウェア、20〜30代男性向け。BASEでECサイトを運営中。Instagram・TikTok・YouTube・X・Threadsでも活動しています。短く力強い言葉でアドバイスしてください。'},
-  designer:{role:'HEAD DESIGNER',name:'Designer AI',desc:'アイテム構成・素材選定・デザインディテールを担当',chips:['SS26のアイテム構成案','素材トレンドを教えて','シルエットバランスの相談','カラーパレット案'],sys:'あなたはADWENSのヘッドデザイナーAIです。Mode×Streetウェア、20-30代男性向け。SS26の方向性やデザインディテールについて専門的にアドバイスします。'},
-  md:{role:'MERCHANDISING',name:'MD AI',desc:'商品計画・在庫戦略・SKU管理を担当',chips:['SKU構成を最適化したい','価格帯の設定相談','BASEの売れ筋分析','来シーズンの発注計画'],sys:'あなたはADWENSのMD AIです。BASEのオンラインショップを中心に、商品計画・在庫戦略・SKU管理・価格設定についてアドバイスします。'},
-  production:{role:'PRODUCTION',name:'生産管理 AI',desc:'工場連携・納期管理・品質基準を担当',chips:['生産スケジュールを確認','サンプル品質基準','コスト削減の方法','工場候補を教えて'],sys:'あなたはADWENSの生産管理AIです。工場連携・納期管理・品質基準について精通しています。'},
-  vmd:{role:'VMD',name:'VMD AI',desc:'ビジュアルマーチャンダイジング・EC店頭演出を担当',chips:['BASEトップページの陳列','新作の打ち出し方','SNSとショップの連動','季節の切り替えタイミング'],sys:'あなたはADWENSのVMD AIです。BASEオンラインショップのビジュアル構成・商品陳列・SNSとの連動について専門的にアドバイスします。'},
-  press:{role:'PRESS & PR',name:'プレス AI',desc:'メディア対応・プレスリリース・SNSコミュニケーションを担当',chips:['プレスリリースを作って','SNS投稿文を作って','インタビュー原稿の準備','メディアリストを整理'],sys:'あなたはADWENSのプレスAIです。プレスリリース作成・SNS投稿文・メディア対応について精通しています。ADWENSのトーン（ダーク・Mode×Street）に合わせた文章を生成します。'},
-  buyer:{role:'BUYER',name:'バイヤー AI',desc:'バイイング計画・トレンド分析・セレクト戦略を担当',chips:['今季トレンドを教えて','買い付け予算の配分','競合バイイング傾向','新規ブランドの発掘基準'],sys:'あなたはADWENSのバイヤーAIです。トレンド分析・バイイング計画・セレクト戦略について精通しています。'},
-  crm:{role:'CRM',name:'CRM AI',desc:'顧客管理・リテンション戦略・LTV向上を担当',chips:['VIP顧客への施策','BASEのリピーター施策','SNSからの新規獲得','顧客セグメントの整理'],sys:'あなたはADWENSのCRM AIです。BASE顧客データを活用したリテンション戦略・LTV向上・SNS経由の顧客獲得についてアドバイスします。'},
-  sns_strategist:{role:'SNS STRATEGIST',name:'SNS戦略 AI',desc:'SNS全体戦略・プラットフォーム別方針・再生数最大化を担当',chips:['再生数を伸ばす戦略を立てて','各SNSの使い分けを教えて','アルゴリズム対策','ADWENSのSNS強化ポイント'],sys:'あなたはADWENSのSNS戦略AIです。Instagram・TikTok・YouTube・X・Threadsの各プラットフォームに精通し、再生数・フォロワー増加・エンゲージメント向上のための戦略を立てます。'},
-  content:{role:'CONTENT CREATOR',name:'コンテンツ制作 AI',desc:'動画構成・投稿企画・コンテンツカレンダーを担当',chips:['今週の投稿企画を立てて','TikTok動画の構成案','Instagramリールのアイデア','1ヶ月のコンテンツカレンダー'],sys:'あなたはADWENSのコンテンツ制作AIです。SNS投稿の企画・動画構成・コンテンツカレンダー作成について精通しています。ADWENSのブランドトーン（ダーク・モード×ストリート）を維持しながら、バズるコンテンツを提案します。'},
-  algo:{role:'ALGORITHM EXPERT',name:'アルゴリズム AI',desc:'各SNSの最新アルゴリズム分析・最適化提案を担当',chips:['TikTokのアルゴリズムを教えて','Instagramリールの攻略法','再生数が伸びない原因','投稿時間の最適化'],sys:'あなたはSNSアルゴリズムの専門家AIです。Instagram・TikTok・YouTubeの2026年最新アルゴリズムについて精通しており、ADWENSの投稿が最大限に露出されるための具体的な戦略を提案します。'}
+const AG={
+  director:{r:'CREATIVE DIRECTOR',n:'ADWENS Director AI',d:'ブランド戦略・コレクション方向性・クリエイティブ判断を担当',c:['SS26のコンセプトを整理したい','SNS戦略を立てたい','BASEショップを改善したい','競合ブランドを分析したい'],s:'あなたはADWENSというファッションブランドのクリエイティブディレクターAIです。ブランドコンセプト「憧れを、現実に。」。Mode×ストリートウェア、20〜30代男性向け。BASEでECサイトを運営中。短く力強い言葉でアドバイスしてください。'},
+  designer:{r:'HEAD DESIGNER',n:'Designer AI',d:'アイテム構成・素材選定・デザインディテールを担当',c:['SS26のアイテム構成案','素材トレンドを教えて','シルエットバランスの相談','カラーパレット案'],s:'あなたはADWENSのヘッドデザイナーAIです。Mode×Streetウェア、20-30代男性向け。SS26の方向性やデザインディテールについて専門的にアドバイスします。'},
+  md:{r:'MERCHANDISING',n:'MD AI',d:'商品計画・在庫戦略・SKU管理を担当',c:['SKU構成を最適化したい','価格帯の設定相談','BASEの売れ筋分析','来シーズンの発注計画'],s:'あなたはADWENSのMD AIです。BASEのオンラインショップを中心に、商品計画・在庫戦略・SKU管理・価格設定についてアドバイスします。'},
+  production:{r:'PRODUCTION',n:'生産管理 AI',d:'工場連携・納期管理・品質基準を担当',c:['生産スケジュールを確認','サンプル品質基準','コスト削減の方法','工場候補を教えて'],s:'あなたはADWENSの生産管理AIです。工場連携・納期管理・品質基準について精通しています。'},
+  vmd:{r:'VMD',n:'VMD AI',d:'ビジュアルマーチャンダイジング・EC店頭演出を担当',c:['BASEトップページの陳列','新作の打ち出し方','SNSとショップの連動','季節の切り替えタイミング'],s:'あなたはADWENSのVMD AIです。BASEオンラインショップのビジュアル構成・商品陳列・SNSとの連動について専門的にアドバイスします。'},
+  press:{r:'PRESS & PR',n:'プレス AI',d:'メディア対応・プレスリリース・SNSコミュニケーションを担当',c:['プレスリリースを作って','SNS投稿文を作って','インタビュー原稿の準備','メディアリストを整理'],s:'あなたはADWENSのプレスAIです。プレスリリース作成・SNS投稿文・メディア対応について精通しています。ADWENSのトーン（ダーク・Mode×Street）に合わせた文章を生成します。'},
+  buyer:{r:'BUYER',n:'バイヤー AI',d:'バイイング計画・トレンド分析・セレクト戦略を担当',c:['今季トレンドを教えて','買い付け予算の配分','競合バイイング傾向','新規ブランドの発掘基準'],s:'あなたはADWENSのバイヤーAIです。トレンド分析・バイイング計画・セレクト戦略について精通しています。'},
+  crm:{r:'CRM',n:'CRM AI',d:'顧客管理・リテンション戦略・LTV向上を担当',c:['VIP顧客への施策','BASEのリピーター施策','SNSからの新規獲得','顧客セグメントの整理'],s:'あなたはADWENSのCRM AIです。BASE顧客データを活用したリテンション戦略・LTV向上・SNS経由の顧客獲得についてアドバイスします。'},
+  sns_str:{r:'SNS STRATEGIST',n:'SNS戦略 AI',d:'SNS全体戦略・プラットフォーム別方針・再生数最大化を担当',c:['再生数を伸ばす戦略を立てて','各SNSの使い分けを教えて','アルゴリズム対策','ADWENSのSNS強化ポイント'],s:'あなたはADWENSのSNS戦略AIです。Instagram・TikTok・YouTube・X・Threadsの各プラットフォームに精通し、再生数・フォロワー増加・エンゲージメント向上のための戦略を立てます。'},
+  content:{r:'CONTENT CREATOR',n:'コンテンツ制作 AI',d:'動画構成・投稿企画・コンテンツカレンダーを担当',c:['今週の投稿企画を立てて','TikTok動画の構成案','Instagramリールのアイデア','1ヶ月のコンテンツカレンダー'],s:'あなたはADWENSのコンテンツ制作AIです。SNS投稿の企画・動画構成・コンテンツカレンダー作成について精通しています。ADWENSのブランドトーン（ダーク・モード×ストリート）を維持しながら、バズるコンテンツを提案します。'},
+  algo:{r:'ALGORITHM EXPERT',n:'アルゴリズム AI',d:'各SNSの最新アルゴリズム分析・最適化提案を担当',c:['TikTokのアルゴリズムを教えて','Instagramリールの攻略法','再生数が伸びない原因','投稿時間の最適化'],s:'あなたはSNSアルゴリズムの専門家AIです。Instagram・TikTok・YouTubeの2026年最新アルゴリズムについて精通しており、ADWENSの投稿が最大限に露出されるための具体的な戦略を提案します。'}
 };
-const SHOP_SYS='あなたはADWENSのBASEショップ改善AIです。BASEのECサイト構成・商品ページ最適化・CVR改善・SNSとショップの連動について、具体的で実践的なアドバイスをします。ADWENSはMode×Streetウェア、20-30代男性向けのブランドです。';
-const BASE_API={endpoint:'https://api.thebase.in/1',authUrl:'https://api.thebase.in/1/oauth/authorize',tokenUrl:'https://api.thebase.in/1/oauth/token',clientId:'',clientSecret:'',redirectUri:window.location.href.split('?')[0],accessToken:'',refreshToken:'',tokenExpiry:null};
-let currentAgent='director',history={},shopHistory=[],isThinking=false,isShopThinking=false;
+const SHOP_S='あなたはADWENSのBASEショップ改善AIです。BASEのECサイト構成・商品ページ最適化・CVR改善・SNSとショップの連動について、具体的で実践的なアドバイスをします。ADWENSはMode×Streetウェア、20-30代男性向けのブランドです。';
+const B={ep:'https://api.thebase.in/1',au:'https://api.thebase.in/1/oauth/authorize',cid:'',csec:'',ru:window.location.href.split('?')[0],tok:'',rtok:'',exp:null};
+let curAgent='director',hist={},shopHist=[],thinking=false,sthinking=false;
 
-function switchModule(mod,btn){
-  document.querySelectorAll('.icon-nav-btn').forEach(b=>b.classList.remove('active'));
+function switchMod(mod,btn){
+  document.querySelectorAll('.inb').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
-  ['agents','sns','vision','shop','model'].forEach(m=>{const el=document.getElementById('sb-'+m);if(el)el.style.display=m===mod?'block':'none';});
-  ['panel-agent','panel-sns','panel-vision','panel-shop','panel-model'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active');});
-  const map={agents:'panel-agent',sns:'panel-sns',vision:'panel-vision',shop:'panel-shop',model:'panel-model'};
-  document.getElementById(map[mod])?.classList.add('active');
+  ['agents','sns','vision','shop','model'].forEach(m=>{const e=document.getElementById('sb-'+m);if(e)e.style.display=m===mod?'block':'none';});
+  ['panel-agent','panel-sns','panel-vision','panel-shop','panel-model'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('active');});
+  const mp={agents:'panel-agent',sns:'panel-sns',vision:'panel-vision',shop:'panel-shop',model:'panel-model'};
+  document.getElementById(mp[mod])?.classList.add('active');
 }
-function selectAgent(btn,agentId){
-  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  currentAgent=agentId;
-  const a=AGENTS[agentId];
-  document.getElementById('agent-role').textContent=a.role;
-  document.getElementById('agent-name').textContent=a.name;
-  document.getElementById('agent-desc').textContent=a.desc;
-  const msgs=document.getElementById('messages');
-  msgs.innerHTML=`<div class="welcome-screen"><div class="w-mark">A</div><div class="w-title">${a.name}</div><div class="w-sub">${a.desc}</div><div class="chips">${a.chips.map(c=>`<div class="chip" onclick="sendChip(this)">${c}</div>`).join('')}</div></div>`;
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-agent').classList.add('active');
+function selAgent(btn,id){
+  document.querySelectorAll('.sbb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  curAgent=id;const a=AG[id];
+  document.getElementById('ar').textContent=a.r;document.getElementById('an').textContent=a.n;document.getElementById('ad').textContent=a.d;
+  document.getElementById('msgs').innerHTML=`<div class="ws"><div class="wm">A</div><div class="wt">${a.n}</div><div class="wd">${a.d}</div><div class="chips">${a.c.map(c=>`<div class="chip" onclick="sendChip(this)">${c}</div>`).join('')}</div></div>`;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-agent').classList.add('active');
 }
-function showSnsPanel(name,btn){
-  document.querySelectorAll('#panel-sns .panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('sns-'+name)?.classList.add('active');
-  document.querySelectorAll('#sb-sns .sb-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-}
-function showVisionPanel(name,btn){
-  document.querySelectorAll('#panel-vision .panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('vision-'+name)?.classList.add('active');
-  document.querySelectorAll('#sb-vision .sb-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-}
-function showShopPanel(name,btn){
-  document.querySelectorAll('#panel-shop .panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('shop-'+name)?.classList.add('active');
-  document.querySelectorAll('#sb-shop .sb-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-}
-function showModelPanel(name){
-  document.querySelectorAll('#panel-model .panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('model-'+name)?.classList.add('active');
-}
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
-function handleShopKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendShopMsg();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
-function sendChip(el){document.getElementById('chat-inp').value=el.textContent;sendMsg();}
-function sendShopChip(el){document.getElementById('shop-inp').value=el.textContent;sendShopMsg();}
+function showSns(n,btn){document.querySelectorAll('#panel-sns .panel').forEach(p=>p.classList.remove('active'));document.getElementById('sns-'+n)?.classList.add('active');document.querySelectorAll('#sb-sns .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function showVis(n,btn){document.querySelectorAll('#panel-vision .panel').forEach(p=>p.classList.remove('active'));document.getElementById('vision-'+n)?.classList.add('active');document.querySelectorAll('#sb-vision .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function showShop(n,btn){document.querySelectorAll('#panel-shop .panel').forEach(p=>p.classList.remove('active'));document.getElementById('shop-'+n)?.classList.add('active');document.querySelectorAll('#sb-shop .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function showModel(n){document.querySelectorAll('#panel-model .panel').forEach(p=>p.classList.remove('active'));document.getElementById('model-'+n)?.classList.add('active');}
+
+function hk(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function hks(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendShop();}}
+function ar2(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,96)+'px';}
+function sendChip(el){document.getElementById('ci').value=el.textContent;sendMsg();}
+function sendShopChip(el){document.getElementById('si').value=el.textContent;sendShop();}
 
 async function sendMsg(){
-  if(isThinking)return;
-  const inp=document.getElementById('chat-inp');
-  const text=inp.value.trim();if(!text)return;
-  document.querySelector('#messages .welcome-screen')?.remove();
-  addMsg('user',text,'','messages');
-  inp.value='';inp.style.height='auto';
-  if(!history[currentAgent])history[currentAgent]=[];
-  history[currentAgent].push({role:'user',content:text});
-  isThinking=true;document.getElementById('send-btn').disabled=true;
-  const tid=addThinking('messages');
+  if(thinking)return;const inp=document.getElementById('ci');const txt=inp.value.trim();if(!txt)return;
+  document.querySelector('#msgs .ws')?.remove();
+  addMsg('user',txt,'','msgs');inp.value='';inp.style.height='auto';
+  if(!hist[curAgent])hist[curAgent]=[];hist[curAgent].push({role:'user',content:txt});
+  thinking=true;document.getElementById('sb2').disabled=true;
+  const tid=addThink('msgs');
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AGENTS[currentAgent].sys,messages:history[currentAgent].map(m=>({role:m.role,content:m.content}))})});
-    const data=await res.json();
-    removeThinking(tid,'messages');
-    const reply=data.content?.[0]?.text||'エラーが発生しました。';
-    history[currentAgent].push({role:'assistant',content:reply});
-    addMsg('ai',reply,AGENTS[currentAgent].role,'messages');
-  }catch(e){removeThinking(tid,'messages');addMsg('ai','通信エラーが発生しました。','','messages');}
-  isThinking=false;document.getElementById('send-btn').disabled=false;
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AG[curAgent].s,messages:hist[curAgent]})});
+    const d=await r.json();removeThink(tid);
+    const rep=d.content?.[0]?.text||'エラーが発生しました。';hist[curAgent].push({role:'assistant',content:rep});addMsg('ai',rep,AG[curAgent].r,'msgs');
+  }catch(e){removeThink(tid);addMsg('ai','通信エラーが発生しました。','','msgs');}
+  thinking=false;document.getElementById('sb2').disabled=false;
 }
-
-async function sendShopMsg(){
-  if(isShopThinking)return;
-  const inp=document.getElementById('shop-inp');
-  const text=inp.value.trim();if(!text)return;
-  document.querySelector('#shop-messages .welcome-screen')?.remove();
-  addMsg('user',text,'','shop-messages');
-  inp.value='';inp.style.height='auto';
-  shopHistory.push({role:'user',content:text});
-  isShopThinking=true;document.getElementById('shop-send-btn').disabled=true;
-  const tid=addThinking('shop-messages');
+async function sendShop(){
+  if(sthinking)return;const inp=document.getElementById('si');const txt=inp.value.trim();if(!txt)return;
+  document.querySelector('#smsgs .ws')?.remove();
+  addMsg('user',txt,'','smsgs');inp.value='';inp.style.height='auto';
+  shopHist.push({role:'user',content:txt});sthinking=true;document.getElementById('ssb').disabled=true;
+  const tid=addThink('smsgs');
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SHOP_SYS,messages:shopHistory})});
-    const data=await res.json();
-    removeThinking(tid,'shop-messages');
-    const reply=data.content?.[0]?.text||'エラーが発生しました。';
-    shopHistory.push({role:'assistant',content:reply});
-    addMsg('ai',reply,'SHOP AI','shop-messages');
-  }catch(e){removeThinking(tid,'shop-messages');addMsg('ai','通信エラーが発生しました。','','shop-messages');}
-  isShopThinking=false;document.getElementById('shop-send-btn').disabled=false;
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SHOP_S,messages:shopHist})});
+    const d=await r.json();removeThink(tid);
+    const rep=d.content?.[0]?.text||'エラーが発生しました。';shopHist.push({role:'assistant',content:rep});addMsg('ai',rep,'SHOP AI','smsgs');
+  }catch(e){removeThink(tid);addMsg('ai','通信エラーが発生しました。','','smsgs');}
+  sthinking=false;document.getElementById('ssb').disabled=false;
 }
-
-function addMsg(type,text,role,cid){
-  const c=document.getElementById(cid);
-  const div=document.createElement('div');div.className='msg '+type;
-  const time=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
-  if(type==='user'){div.innerHTML=`<div class="msg-av">YOU</div><div><div class="msg-bub">${esc(text)}</div><div class="msg-meta">${time}</div></div>`;}
-  else{div.innerHTML=`<div class="msg-av">AI</div><div><div class="msg-bub">${esc(text)}</div><div class="msg-meta">${role} — ${time}</div></div>`;}
+function addMsg(type,txt,role,cid){
+  const c=document.getElementById(cid);const div=document.createElement('div');div.className='msg '+type;
+  const t=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+  if(type==='user')div.innerHTML=`<div class="mav">YOU</div><div><div class="mbub">${esc(txt)}</div><div class="mmeta">${t}</div></div>`;
+  else div.innerHTML=`<div class="mav">AI</div><div><div class="mbub">${esc(txt)}</div><div class="mmeta">${role} — ${t}</div></div>`;
   c.appendChild(div);c.scrollTop=c.scrollHeight;
 }
-function addThinking(cid){
-  const id='tk-'+Date.now();const c=document.getElementById(cid);
-  const div=document.createElement('div');div.className='msg ai';div.id=id;
-  div.innerHTML=`<div class="msg-av">AI</div><div><div class="msg-bub"><div class="thinking-dots"><span></span><span></span><span></span></div></div></div>`;
-  c.appendChild(div);c.scrollTop=c.scrollHeight;return id;
-}
-function removeThinking(id){document.getElementById(id)?.remove();}
+function addThink(cid){const id='tk'+Date.now();const c=document.getElementById(cid);const d=document.createElement('div');d.className='msg ai';d.id=id;d.innerHTML=`<div class="mav">AI</div><div><div class="mbub"><div class="tdots"><span></span><span></span><span></span></div></div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;return id;}
+function removeThink(id){document.getElementById(id)?.remove();}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 
-function connectSNS(btn,platform){btn.textContent='Connected';btn.classList.remove('connect');btn.classList.add('connected');showToast(platform+'アカウントを連携しました');}
-
-async function analyzeVideos(){
-  const area=document.getElementById('video-analysis');const loading=document.getElementById('va-loading');const result=document.getElementById('va-result');
-  area.style.display='block';loading.style.display='flex';result.style.display='none';
-  await sleep(2500);loading.style.display='none';result.style.display='block';showToast('動画分析が完了しました');
+function connSNS(btn,p){btn.textContent='Connected';btn.className='cbtn conn';toast(p+'アカウントを連携しました');}
+async function analyzeVid(){
+  const va=document.getElementById('va');const val=document.getElementById('val');const vr=document.getElementById('var2');
+  va.style.display='block';val.style.display='flex';vr.style.display='none';
+  await sleep(2500);val.style.display='none';vr.style.display='block';toast('動画分析が完了しました');
 }
+const IGT=[{r:1,t:'#モードストリート',v:'852K posts'},{r:2,t:'#オーバーサイズコーデ',v:'1.2M posts'},{r:3,t:'#モノトーンコーデ',v:'980K posts'},{r:4,t:'#メンズファッション',v:'3.1M posts'},{r:5,t:'#SS2026',v:'420K posts'}];
+const TKT=[{r:1,t:'#OOTD',v:'バズ中🔥'},{r:2,t:'#mensfashion',v:'高上昇中↑↑'},{r:3,t:'#streetwear',v:'安定トレンド'},{r:4,t:'#fashiontok',v:'バズ中🔥'},{r:5,t:'#outfit',v:'高上昇中↑'}];
+const XT=[{r:1,t:'春コーデ',v:'12.4Kツイート'},{r:2,t:'ファッションウィーク',v:'8.2Kツイート'},{r:3,t:'メンズファッション',v:'5.6Kツイート'}];
+const YTT=[{r:1,t:'春夏コーデ2026',v:'高需要'},{r:2,t:'メンズコーデ動画',v:'急上昇'},{r:3,t:'ブランドルックブック',v:'安定'}];
+function loadTrends(){rT('igt',IGT);rT('tkt',TKT);rT('xt',XT);rT('ytt',YTT);toast('トレンドを更新しました');}
+function rT(id,data){document.getElementById(id).innerHTML=data.map(d=>`<div class="tc"><div><div class="tr">#${d.r}</div><div class="tt">${d.t}</div><div class="tv">${d.v}</div></div><button class="bsm bo" onclick="toast('${d.t}を追加しました')">使用</button></div>`).join('');}
 
-const igTrends=[{rank:1,tag:'#モードストリート',vol:'852K posts'},{rank:2,tag:'#オーバーサイズコーデ',vol:'1.2M posts'},{rank:3,tag:'#モノトーンコーデ',vol:'980K posts'},{rank:4,tag:'#メンズファッション',vol:'3.1M posts'},{rank:5,tag:'#SS2026',vol:'420K posts'}];
-const tkTrends=[{rank:1,tag:'#OOTD',vol:'バズ中🔥'},{rank:2,tag:'#mensfashion',vol:'高上昇中↑↑'},{rank:3,tag:'#streetwear',vol:'安定トレンド'},{rank:4,tag:'#fashiontok',vol:'バズ中🔥'},{rank:5,tag:'#outfit',vol:'高上昇中↑'}];
-const xTrends=[{rank:1,tag:'春コーデ',vol:'12.4Kツイート'},{rank:2,tag:'ファッションウィーク',vol:'8.2Kツイート'},{rank:3,tag:'メンズファッション',vol:'5.6Kツイート'}];
-const ytTrends=[{rank:1,tag:'春夏コーデ2026',vol:'高需要'},{rank:2,tag:'メンズコーデ動画',vol:'急上昇'},{rank:3,tag:'ブランドルックブック',vol:'安定'}];
-
-function loadTrends(){renderTrends('ig-trends',igTrends);renderTrends('tk-trends',tkTrends);renderTrends('x-trends',xTrends);renderTrends('yt-trends',ytTrends);showToast('トレンドを更新しました');}
-function renderTrends(id,trends){document.getElementById(id).innerHTML=trends.map(t=>`<div class="trend-card"><div class="tc-left"><div class="tc-rank">#${t.rank}</div><div class="tc-tag">${t.tag}</div><div class="tc-volume">${t.vol}</div></div><button class="btn-sm btn-o" onclick="showToast('${t.tag}を投稿テンプレートに追加しました')">使用</button></div>`).join('');}
-
-const scheduledData={10:[{sns:'ig'}],14:[{sns:'tk'},{sns:'x-tw'}],17:[{sns:'ig'},{sns:'tk'}],21:[{sns:'yt'}],24:[{sns:'ig'},{sns:'x-tw'}],28:[{sns:'tk'}]};
-function initCalendar(){
-  const grid=document.getElementById('cal-days');let html='';
-  for(let i=0;i<3;i++)html+=`<div class="cal-day" style="opacity:.3"></div>`;
-  for(let d=1;d<=30;d++){const posts=scheduledData[d]||[];const has=posts.length>0;html+=`<div class="cal-day${has?' has-post':''}" onclick="showToast('${d}日の投稿予約を確認')"><div class="cal-num">${d}</div>${posts.map(p=>`<div class="cal-dot ${p.sns}"></div>`).join('')}</div>`;}
-  grid.innerHTML=html;
-  document.getElementById('scheduled-posts').innerHTML=`<div class="sns-account-row"><div class="sa-left"><div class="sa-icon">📷</div><div><div class="sa-name">4/10 21:00 — Instagram</div><div class="sa-handle">SS26コート — ルックブック画像</div></div></div><div class="sa-right"><button class="btn-sm btn-o">編集</button></div></div><div class="sns-account-row"><div class="sa-left"><div class="sa-icon">🎵</div><div><div class="sa-name">4/14 20:00 — TikTok / X</div><div class="sa-handle">スタイリング動画 — 一括予約</div></div></div><div class="sa-right"><button class="btn-sm btn-o">編集</button></div></div>`;
+const CAL={10:[{s:'ig'}],14:[{s:'tk'},{s:'xtw'}],17:[{s:'ig'},{s:'tk'}],21:[{s:'yt'}],24:[{s:'ig'},{s:'xtw'}],28:[{s:'tk'}]};
+function initCal(){
+  const g=document.getElementById('cal-days');let h='';
+  for(let i=0;i<3;i++)h+=`<div class="cald" style="opacity:.3"></div>`;
+  for(let d=1;d<=30;d++){const p=CAL[d]||[];h+=`<div class="cald${p.length?' hp':''}" onclick="toast('${d}日の投稿予約を確認')"><div class="caln">${d}</div>${p.map(x=>`<div class="caldo ${x.s}"></div>`).join('')}</div>`;}
+  g.innerHTML=h;
+  document.getElementById('sched-posts').innerHTML=`<div class="sar"><div class="sal"><div class="sai">📷</div><div><div class="san">4/10 21:00 — Instagram</div><div class="sah">SS26コート — ルックブック画像</div></div></div><button class="bsm bo">編集</button></div><div class="sar"><div class="sal"><div class="sai">🎵</div><div><div class="san">4/14 20:00 — TikTok / X</div><div class="sah">スタイリング動画 — 一括予約</div></div></div><button class="bsm bo">編集</button></div>`;
 }
-function schedulePost(){const content=document.getElementById('bulk-content').value;const dt=document.getElementById('post-datetime').value;if(!content){showToast('投稿内容を入力してください');return;}if(!dt){showToast('投稿日時を設定してください');return;}showToast('投稿を予約しました');}
+function schedPost(){const c=document.getElementById('bulk').value;const d=document.getElementById('pdt').value;if(!c){toast('投稿内容を入力してください');return;}if(!d){toast('投稿日時を設定してください');return;}toast('投稿を予約しました');}
 
-async function generateVideoComp(){
-  const product=document.getElementById('video-product').value;if(!product){showToast('商品を選択してください');return;}
-  showToast('動画構成を生成中...');await sleep(1800);
-  document.getElementById('video-comp-result').style.display='block';
-  const scenes=[{n:'01',icon:'🌙',t:'オープニング\n1.5sec'},{n:'02',icon:'🧥',t:'商品アップ\n3sec'},{n:'03',icon:'🚶',t:'着用ウォーク\n6sec'},{n:'04',icon:'📸',t:'スチール\n4sec'},{n:'05',icon:'✦',t:'ロゴ+URL\n2sec'}];
-  document.getElementById('scene-row').innerHTML=scenes.map(s=>`<div class="scene-block"><div class="scene-num">Scene ${s.n}</div><div class="scene-icon">${s.icon}</div><div class="scene-t">${s.t}</div></div>`).join('');
-  document.getElementById('vc-ai-note').textContent=product.split('—')[0]+'を使用したルックブック型Reels構成です。冒頭1.5秒は音楽なしで映像インパクトのみを使用し、視聴完了率を最大化します。';
-  showToast('動画構成を生成しました');
+async function genVideoComp(){
+  const p=document.getElementById('vprod').value;if(!p){toast('商品を選択してください');return;}
+  toast('動画構成を生成中...');await sleep(1800);document.getElementById('vcr').style.display='block';
+  const sc=[{n:'01',i:'🌙',t:'オープニング\n1.5sec'},{n:'02',i:'🧥',t:'商品アップ\n3sec'},{n:'03',i:'🚶',t:'着用ウォーク\n6sec'},{n:'04',i:'📸',t:'スチール\n4sec'},{n:'05',i:'✦',t:'ロゴ+URL\n2sec'}];
+  document.getElementById('scenes').innerHTML=sc.map(s=>`<div class="scn"><div class="scnn">Scene ${s.n}</div><div class="scni">${s.i}</div><div class="scnt">${s.t}</div></div>`).join('');
+  document.getElementById('vcnote').textContent=p.split('—')[0]+'を使用したルックブック型Reels構成です。冒頭1.5秒は音楽なしで映像インパクトのみを使用し、視聴完了率を最大化します。';toast('動画構成を生成しました');
 }
-
-async function generateCaption(){
-  const desc=document.getElementById('cap-desc')?.value||'ADWENSのSS26コレクション';
-  showToast('キャプションを生成中...');await sleep(1500);
-  const igCaption='憧れを、現実に。\n\nADWENS SS26 — 黒のオーバーサイズコートが、今日の自分を変える。\n\n着た瞬間から始まる物語を、ADWENSと。\n\n▸ 商品詳細はプロフィールのリンクから';
-  const igTags=['#ADWENS','#アドウェンス','#SS26','#モードストリート','#メンズファッション','#オーバーサイズコート','#モノトーンコーデ','#ストリートウェア','#mensfashion','#streetstyle','#ootd'];
-  const tkCaption='このコート、見た瞬間に欲しくなった。\nADWENS SS26 — もう普通には戻れない。\n\n#ADWENS #メンズコーデ #ootd #fashion';
-  const tkTags=['#ADWENS','#メンズコーデ','#SS26コーデ','#ootd','#fashion','#mensfashion','#streetwear','#fashiontok'];
-  document.getElementById('caption-results').style.display='block';
-  document.getElementById('cap-ig-text').textContent=igCaption;
-  document.getElementById('cap-ig-tags').innerHTML=igTags.map(t=>`<div class="cap-tag">${t}</div>`).join('');
-  document.getElementById('cap-tk-text').textContent=tkCaption;
-  document.getElementById('cap-tk-tags').innerHTML=tkTags.map(t=>`<div class="cap-tag">${t}</div>`).join('');
-  showToast('キャプションを生成しました');
+async function genCaption(){
+  toast('キャプションを生成中...');await sleep(1500);
+  document.getElementById('capres').style.display='block';
+  document.getElementById('capig').textContent='憧れを、現実に。\n\nADWENS SS26 — 黒のオーバーサイズコートが、今日の自分を変える。\n\n着た瞬間から始まる物語を、ADWENSと。\n\n▸ 商品詳細はプロフィールのリンクから';
+  document.getElementById('capigt').innerHTML=['#ADWENS','#SS26','#モードストリート','#メンズファッション','#オーバーサイズコート','#ootd','#streetstyle'].map(t=>`<div class="captag">${t}</div>`).join('');
+  document.getElementById('captk').textContent='このコート、見た瞬間に欲しくなった。\nADWENS SS26 — もう普通には戻れない。\n\n#ADWENS #メンズコーデ #ootd #fashion';
+  document.getElementById('captkt').innerHTML=['#ADWENS','#メンズコーデ','#SS26コーデ','#ootd','#fashiontok','#streetwear'].map(t=>`<div class="captag">${t}</div>`).join('');
+  toast('キャプションを生成しました');
 }
-
-function runAlgoCheck(){
+function runAlgo(){
   const items=[['フック（冒頭1秒）の強さ','動画の冒頭でブランドの世界観を即提示する','✓'],['字幕・テキストオーバーレイ','音なし視聴対応の字幕を全動画に追加する','✓'],['最適投稿時間（20:00〜22:00）','この時間帯に投稿予約をセットする','✓'],['ハッシュタグ数（IG: 5〜10個）','ビッグ・ミドル・スモールを混合する','✓'],['トレンドサウンド活用（TK）','バズ中の音源を72時間以内に使用する','△'],['エンゲージメント促進','コメントを誘導するCTAを文末に添える','✓'],['ストーリーズとフィードの連動','投稿後すぐにストーリーズでもシェアする','△']];
-  document.getElementById('algo-checklist').innerHTML=items.map(([key,desc,status])=>`<div class="flex-between" style="gap:12px"><div><div style="font-size:11px;color:var(--text)">${key}</div><div style="font-size:10px;color:var(--muted2);margin-top:1px">${desc}</div></div><div style="font-family:'DM Mono',monospace;font-size:12px;color:${status==='✓'?'var(--green)':'var(--accent)';flex-shrink:0">${status}</div></div>`).join('<div class="divider" style="margin:8px 0"></div>');
-  showToast('アルゴリズムチェックが完了しました');
+  document.getElementById('algoc').innerHTML=items.map(([k,d,s])=>`<div class="flex-b" style="gap:10px;padding:5px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:10px;color:var(--text)">${k}</div><div style="font-size:9px;color:var(--muted2);margin-top:1px">${d}</div></div><div style="font-family:'DM Mono',monospace;font-size:11px;color:${s==='✓'?'var(--green)':'var(--accent)'};flex-shrink:0">${s}</div></div>`).join('');
+  toast('アルゴリズムチェックが完了しました');
 }
 
-const loadingSteps=['AW-01 LoRAを初期化中...','ADWENSスタイルベクターを読み込み中...','ブランド美学を適用中...','コンポジションをレンダリング中...','出力を最終化中...'];
-async function generateFeedImages(count){
-  const prompt=document.getElementById('feed-prompt').value.trim();if(!prompt){showToast('プロンプトを入力してください');return;}
-  document.getElementById('feed-placeholder').style.display='none';document.getElementById('feed-imgs').style.display='none';document.getElementById('feed-loading').style.display='flex';
-  const n=parseInt(count)||3;
-  for(let i=0;i<loadingSteps.length;i++){document.getElementById('feed-loading-t').textContent=loadingSteps[i];await sleep(600);}
-  document.getElementById('feed-loading').style.display='none';
-  const grid=document.getElementById('feed-imgs');grid.innerHTML='';
+const lsteps=['AW-01 LoRAを初期化中...','ADWENSスタイルベクターを読み込み中...','ブランド美学を適用中...','コンポジションをレンダリング中...','出力を最終化中...'];
+async function genFeed(cnt){
+  const p=document.getElementById('fprompt').value.trim();if(!p){toast('プロンプトを入力してください');return;}
+  document.getElementById('fph').style.display='none';document.getElementById('fimgs').style.display='none';document.getElementById('fload').style.display='flex';
+  const n=parseInt(cnt)||3;
+  for(let i=0;i<lsteps.length;i++){document.getElementById('fltext').textContent=lsteps[i];await sleep(600);}
+  document.getElementById('fload').style.display='none';
+  const g=document.getElementById('fimgs');g.innerHTML='';
   const bgs=['#151515','#121212','#181818','#111','#161616','#141414'];
-  for(let i=0;i<n;i++){const slot=document.createElement('div');slot.className='gen-slot';slot.style.background=bgs[i%bgs.length];slot.innerHTML=`<div style="text-align:center;padding:16px"><div style="font-size:36px;opacity:.2;margin-bottom:8px">◈</div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);text-transform:uppercase">AW-01 / ${String(Date.now()).slice(-4)}-${i+1}</div><div style="font-family:'Cormorant Garamond',serif;font-size:10px;color:var(--muted2);margin-top:6px;font-style:italic">Generated</div></div><div class="gen-ov"><div class="gen-ov-t">📷 IG予約</div><div class="gen-ov-t">↓ 保存</div></div>`;grid.appendChild(slot);}
-  grid.style.display='grid';showToast(n+'枚生成完了 — AW-01 LoRA');
+  for(let i=0;i<n;i++){const s=document.createElement('div');s.className='gslot';s.style.background=bgs[i%bgs.length];s.innerHTML=`<div style="text-align:center;padding:12px"><div style="font-size:28px;opacity:.15;margin-bottom:6px">◈</div><div style="font-family:'DM Mono',monospace;font-size:6px;color:var(--muted);text-transform:uppercase">AW-01 / ${String(Date.now()).slice(-4)}-${i+1}</div><div style="font-family:'Cormorant Garamond',serif;font-size:9px;color:var(--muted2);margin-top:4px;font-style:italic">Generated</div></div><div class="gov"><div class="govt">📷 IG予約</div><div class="govt">↓ 保存</div></div>`;g.appendChild(s);}
+  g.style.display='grid';toast(n+'枚生成完了 — AW-01 LoRA');
 }
-function clearFeedGen(){document.getElementById('feed-prompt').value='';document.getElementById('feed-imgs').style.display='none';document.getElementById('feed-placeholder').style.display='block';document.querySelectorAll('#panel-vision .tag').forEach(t=>t.classList.remove('on'));}
+function clearFeed(){document.getElementById('fprompt').value='';document.getElementById('fimgs').style.display='none';document.getElementById('fph').style.display='block';document.querySelectorAll('#panel-vision .tag').forEach(t=>t.classList.remove('on'));}
 
-const products=[{name:'オーバーサイズコート',price:'¥38,000',stock:'在庫あり',icon:'🧥',id:'AW001'},{name:'モノトーンセットアップ',price:'¥28,000',stock:'残り5点',icon:'👔',id:'AW002'},{name:'ワイドデニム',price:'¥18,000',stock:'在庫あり',icon:'👖',id:'AW003'},{name:'クロップドジャケット',price:'¥32,000',stock:'在庫あり',icon:'🥻',id:'AW004'},{name:'グラフィックTシャツ',price:'¥12,000',stock:'残り8点',icon:'👕',id:'AW005'},{name:'ストリートキャップ',price:'¥8,000',stock:'在庫あり',icon:'🧢',id:'AW006'},{name:'レザーバッグ',price:'¥45,000',stock:'残り1点',icon:'👜',id:'AW007'},{name:'スニーカー',price:'¥28,000',stock:'受注生産',icon:'👟',id:'AW008'}];
-function initProducts(){document.getElementById('products-grid').innerHTML=products.map(p=>`<div class="product-card" onclick="showToast('${p.name}の詳細を開きます')"><div class="product-thumb">${p.icon}</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-price">${p.price}</div><div class="product-stock">${p.stock}</div><div class="base-item-id">ID: ${p.id}</div></div></div>`).join('');}
+const PRODS=[{name:'オーバーサイズコート',price:'¥38,000',stock:'在庫あり',icon:'🧥',id:'AW001'},{name:'モノトーンセットアップ',price:'¥28,000',stock:'残り5点',icon:'👔',id:'AW002'},{name:'ワイドデニム',price:'¥18,000',stock:'在庫あり',icon:'👖',id:'AW003'},{name:'クロップドジャケット',price:'¥32,000',stock:'在庫あり',icon:'🥻',id:'AW004'},{name:'グラフィックTシャツ',price:'¥12,000',stock:'残り8点',icon:'👕',id:'AW005'},{name:'ストリートキャップ',price:'¥8,000',stock:'在庫あり',icon:'🧢',id:'AW006'},{name:'レザーバッグ',price:'¥45,000',stock:'残り1点',icon:'👜',id:'AW007'},{name:'スニーカー',price:'¥28,000',stock:'受注生産',icon:'👟',id:'AW008'}];
+function initProds(){document.getElementById('pgrid').innerHTML=PRODS.map(p=>`<div class="pcard" onclick="toast('${p.name}の詳細')"><div class="pthumb">${p.icon}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="pprice">${p.price}</div><div class="pstock">${p.stock}</div><div class="pid">ID: ${p.id}</div></div></div>`).join('');}
 
-async function optimizeProdDesc(){
-  const prod=document.getElementById('prod-select').value;const desc=document.getElementById('prod-desc').value;
-  if(!prod){showToast('商品を選択してください');return;}
-  showToast('AI最適化中...');await sleep(1800);
-  const name=prod.split('—')[0].trim();
-  const optimized=`【${name}】\n\n「憧れを、現実に。」— ADWENSが提案する、着た瞬間から自分が変わる一着。\n\n上質な素材感とオーバーサイズのシルエットが、日常を非日常へと昇格させます。ストリートでもモードでも、どんなシーンにも馴染む完成されたバランス。\n\n今季の自分を更新する準備は、できていますか。\n\n▸ シルエット：オーバーサイズフィット\n▸ カラー：ブラック / グレー\n▸ 対象：20-30代メンズ`;
-  document.getElementById('prod-desc-result').style.display='block';
-  document.getElementById('prod-desc-text').textContent=optimized;
-  showToast('説明文の最適化が完了しました');
+async function optProd(){
+  const p=document.getElementById('psel').value;if(!p){toast('商品を選択してください');return;}
+  toast('AI最適化中...');await sleep(1800);
+  document.getElementById('pdres').style.display='block';
+  document.getElementById('pdtext').textContent='【'+p.split('—')[0].trim()+'】\n\n「憧れを、現実に。」— ADWENSが提案する、着た瞬間から自分が変わる一着。\n\n上質な素材感とオーバーサイズのシルエットが、日常を非日常へと昇格させます。ストリートでもモードでも、どんなシーンにも馴染む完成されたバランス。\n\n▸ シルエット：オーバーサイズフィット\n▸ カラー：ブラック / グレー\n▸ 対象：20-30代メンズ';
+  toast('説明文の最適化が完了しました');
 }
-
-async function applyToBase(){
-  if(!BASE_API.accessToken){showToast('BASEと連携してください');openBaseSetup();return;}
-  showToast('BASEに反映中...');await sleep(1500);showToast('✓ BASEの商品説明文を更新しました');
+async function applyBase(){if(!B.tok){toast('BASEと連携してください');openBase();return;}toast('BASEに反映中...');await sleep(1500);toast('✓ BASEの商品説明文を更新しました');}
+async function genCode(){
+  toast('BASEコードを生成中...');await sleep(1600);
+  document.getElementById('bcres').style.display='block';
+  document.getElementById('bcode').textContent='<!-- ADWENS SS26 バナー -->\n<style>\n.adwens-banner{background:#080808;border:1px solid #2a2a2a;padding:32px 24px;text-align:center;font-family:Georgia,serif;margin:24px 0;}\n.adwens-banner .headline{font-size:28px;font-weight:300;letter-spacing:0.15em;color:#f2ede7;margin-bottom:8px;}\n.adwens-banner .sub{font-size:11px;letter-spacing:0.2em;color:#c8a96e;text-transform:uppercase;margin-bottom:20px;}\n.adwens-banner .cta{display:inline-block;background:#c8a96e;color:#080808;padding:12px 32px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;}\n</style>\n<div class="adwens-banner">\n  <div class="headline">SS26 NEW ARRIVAL</div>\n  <div class="sub">憧れを、現実に。</div>\n  <a href="/items" class="cta">コレクションを見る →</a>\n</div>';
+  toast('BASEコードを生成しました');
 }
-
-async function generateBaseCode(){
-  showToast('BASEコードを生成中...');await sleep(1600);
-  const code=`<!-- ADWENS SS26 バナー — BASE Custom Section -->
-<style>
-.adwens-banner{background:#080808;border:1px solid #2a2a2a;padding:32px 24px;text-align:center;font-family:'Georgia',serif;margin:24px 0;}
-.adwens-banner .headline{font-size:28px;font-weight:300;letter-spacing:0.15em;color:#f2ede7;margin-bottom:8px;}
-.adwens-banner .sub{font-size:11px;letter-spacing:0.2em;color:#c8a96e;text-transform:uppercase;margin-bottom:20px;}
-.adwens-banner .cta{display:inline-block;background:#c8a96e;color:#080808;padding:12px 32px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;transition:background 0.2s;}
-.adwens-banner .cta:hover{background:#f2ede7;}
-</style>
-<div class="adwens-banner">
-  <div class="headline">SS26 NEW ARRIVAL</div>
-  <div class="sub">憧れを、現実に。</div>
-  <a href="/items" class="cta">コレクションを見る →</a>
-</div>`;
-  document.getElementById('base-code-result').style.display='block';
-  document.getElementById('generated-code').textContent=code;
-  showToast('BASEコードを生成しました');
+async function genSnsShop(){
+  const p=document.getElementById('slprod').value;toast('SNS戦略を生成中...');await sleep(1600);
+  document.getElementById('slres').style.display='block';
+  document.getElementById('sltext').textContent='【'+p.split('—')[0]+'のSNS×ショップ連携戦略】\n\nInstagram: ルックブック画像で先行公開→Instagram Shopping商品タグを付与。フィード・リール・ストーリーズで段階的に訴求。\n\nTikTok: GRWM形式で着用シーンを自然に紹介→商品リンクを動画内に埋め込み→TikTok Shop連携で視聴から購買を完結。\n\n推奨: 発売7日前からSNSで予告投稿を開始し、発売日当日にInstagramとTikTokで同時投稿。';
+  toast('戦略を生成しました');
 }
 
-async function generateSnsShopStrategy(){
-  const product=document.getElementById('sns-shop-product').value;
-  showToast('SNS戦略を生成中...');await sleep(1600);
-  const text=`【${product.split('—')[0]}のSNS×ショップ連携戦略】\n\nInstagram: ルックブック画像で先行公開→Instagram Shopping商品タグを付与。フィード・リール・ストーリーズで段階的に訴求。\n\nTikTok: GRWM形式で着用シーンを自然に紹介→商品リンクを動画内に埋め込み→TikTok Shop連携で視聴から購買を完結。\n\nX: 発売7日前から予告投稿を開始し、発売日当日にInstagramとTikTokで同時投稿。`;
-  document.getElementById('sns-shop-result').style.display='block';
-  document.getElementById('sns-shop-text').textContent=text;
-  showToast('戦略を生成しました');
+function bSave(){try{localStorage.setItem('adwens_b',JSON.stringify({cid:B.cid,csec:B.csec,tok:B.tok,rtok:B.rtok,exp:B.exp}));}catch(e){}}
+function bLoad(){try{const d=JSON.parse(localStorage.getItem('adwens_b')||'{}');Object.assign(B,d);}catch(e){}}
+function bUI(){
+  const cn=!!B.tok;
+  const tb=document.getElementById('base-tb');if(tb)tb.innerHTML=cn?'Shop: <span style="color:var(--green)">BASE Connected</span>':'Shop: <span>BASE未接続</span>';
+  const st=document.getElementById('bstat');if(st){st.className='bstat '+(cn?'conn':'disc');st.textContent=cn?'● Connected':'○ 未接続';}
+  const ba=document.getElementById('bauth');const bs=document.getElementById('bsync');if(ba)ba.style.display=cn?'none':'block';if(bs)bs.style.display=cn?'block':'none';
+  const bb=document.getElementById('base-banner');if(bb)bb.style.display=cn?'none':'flex';
+  if(cn){const el=document.getElementById('btokinfo');if(el)el.innerHTML=`<div class="binr"><span>Client ID</span><span>${B.cid.slice(0,12)}…</span></div><div class="binr"><span>Access Token</span><span>${B.tok.slice(0,14)}…</span></div><div class="binr"><span>有効期限</span><span>${B.exp?new Date(B.exp).toLocaleString('ja-JP'):'—'}</span></div>`;}
 }
-
-function baseSave(){try{localStorage.setItem('adwens_base',JSON.stringify({clientId:BASE_API.clientId,clientSecret:BASE_API.clientSecret,accessToken:BASE_API.accessToken,refreshToken:BASE_API.refreshToken,tokenExpiry:BASE_API.tokenExpiry}));}catch(e){}}
-function baseLoad(){try{const d=JSON.parse(localStorage.getItem('adwens_base')||'{}');Object.assign(BASE_API,d);}catch(e){}}
-function baseUpdateStatusUI(){
-  const connected=!!BASE_API.accessToken;
-  const tb=document.getElementById('base-topbar-badge');if(tb)tb.innerHTML=connected?'Shop: <span style="color:var(--green)">BASE Connected</span>':'Shop: <span>BASE未接続</span>';
-  const st=document.getElementById('base-conn-status');if(st){st.className='base-status-badge '+(connected?'connected':'disconnected');st.textContent=connected?'● Connected':'○ 未接続';}
-  const as=document.getElementById('base-auth-section');const ss=document.getElementById('base-sync-section');
-  if(as)as.style.display=connected?'none':'block';if(ss)ss.style.display=connected?'block':'none';
-  const pb=document.getElementById('products-base-banner');if(pb)pb.style.display=connected?'none':'flex';
-  if(connected)baseUpdateTokenInfo();
+function openBase(){document.getElementById('bov').classList.add('show');bUI();}
+function closeBase(){document.getElementById('bov').classList.remove('show');}
+function baseOAuth(){
+  const cid=document.getElementById('bcid').value.trim();const cs=document.getElementById('bcsec').value.trim();const ru=document.getElementById('bruri').value.trim()||B.ru;
+  if(!cid||!cs){toast('Client IDとClient Secretを入力してください');return;}
+  B.cid=cid;B.csec=cs;B.ru=ru;bSave();
+  const sc=['read_users','read_items','read_orders','write_items'].join(' ');
+  const url=`${B.au}?response_type=code&client_id=${encodeURIComponent(cid)}&redirect_uri=${encodeURIComponent(ru)}&scope=${encodeURIComponent(sc)}&state=adwens`;
+  const pop=window.open(url,'base_oauth','width=520,height=680,scrollbars=yes');
+  if(!pop){document.getElementById('blink').href=url;document.getElementById('blinkw').style.display='block';}
+  document.getElementById('bcodew').style.display='block';toast('BASEの認可画面を開きました');
 }
-function baseUpdateTokenInfo(){const el=document.getElementById('base-token-info');if(!el)return;const exp=BASE_API.tokenExpiry?new Date(BASE_API.tokenExpiry).toLocaleString('ja-JP'):'—';el.innerHTML=`<div class="base-info-row"><span>Client ID</span><span>${BASE_API.clientId.slice(0,12)}…</span></div><div class="base-info-row"><span>Access Token</span><span>${BASE_API.accessToken.slice(0,14)}…</span></div><div class="base-info-row"><span>有効期限</span><span>${exp}</span></div>`;}
-function baseStartOAuth(){
-  const cid=document.getElementById('base-client-id').value.trim();const csec=document.getElementById('base-client-secret').value.trim();const ruri=document.getElementById('base-redirect-uri').value.trim()||BASE_API.redirectUri;
-  if(!cid||!csec){showToast('Client IDとClient Secretを入力してください');return;}
-  BASE_API.clientId=cid;BASE_API.clientSecret=csec;BASE_API.redirectUri=ruri;baseSave();
-  const scope=['read_users','read_items','read_orders','write_items'].join(' ');
-  const url=`${BASE_API.authUrl}?response_type=code&client_id=${encodeURIComponent(cid)}&redirect_uri=${encodeURIComponent(ruri)}&scope=${encodeURIComponent(scope)}&state=adwens`;
-  const popup=window.open(url,'base_oauth','width=520,height=680,scrollbars=yes');
-  if(!popup){document.getElementById('base-auth-link').href=url;document.getElementById('base-auth-link-wrap').style.display='block';}
-  document.getElementById('base-code-input-wrap').style.display='block';
-  showToast('BASEの認可画面を開きました');
-}
-async function baseExchangeCode(){
-  const code=document.getElementById('base-auth-code').value.trim();if(!code){showToast('認可コードを入力してください');return;}
-  const btn=document.getElementById('base-exchange-btn');btn.disabled=true;btn.textContent='取得中...';
+async function baseExchange(){
+  const code=document.getElementById('bcode2').value.trim();if(!code){toast('認可コードを入力してください');return;}
+  const btn=document.getElementById('bexbtn');btn.disabled=true;btn.textContent='取得中...';
   try{
     await sleep(1200);
-    BASE_API.accessToken='mock_'+Math.random().toString(36).slice(2,18);BASE_API.refreshToken='mock_rt_'+Math.random().toString(36).slice(2,14);BASE_API.tokenExpiry=Date.now()+3600*1000;baseSave();
-    showToast('✓ BASEと連携しました！');baseUpdateStatusUI();document.getElementById('base-code-input-wrap').style.display='none';closeBaseSetup();await baseSyncProducts();
-  }catch(e){showToast('トークン取得に失敗しました');}
+    B.tok='mock_'+Math.random().toString(36).slice(2,18);B.rtok='mock_rt_'+Math.random().toString(36).slice(2,14);B.exp=Date.now()+3600*1000;bSave();
+    toast('✓ BASEと連携しました！');bUI();document.getElementById('bcodew').style.display='none';closeBase();await syncProducts();
+  }catch(e){toast('トークン取得に失敗しました');}
   btn.disabled=false;btn.textContent='アクセストークンを取得';
 }
-function baseSetManualToken(){const token=document.getElementById('base-manual-token').value.trim();if(!token){showToast('アクセストークンを入力してください');return;}BASE_API.accessToken=token;BASE_API.tokenExpiry=Date.now()+3600*1000;baseSave();showToast('アクセストークンを設定しました');baseUpdateStatusUI();baseSyncProducts();}
-async function baseSyncProducts(){
-  const logEl=document.getElementById('base-sync-log');const progEl=document.getElementById('base-sync-progress');
-  if(logEl){logEl.innerHTML='';baseLog(logEl,'info','商品データの同期を開始...');}if(progEl)progEl.style.width='0%';
+function baseManual(){const t=document.getElementById('bmanual').value.trim();if(!t){toast('アクセストークンを入力してください');return;}B.tok=t;B.exp=Date.now()+3600*1000;bSave();toast('アクセストークンを設定しました');bUI();syncProducts();}
+async function syncProducts(){
+  const log=document.getElementById('blog2');const prog=document.getElementById('bprog');
+  if(log){log.innerHTML='';bLog(log,'info','商品データの同期を開始...');}if(prog)prog.style.width='0%';
   try{
-    if(logEl)baseLog(logEl,'info','GET /1/items — 商品一覧を取得中...');if(progEl){await sleep(600);progEl.style.width='30%';}
+    if(log)bLog(log,'info','GET /1/items — 商品一覧を取得中...');if(prog){await sleep(600);prog.style.width='30%';}
     let items=[];
-    if(BASE_API.accessToken&&!BASE_API.accessToken.startsWith('mock_')){const res=await fetch(`${BASE_API.endpoint}/items?limit=100`,{headers:{'Authorization':'Bearer '+BASE_API.accessToken}});if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();items=data.items||[];}
-    else{await sleep(800);items=generateMockItems();}
-    if(progEl){await sleep(400);progEl.style.width='70%';}if(logEl)baseLog(logEl,'success',items.length+'件の商品を取得しました');
-    renderBaseProducts(items);const cntEl=document.getElementById('base-sync-count');if(cntEl)cntEl.textContent=items.length;
-    if(progEl){await sleep(300);progEl.style.width='100%';}if(logEl)baseLog(logEl,'success','同期完了 ✓');showToast('BASEから'+items.length+'件の商品を同期しました');
-  }catch(e){if(logEl)baseLog(logEl,'error','エラー: '+e.message);showToast('同期に失敗しました');}
+    if(B.tok&&!B.tok.startsWith('mock_')){const r=await fetch(`${B.ep}/items?limit=100`,{headers:{'Authorization':'Bearer '+B.tok}});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();items=d.items||[];}
+    else{await sleep(800);items=[{item_id:'AW001',title:'オーバーサイズコート',price:38000,stock:12,mainImage:'🧥'},{item_id:'AW002',title:'モノトーンセットアップ',price:28000,stock:5,mainImage:'👔'},{item_id:'AW003',title:'ワイドデニム',price:18000,stock:20,mainImage:'👖'},{item_id:'AW004',title:'クロップドジャケット',price:32000,stock:8,mainImage:'🥻'},{item_id:'AW005',title:'グラフィックTシャツ',price:12000,stock:30,mainImage:'👕'},{item_id:'AW006',title:'ストリートキャップ',price:8000,stock:25,mainImage:'🧢'},{item_id:'AW007',title:'レザーバッグ',price:45000,stock:3,mainImage:'👜'},{item_id:'AW008',title:'スニーカー',price:28000,stock:0,mainImage:'👟'}];}
+    if(prog){await sleep(400);prog.style.width='70%';}if(log)bLog(log,'success',items.length+'件の商品を取得しました');
+    renderProds(items);const cnt=document.getElementById('bcnt');if(cnt)cnt.textContent=items.length;
+    if(prog){await sleep(300);prog.style.width='100%';}if(log)bLog(log,'success','同期完了 ✓');toast('BASEから'+items.length+'件の商品を同期しました');
+  }catch(e){if(log)bLog(log,'error','エラー: '+e.message);toast('同期に失敗しました');}
 }
-function generateMockItems(){return[{item_id:'AW001',title:'オーバーサイズコート',price:38000,stock:12,mainImage:'🧥'},{item_id:'AW002',title:'モノトーンセットアップ',price:28000,stock:5,mainImage:'👔'},{item_id:'AW003',title:'ワイドデニム',price:18000,stock:20,mainImage:'👖'},{item_id:'AW004',title:'クロップドジャケット',price:32000,stock:8,mainImage:'🥻'},{item_id:'AW005',title:'グラフィックTシャツ',price:12000,stock:30,mainImage:'👕'},{item_id:'AW006',title:'ストリートキャップ',price:8000,stock:25,mainImage:'🧢'},{item_id:'AW007',title:'レザーバッグ',price:45000,stock:3,mainImage:'👜'},{item_id:'AW008',title:'スニーカー',price:28000,stock:0,mainImage:'👟'}];}
-function renderBaseProducts(items){
-  const grid=document.getElementById('products-grid');if(!grid)return;
-  grid.innerHTML=items.map(item=>{const sc=item.stock===0?'在庫切れ':item.stock<=5?`残り${item.stock}点`:'在庫あり';const col=item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--green)';return`<div class="product-card" onclick="showToast('${item.title}の詳細を開きます')"><div class="product-thumb">${item.mainImage||'◈'}</div><div class="product-info"><div class="product-name">${item.title}</div><div class="product-price">¥${item.price.toLocaleString()}</div><div class="product-stock" style="color:${col}">${sc}</div><div class="base-item-id">ID: ${item.item_id}</div></div></div>`;}).join('');
+function renderProds(items){
+  const g=document.getElementById('pgrid');if(!g)return;
+  g.innerHTML=items.map(item=>{const sc=item.stock===0?'在庫切れ':item.stock<=5?'残り'+item.stock+'点':'在庫あり';const col=item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--green)';return`<div class="pcard" onclick="toast('${item.title}')"><div class="pthumb">${item.mainImage}</div><div class="pinfo"><div class="pname">${item.title}</div><div class="pprice">¥${item.price.toLocaleString()}</div><div class="pstock" style="color:${col}">${sc}</div><div class="pid">ID: ${item.item_id}</div></div></div>`;}).join('');
   const total=items.reduce((s,i)=>s+i.stock,0);const out=items.filter(i=>i.stock===0).length;const low=items.filter(i=>i.stock>0&&i.stock<=5).length;
-  const sum=document.getElementById('base-stock-summary');if(sum)sum.innerHTML=`<div class="base-summary-stat"><div class="base-summary-v">${items.length}</div><div class="base-summary-l">総商品数</div></div><div class="base-summary-stat"><div class="base-summary-v" style="color:var(--accent)">${low}</div><div class="base-summary-l">残少</div></div><div class="base-summary-stat"><div class="base-summary-v" style="color:var(--red)">${out}</div><div class="base-summary-l">在庫切れ</div></div><div class="base-summary-stat"><div class="base-summary-v">${total}</div><div class="base-summary-l">総在庫数</div></div>`;
-  const rank=document.getElementById('base-ranking');if(rank){const ranked=[...items].sort((a,b)=>b.price-a.price).slice(0,5);rank.innerHTML=ranked.map((item,i)=>`<div class="base-rank-row"><div class="base-rank-num">${i+1}</div><div class="base-rank-icon">${item.mainImage}</div><div class="base-rank-info"><div class="base-rank-name">${item.title}</div><div class="base-rank-price">¥${item.price.toLocaleString()}</div></div><div class="base-rank-stock" style="color:${item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--muted2)'}">${item.stock===0?'在庫切れ':item.stock+'点'}</div></div>`).join('');}
+  const bs=document.getElementById('bsum');if(bs)bs.innerHTML=`<div class="bss"><div class="bssv">${items.length}</div><div class="bssl">総商品数</div></div><div class="bss"><div class="bssv" style="color:var(--accent)">${low}</div><div class="bssl">残少</div></div><div class="bss"><div class="bssv" style="color:var(--red)">${out}</div><div class="bssl">在庫切れ</div></div><div class="bss"><div class="bssv">${total}</div><div class="bssl">総在庫数</div></div>`;
+  const pr=document.getElementById('prank');if(pr){const ranked=[...items].sort((a,b)=>b.price-a.price).slice(0,5);pr.innerHTML=ranked.map((item,i)=>`<div class="brr"><div class="brn">${i+1}</div><div class="bri">${item.mainImage}</div><div class="brinf"><div class="brnm">${item.title}</div><div class="brpr">¥${item.price.toLocaleString()}</div></div><div class="brst" style="color:${item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--muted2)'}">${item.stock===0?'在庫切れ':item.stock+'点'}</div></div>`).join('');}
 }
-function baseLog(el,type,msg){const colors={info:'var(--muted2)',success:'var(--green)',error:'var(--red)'};const icons={info:'›',success:'✓',error:'✕'};const div=document.createElement('div');div.className='base-log-line';div.innerHTML=`<span style="color:${colors[type]}">${icons[type]}</span> ${msg}`;el.appendChild(div);el.scrollTop=el.scrollHeight;}
-async function baseRefreshToken(){showToast('トークンを更新中...');await sleep(1000);BASE_API.tokenExpiry=Date.now()+3600*1000;baseSave();baseUpdateStatusUI();showToast('トークンを更新しました');}
-function baseDisconnect(){if(!confirm('BASEとの接続を解除しますか？'))return;BASE_API.accessToken='';BASE_API.refreshToken='';BASE_API.tokenExpiry=null;baseSave();baseUpdateStatusUI();document.getElementById('products-grid').innerHTML='';showToast('BASEとの接続を解除しました');}
-function openBaseSetup(){document.getElementById('base-setup-overlay').classList.add('show');baseUpdateStatusUI();}
-function closeBaseSetup(){document.getElementById('base-setup-overlay').classList.remove('show');}
+function bLog(el,type,msg){const c={info:'var(--muted2)',success:'var(--green)',error:'var(--red)'};const ic={info:'›',success:'✓',error:'✕'};const d=document.createElement('div');d.style.cssText='padding:1px 0;line-height:1.6;';d.innerHTML=`<span style="color:${c[type]}">${ic[type]}</span> ${msg}`;el.appendChild(d);el.scrollTop=el.scrollHeight;}
+async function baseRefresh(){toast('トークンを更新中...');await sleep(1000);B.exp=Date.now()+3600*1000;bSave();bUI();toast('トークンを更新しました');}
+function baseDisconn(){if(!confirm('BASEとの接続を解除しますか？'))return;B.tok='';B.rtok='';B.exp=null;bSave();bUI();document.getElementById('pgrid').innerHTML='';toast('BASEとの接続を解除しました');}
 
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(()=>t.style.display='none',2800);}
-function selectCard(el){el.parentElement.querySelectorAll('.sel-card').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
-function toggleBadge(el){el.classList.toggle('on');}
-function addTagToPrompt(el,text,inputId){el.classList.toggle('on');const inp=document.getElementById(inputId);inp.value=el.classList.contains('on')?(inp.value+' '+text).trim():inp.value.replace(text,'').trim();}
-function copyCaption(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('コピーしました'));}
-function copyText(id){copyCaption(id);}
-function copyCode(){navigator.clipboard.writeText(document.getElementById('generated-code').textContent).then(()=>showToast('コードをコピーしました'));}
+function toast(msg){const t=document.getElementById('toast-el');t.textContent=msg;t.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(()=>t.style.display='none',2800);}
+function selCard(el){el.parentElement.querySelectorAll('.sc').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+function addTag(el,txt,id){el.classList.toggle('on');const inp=document.getElementById(id);inp.value=el.classList.contains('on')?(inp.value+' '+txt).trim():inp.value.replace(txt,'').trim();}
+function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>toast('コピーしました'));}
 
 document.addEventListener('DOMContentLoaded',()=>{
-  baseLoad();initCalendar();initProducts();loadTrends();baseUpdateStatusUI();
-  document.getElementById('algo-checklist').innerHTML=`<div class="text-muted" style="text-align:center;padding:16px">"AIでスコアを計算"を押すとチェックリストが表示されます</div>`;
-  document.getElementById('base-setup-overlay').addEventListener('click',function(e){if(e.target===this)closeBaseSetup();});
+  bLoad();initCal();initProds();loadTrends();bUI();
+  document.getElementById('bov').addEventListener('click',function(e){if(e.target===this)closeBase();});
   const p=new URLSearchParams(window.location.search);const code=p.get('code');
-  if(code){const inp=document.getElementById('base-auth-code');if(inp){inp.value=code;document.getElementById('base-code-input-wrap').style.display='block';showToast('認可コードを受け取りました');}}
+  if(code){const inp=document.getElementById('bcode2');if(inp){inp.value=code;document.getElementById('bcodew').style.display='block';openBase();toast('認可コードを受け取りました');}}
 });
 </script>
 </body>
 </html>
-
