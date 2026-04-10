@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADWENS AI STUDIO</title>
+<script>
+// BASE API OAuth コールバック処理
+(function(){
+  const p = new URLSearchParams(window.location.search);
+  const code = p.get('code');
+  if(code){
+    // コードをlocalStorageに保存してメインアプリにリダイレクト
+    localStorage.setItem('base_oauth_code', code);
+    localStorage.setItem('base_oauth_ts', Date.now());
+    // index.htmlにcode付きでリダイレクト（自分自身）
+    if(!window.location.pathname.includes('adwens')){
+      window.location.href = './adwens.html?code=' + code;
+    }
+  }
+})();
+</script>
+<meta http-equiv="refresh" content="0;url=./adwens.html">
+</head>
+<body>
+<p style="font-family:monospace;color:#888;padding:20px">BASE認証中... リダイレクトしています</p>
+</body>
+</html>
