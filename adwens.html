@@ -148,7 +148,6 @@ body{font-family:'Noto Serif JP',serif;background:var(--black);color:var(--text)
 .caldo.yt{background:var(--yt);}
 .pcard{background:var(--card);border:1px solid var(--border);overflow:hidden;cursor:pointer;}
 .pthumb{background:var(--surface);height:100px;display:flex;align-items:center;justify-content:center;font-size:30px;opacity:.4;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
-.pthumb img{width:100%;height:100%;object-fit:cover;opacity:1;}
 .pinfo{padding:8px 10px;}
 .pname{font-size:10px;color:var(--text);margin-bottom:2px;}
 .pprice{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);}
@@ -229,6 +228,7 @@ video{width:100%;max-height:200px;display:block;}
   <div class="topbar-right">
     <div class="tb-badge" id="base-tb">Shop: <span>BASE未接続</span></div>
     <div class="tb-badge">Brand: <span style="color:var(--text)">ADWENS</span></div>
+    <button class="tb-badge" onclick="openApiKeySettings()" style="cursor:pointer;border-color:var(--accent-dim);color:var(--accent)">API ⚙</button>
     <div class="pulse"></div>
   </div>
 </header>
@@ -662,37 +662,101 @@ video{width:100%;max-height:200px;display:block;}
     </div>
   </div>
 </div>
-<script>
-const ADWENS_BRAND=`あなたはD2Cアパレルブランド「ADWENS」の専属AIアシスタントです。
-■ ブランド概要
-ブランド名：ADWENS / ジャンル：メンズ中心のモード×ストリート / 価格帯：5,000〜15,000円
-販売チャネル：BASE / Instagram / TikTok / コンセプト：「憧れを、現実に。」
-役割：誰でも"雰囲気ある人"になれる服を提供する。ハイブランドに憧れる層に手の届く価格で雰囲気を提供する。
-■ ターゲット
-20代前半〜30代前半の男性。ストリート、ラップ、格闘技が好き。服で印象を変えたい。量産型ファッションに飽きている。
-心理：「かっこよくなりたい」「雰囲気ある人に見られたい」「自信を持ちたい」「周りと被りたくない」
-■ 商品説明文のルール
-必ず以下の構成で作成：①キャッチコピー（【】使用）②リードコピー③ボディコピー④ベネフィット⑤おすすめコーディネート⑥訴求文
-重要：ボディコピーはです・ます調 / 購買意欲を高める / 着用イメージが浮かぶように / 安っぽい表現NG
-■ ADWENS DAILYライン：5,000〜7,999円。冒頭でDAILYラインであることを触れる。
-■ 最重要ミッション：商品を売ること / 「欲しい」と思わせること / 「自分のことだ」と思わせること`;
+</main>
+</div>
 
-const AG={
+<!-- API KEY SETTINGS MODAL -->
+<div class="modal-ov" id="apikey-modal">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2px">SETTINGS</div>
+        <div class="modal-title">API キー設定</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="bstep">
+        <div class="bsn">Anthropic API キーを入力</div>
+        <div class="bst2">AIエージェント全機能を有効化</div>
+        <div class="bsd">APIキーはこのブラウザのみに保存されます。GitHubや外部サーバーには送信されません。取得先: console.anthropic.com → API keys</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input type="password" class="inp" id="apikey-input" placeholder="sk-ant-api03-..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1">
+          <button class="bp" onclick="saveApiKey()">保存</button>
+        </div>
+        <div id="apikey-status" style="font-family:'DM Mono',monospace;font-size:8px;margin-top:8px;display:none"></div>
+      </div>
+      <div class="bstep" id="apikey-current" style="display:none">
+        <div class="bsn">現在のAPIキー</div>
+        <div id="apikey-display" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--green);margin-bottom:8px"></div>
+        <button class="bo bsm" onclick="clearApiKey()">キーを削除</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast-el"></div>
+
+<!-- SNS ACCOUNT SETTINGS MODAL -->
+<div class="modal-ov" id="sns-acc-modal">
+  <div class="modal-box">
+    <div class="modal-hd"><div><div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2px">SNS SETTINGS</div><div class="modal-title">SNSアカウント設定</div></div><button class="modal-close" onclick="closeModal('sns-acc-modal')">✕</button></div>
+    <div class="modal-body">
+      <div class="bstep">
+        <div class="bsn">アカウント名を変更</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div><div class="fl" style="margin-bottom:3px">📷 Instagram</div><input type="text" class="inp" id="sns-ig" placeholder="@adwens_official_" style="font-family:'DM Mono',monospace;font-size:10px"></div>
+          <div><div class="fl" style="margin-bottom:3px">🎵 TikTok</div><input type="text" class="inp" id="sns-tk" placeholder="@adwens_official_" style="font-family:'DM Mono',monospace;font-size:10px"></div>
+          <div><div class="fl" style="margin-bottom:3px">▶ YouTube</div><input type="text" class="inp" id="sns-yt" placeholder="@ADwens0111" style="font-family:'DM Mono',monospace;font-size:10px"></div>
+          <div><div class="fl" style="margin-bottom:3px">✕ X (Twitter)</div><input type="text" class="inp" id="sns-x" placeholder="@adwens_official" style="font-family:'DM Mono',monospace;font-size:10px"></div>
+          <div><div class="fl" style="margin-bottom:3px">◎ Threads</div><input type="text" class="inp" id="sns-th" placeholder="@adwens_official_" style="font-family:'DM Mono',monospace;font-size:10px"></div>
+        </div>
+        <div class="br mt6"><button class="bp" onclick="saveSnsAccounts()">保存して反映する</button><button class="bo" onclick="closeModal('sns-acc-modal')">キャンセル</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BASE API MODAL -->
+<div class="modal-ov" id="base-modal">
+  <div class="modal-box">
+    <div class="modal-hd"><div><div style="font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:2px">BASE API</div><div class="modal-title">ショップ連携設定</div></div><div style="display:flex;align-items:center;gap:8px"><div class="bstat disc" id="bstat">○ 未接続</div><button class="modal-close" onclick="closeModal('base-modal')">✕</button></div></div>
+    <div class="modal-body">
+      <div id="bauth">
+        <div class="bstep"><div class="bsn">Step 01</div><div class="bst2">BASE Developers に申請</div><div class="bsd">申請後1〜2週間でClient IDとClient Secretが発行されます。</div><a href="https://developers.thebase.in/" target="_blank" class="balink">BASE Developers → 申請ページ ↗</a></div>
+        <div class="bstep"><div class="bsn">Step 02</div><div class="bst2">Client ID / Secret を設定</div><div style="display:flex;flex-direction:column;gap:6px"><div><div class="fl" style="margin-bottom:3px">Client ID</div><input type="text" class="inp" id="bcid" placeholder="25d51ff11f18f7006fcfc9bffde983ba" style="font-family:'DM Mono',monospace;font-size:10px"></div><div><div class="fl" style="margin-bottom:3px">Client Secret</div><input type="password" class="inp" id="bcsec" style="font-family:'DM Mono',monospace;font-size:10px"></div><div><div class="fl" style="margin-bottom:3px">Redirect URI</div><input type="text" class="inp" id="bruri" placeholder="https://ADWENS0623.github.io/adwens/" style="font-family:'DM Mono',monospace;font-size:10px"></div></div></div>
+        <div class="bstep"><div class="bsn">Step 03</div><div class="bst2">BASEで許可する</div><div class="br"><button class="bp" onclick="baseOAuth()">BASEで認証する →</button></div><div id="blinkw" style="display:none;margin-top:6px"><a href="#" id="blink" target="_blank" class="balink">認可ページを開く ↗</a></div><div id="bcodew" style="display:none;margin-top:10px"><div style="background:var(--surface);border:1px solid var(--border);padding:10px"><div class="fl" style="margin-bottom:4px">認可コード</div><div style="display:flex;gap:5px"><input type="text" class="inp" id="bcode2" placeholder="認可コードを貼り付け..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1"><button class="bp" id="bexbtn" onclick="baseExchange()">トークンを取得</button></div></div></div></div>
+        <div class="bstep"><div class="bsn">代替方法</div><div style="display:flex;gap:5px"><input type="text" class="inp" id="bmanual" placeholder="アクセストークン..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1"><button class="bo" onclick="baseManual()">設定</button></div></div>
+      </div>
+      <div id="bsync" style="display:none">
+        <div class="bstep"><div class="bsn">接続情報</div><div id="btokinfo"></div><div class="br mt6"><button class="bsm bo" onclick="baseRefresh()">トークンを更新</button><button class="bsm bo" style="color:var(--red);border-color:rgba(140,74,74,.4)" onclick="baseDisconn()">接続を解除</button></div></div>
+        <div class="bstep"><div class="bsn">商品データ同期</div><div class="bsbar"><div class="bsprog" id="bprog"></div></div><div class="blog2" id="blog2"></div><div class="br mt6"><button class="bp" onclick="syncProducts()">今すぐ同期する</button><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--muted)">取得済み: <span id="bcnt" style="color:var(--accent)">0</span> 件</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// APIキーはlocalStorageから取得（GitHubには保存しない）
+function getApiKey(){return localStorage.getItem('adwens_api_key')||'';}
+function setApiKey(key){localStorage.setItem('adwens_api_key',key);}
+
+const ADWENS_BRAND = "あなたはD2Cアパレルブランド「ADWENS」の専属AIアシスタントです。\n■ ブランド概要\nブランド名：ADWENS / ジャンル：メンズ中心のモード×ストリート / 価格帯：5,000〜15,000円\n販売チャネル：BASE / Instagram / TikTok\nコンセプト：「憧れを、現実に。」\n役割：誰でも雰囲気ある人になれる服を提供する。ハイブランドに憧れる層に手の届く価格で雰囲気を提供する。\n■ ターゲット\n20代前半〜30代前半の男性。ストリート、ラップ、格闘技が好き。服で印象を変えたい。\n心理：かっこよくなりたい / 雰囲気ある人に見られたい / 自信を持ちたい / 周りと被りたくない\n■ 商品説明文のルール\n必ず以下の構成：1.キャッチコピー(【】使用) 2.リードコピー 3.ボディコピー 4.ベネフィット 5.おすすめコーディネート 6.訴求文\nボディコピーはです・ます調 / 購買意欲を高める / 安っぽい表現NG\n■ ADWENS DAILYライン：5,000〜7,999円。冒頭でDAILYラインであることを触れる。\n■ 最重要ミッション：商品を売ること / 欲しいと思わせること / 自分のことだと思わせること";
+
+const AG = {
   director:{r:'CREATIVE DIRECTOR',n:'ADWENS Director AI',d:'ブランド戦略・コレクション方向性・クリエイティブ判断を担当',c:['SS26のコンセプトを整理したい','SNS戦略を立てたい','BASEショップを改善したい','競合ブランドを分析したい'],s:ADWENS_BRAND+'\n\nあなたはADWENSのクリエイティブディレクターAIです。短く力強い言葉でアドバイスしてください。'},
   designer:{r:'HEAD DESIGNER',n:'Designer AI',d:'アイテム構成・素材選定・デザインディテールを担当',c:['SS26のアイテム構成案','素材トレンドを教えて','シルエットバランスの相談','カラーパレット案'],s:ADWENS_BRAND+'\n\nあなたはADWENSのヘッドデザイナーAIです。'},
   md:{r:'MERCHANDISING',n:'MD AI',d:'商品計画・在庫戦略・SKU管理を担当',c:['SKU構成を最適化したい','価格帯の設定相談','BASEの売れ筋分析','来シーズンの発注計画'],s:ADWENS_BRAND+'\n\nあなたはADWENSのMD AIです。'},
   production:{r:'PRODUCTION',n:'生産管理 AI',d:'工場連携・納期管理・品質基準を担当',c:['生産スケジュールを確認','サンプル品質基準','コスト削減の方法','工場候補を教えて'],s:ADWENS_BRAND+'\n\nあなたはADWENSの生産管理AIです。'},
   vmd:{r:'VMD',n:'VMD AI',d:'ビジュアルマーチャンダイジング・EC店頭演出を担当',c:['BASEトップページの陳列','新作の打ち出し方','SNSとショップの連動','季節の切り替えタイミング'],s:ADWENS_BRAND+'\n\nあなたはADWENSのVMD AIです。'},
-  press:{r:'PRESS & PR',n:'プレス AI',d:'メディア対応・プレスリリース・SNSコミュニケーションを担当',c:['プレスリリースを作って','SNS投稿文を作って','インタビュー原稿の準備','メディアリストを整理'],s:ADWENS_BRAND+'\n\nあなたはADWENSのプレスAIです。ADWENSのトーン（ダーク・Mode×Street）に合わせた文章を生成します。'},
+  press:{r:'PRESS & PR',n:'プレス AI',d:'メディア対応・プレスリリース・SNSコミュニケーションを担当',c:['プレスリリースを作って','SNS投稿文を作って','インタビュー原稿の準備','メディアリストを整理'],s:ADWENS_BRAND+'\n\nあなたはADWENSのプレスAIです。'},
   buyer:{r:'BUYER',n:'バイヤー AI',d:'バイイング計画・トレンド分析・セレクト戦略を担当',c:['今季トレンドを教えて','買い付け予算の配分','競合バイイング傾向','新規ブランドの発掘基準'],s:ADWENS_BRAND+'\n\nあなたはADWENSのバイヤーAIです。'},
   crm:{r:'CRM',n:'CRM AI',d:'顧客管理・リテンション戦略・LTV向上を担当',c:['VIP顧客への施策','BASEのリピーター施策','SNSからの新規獲得','顧客セグメントの整理'],s:ADWENS_BRAND+'\n\nあなたはADWENSのCRM AIです。'},
   sns_str:{r:'SNS STRATEGIST',n:'SNS戦略 AI',d:'SNS全体戦略・プラットフォーム別方針・再生数最大化を担当',c:['再生数を伸ばす戦略を立てて','各SNSの使い分けを教えて','アルゴリズム対策','ADWENSのSNS強化ポイント'],s:ADWENS_BRAND+'\n\nあなたはADWENSのSNS戦略AIです。'},
   content:{r:'CONTENT CREATOR',n:'コンテンツ制作 AI',d:'動画構成・投稿企画・コンテンツカレンダーを担当',c:['今週の投稿企画を立てて','TikTok動画の構成案','Instagramリールのアイデア','1ヶ月のコンテンツカレンダー'],s:ADWENS_BRAND+'\n\nあなたはADWENSのコンテンツ制作AIです。'},
   algo:{r:'ALGORITHM EXPERT',n:'アルゴリズム AI',d:'各SNSの最新アルゴリズム分析・最適化提案を担当',c:['TikTokのアルゴリズムを教えて','Instagramリールの攻略法','再生数が伸びない原因','投稿時間の最適化'],s:ADWENS_BRAND+'\n\nあなたはSNSアルゴリズムの専門家AIです。'}
 };
-const SHOP_S=ADWENS_BRAND+'\n\nあなたはADWENSのBASEショップ改善AIです。';
-const API_KEY='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';
-const B={ep:'https://api.thebase.in/1',au:'https://api.thebase.in/1/oauth/authorize',cid:'',csec:'',ru:window.location.href.split('?')[0],tok:'',rtok:'',exp:null};
+const SHOP_S = ADWENS_BRAND+'\n\nあなたはADWENSのBASEショップ改善AIです。';
+const B = {ep:'https://api.thebase.in/1',au:'https://api.thebase.in/1/oauth/authorize',cid:'',csec:'',ru:window.location.href.split('?')[0],tok:'',rtok:'',exp:null};
 let curAgent='director',hist={},shopHist=[],thinking=false,sthinking=false;
 let feedImgB64=null,tryonModelB64=null,tryonItemB64=null,vgenImgB64=null,prodImgB64=null,vidCompImgB64=null;
 
@@ -707,25 +771,26 @@ function selAgent(btn,id){
   document.querySelectorAll('.sbb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
   curAgent=id;const a=AG[id];
   document.getElementById('ar').textContent=a.r;document.getElementById('an').textContent=a.n;document.getElementById('ad').textContent=a.d;
-  document.getElementById('msgs').innerHTML=`<div class="ws"><div class="wm">A</div><div class="wt">${a.n}</div><div class="wd">${a.d}</div><div class="chips">${a.c.map(c=>`<div class="chip" onclick="sendChip(this)">${c}</div>`).join('')}</div></div>`;
+  document.getElementById('msgs').innerHTML='<div class="ws"><div class="wm">A</div><div class="wt">'+a.n+'</div><div class="wd">'+a.d+'</div><div class="chips">'+a.c.map(function(c){return '<div class="chip" onclick="sendChip(this)">'+c+'</div>';}).join('')+'</div></div>';
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-agent').classList.add('active');
 }
-function showSns(n,btn){document.querySelectorAll('#panel-sns .panel').forEach(p=>p.classList.remove('active'));document.getElementById('sns-'+n)?.classList.add('active');document.querySelectorAll('#sb-sns .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
-function showVis(n,btn){document.querySelectorAll('#panel-vision .panel').forEach(p=>p.classList.remove('active'));document.getElementById('vision-'+n)?.classList.add('active');document.querySelectorAll('#sb-vision .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
-function showShop(n,btn){document.querySelectorAll('#panel-shop .panel').forEach(p=>p.classList.remove('active'));document.getElementById('shop-'+n)?.classList.add('active');document.querySelectorAll('#sb-shop .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
-function showModel(n){document.querySelectorAll('#panel-model .panel').forEach(p=>p.classList.remove('active'));document.getElementById('model-'+n)?.classList.add('active');}
+function showSns(n,btn){document.querySelectorAll('#panel-sns .panel').forEach(p=>p.classList.remove('active'));const el=document.getElementById('sns-'+n);if(el)el.classList.add('active');document.querySelectorAll('#sb-sns .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function showVis(n,btn){document.querySelectorAll('#panel-vision .panel').forEach(p=>p.classList.remove('active'));const el=document.getElementById('vision-'+n);if(el)el.classList.add('active');document.querySelectorAll('#sb-vision .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function showShop(n,btn){document.querySelectorAll('#panel-shop .panel').forEach(p=>p.classList.remove('active'));const el=document.getElementById('shop-'+n);if(el)el.classList.add('active');document.querySelectorAll('#sb-shop .sbb').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
+function showModel(n){document.querySelectorAll('#panel-model .panel').forEach(p=>p.classList.remove('active'));const el=document.getElementById('model-'+n);if(el)el.classList.add('active');}
 function openModal(id){document.getElementById(id).classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
 
 async function callClaude(system,messages){
-  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:system,messages:messages})});
-  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error((e.error?.message)||'API Error: '+res.status);}
-  const data=await res.json();return data.content?.[0]?.text||'エラーが発生しました。';
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:system,messages:messages})});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error((e.error&&e.error.message)||'API Error: '+res.status);}
+  const data=await res.json();return(data.content&&data.content[0]&&data.content[0].text)||'エラーが発生しました。';
 }
-async function callClaudeWithImage(system,prompt,base64img,mediaType='image/jpeg'){
-  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:system,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mediaType,data:base64img}},{type:'text',text:prompt}]}]})});
-  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error((e.error?.message)||'API Error: '+res.status);}
-  const data=await res.json();return data.content?.[0]?.text||'エラーが発生しました。';
+async function callClaudeWithImage(system,prompt,base64img,mediaType){
+  mediaType=mediaType||'image/jpeg';
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:system,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mediaType,data:base64img}},{type:'text',text:prompt}]}]})});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error((e.error&&e.error.message)||'API Error: '+res.status);}
+  const data=await res.json();return(data.content&&data.content[0]&&data.content[0].text)||'エラーが発生しました。';
 }
 function fileToBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve({base64:reader.result.split(',')[1],mediaType:file.type||'image/jpeg'});reader.onerror=reject;reader.readAsDataURL(file);});}
 
@@ -737,7 +802,9 @@ function sendShopChip(el){document.getElementById('si').value=el.textContent;sen
 
 async function sendMsg(){
   if(thinking)return;const inp=document.getElementById('ci');const txt=inp.value.trim();if(!txt)return;
-  document.querySelector('#msgs .ws')?.remove();addMsg('user',txt,'','msgs');inp.value='';inp.style.height='auto';
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
+  const ws=document.querySelector('#msgs .ws');if(ws)ws.remove();
+  addMsg('user',txt,'','msgs');inp.value='';inp.style.height='auto';
   if(!hist[curAgent])hist[curAgent]=[];hist[curAgent].push({role:'user',content:txt});
   thinking=true;document.getElementById('sb2').disabled=true;const tid=addThink('msgs');
   try{const reply=await callClaude(AG[curAgent].s,hist[curAgent]);removeThink(tid);hist[curAgent].push({role:'assistant',content:reply});addMsg('ai',reply,AG[curAgent].r,'msgs');}
@@ -746,7 +813,9 @@ async function sendMsg(){
 }
 async function sendShop(){
   if(sthinking)return;const inp=document.getElementById('si');const txt=inp.value.trim();if(!txt)return;
-  document.querySelector('#smsgs .ws')?.remove();addMsg('user',txt,'','smsgs');inp.value='';inp.style.height='auto';
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
+  const ws=document.querySelector('#smsgs .ws');if(ws)ws.remove();
+  addMsg('user',txt,'','smsgs');inp.value='';inp.style.height='auto';
   shopHist.push({role:'user',content:txt});sthinking=true;document.getElementById('ssb').disabled=true;const tid=addThink('smsgs');
   try{const reply=await callClaude(SHOP_S,shopHist);removeThink(tid);shopHist.push({role:'assistant',content:reply});addMsg('ai',reply,'SHOP AI','smsgs');}
   catch(e){removeThink(tid);addMsg('ai','エラー: '+e.message,'','smsgs');}
@@ -755,84 +824,82 @@ async function sendShop(){
 function addMsg(type,txt,role,cid){
   const c=document.getElementById(cid);const div=document.createElement('div');div.className='msg '+type;
   const t=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
-  if(type==='user')div.innerHTML=`<div class="mav">YOU</div><div><div class="mbub">${esc(txt)}</div><div class="mmeta">${t}</div></div>`;
-  else div.innerHTML=`<div class="mav">AI</div><div><div class="mbub">${esc(txt)}</div><div class="mmeta">${role} — ${t}</div></div>`;
+  if(type==='user')div.innerHTML='<div class="mav">YOU</div><div><div class="mbub">'+esc(txt)+'</div><div class="mmeta">'+t+'</div></div>';
+  else div.innerHTML='<div class="mav">AI</div><div><div class="mbub">'+esc(txt)+'</div><div class="mmeta">'+role+' — '+t+'</div></div>';
   c.appendChild(div);c.scrollTop=c.scrollHeight;
 }
-function addThink(cid){const id='tk'+Date.now();const c=document.getElementById(cid);const d=document.createElement('div');d.className='msg ai';d.id=id;d.innerHTML=`<div class="mav">AI</div><div><div class="mbub"><div class="tdots"><span></span><span></span><span></span></div></div></div>`;c.appendChild(d);c.scrollTop=c.scrollHeight;return id;}
-function removeThink(id){document.getElementById(id)?.remove();}
+function addThink(cid){const id='tk'+Date.now();const c=document.getElementById(cid);const d=document.createElement('div');d.className='msg ai';d.id=id;d.innerHTML='<div class="mav">AI</div><div><div class="mbub"><div class="tdots"><span></span><span></span><span></span></div></div></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;return id;}
+function removeThink(id){const el=document.getElementById(id);if(el)el.remove();}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
 
 function connSNS(btn,p){btn.textContent='Connected';btn.className='cbtn conn';toast(p+'アカウントを連携しました');}
 async function analyzeVid(){const va=document.getElementById('va');const val=document.getElementById('val');const vr=document.getElementById('var2');va.style.display='block';val.style.display='flex';vr.style.display='none';await sleep(2500);val.style.display='none';vr.style.display='block';toast('動画分析が完了しました');}
 
 const IGT=[{r:1,t:'#モードストリート',v:'852K posts'},{r:2,t:'#オーバーサイズコーデ',v:'1.2M posts'},{r:3,t:'#モノトーンコーデ',v:'980K posts'},{r:4,t:'#メンズファッション',v:'3.1M posts'},{r:5,t:'#SS2026',v:'420K posts'}];
-const TKT=[{r:1,t:'#OOTD',v:'バズ中🔥'},{r:2,t:'#mensfashion',v:'高上昇中↑↑'},{r:3,t:'#streetwear',v:'安定トレンド'},{r:4,t:'#fashiontok',v:'バズ中🔥'},{r:5,t:'#outfit',v:'高上昇中↑'}];
+const TKT=[{r:1,t:'#OOTD',v:'バズ中'},{r:2,t:'#mensfashion',v:'高上昇中'},{r:3,t:'#streetwear',v:'安定トレンド'},{r:4,t:'#fashiontok',v:'バズ中'},{r:5,t:'#outfit',v:'高上昇中'}];
 const XT=[{r:1,t:'春コーデ',v:'12.4Kツイート'},{r:2,t:'ファッションウィーク',v:'8.2Kツイート'},{r:3,t:'メンズファッション',v:'5.6Kツイート'}];
 const YTT=[{r:1,t:'春夏コーデ2026',v:'高需要'},{r:2,t:'メンズコーデ動画',v:'急上昇'},{r:3,t:'ブランドルックブック',v:'安定'}];
 function loadTrends(){rT('igt',IGT);rT('tkt',TKT);rT('xt',XT);rT('ytt',YTT);}
-function rT(id,data){document.getElementById(id).innerHTML=data.map(d=>`<div class="tc"><div><div class="tr2">#${d.r}</div><div class="tt2">${d.t}</div><div class="tv2">${d.v}</div></div><button class="bsm bo" onclick="toast('${d.t}を追加しました')">使用</button></div>`).join('');}
+function rT(id,data){const el=document.getElementById(id);if(el)el.innerHTML=data.map(d=>'<div class="tc"><div><div class="tr2">#'+d.r+'</div><div class="tt2">'+d.t+'</div><div class="tv2">'+d.v+'</div></div><button class="bsm bo" onclick="toast(\''+d.t+'を追加しました\')">使用</button></div>').join('');}
 
 const CAL={10:[{s:'ig'}],14:[{s:'tk'},{s:'xtw'}],17:[{s:'ig'},{s:'tk'}],21:[{s:'yt'}],24:[{s:'ig'},{s:'xtw'}],28:[{s:'tk'}]};
 function initCal(){
   const g=document.getElementById('cal-days');let h='';
-  for(let i=0;i<3;i++)h+=`<div class="cald" style="opacity:.3"></div>`;
-  for(let d=1;d<=30;d++){const p=CAL[d]||[];h+=`<div class="cald${p.length?' hp':''}" onclick="toast('${d}日の投稿予約を確認')"><div class="caln">${d}</div>${p.map(x=>`<div class="caldo ${x.s}"></div>`).join('')}</div>`;}
+  for(let i=0;i<3;i++)h+='<div class="cald" style="opacity:.3"></div>';
+  for(let d=1;d<=30;d++){const p=CAL[d]||[];h+='<div class="cald'+(p.length?' hp':'')+'" onclick="toast(\''+d+'日の投稿予約\')"><div class="caln">'+d+'</div>'+p.map(x=>'<div class="caldo '+x.s+'"></div>').join('')+'</div>';}
   g.innerHTML=h;
-  document.getElementById('sched-posts').innerHTML=`<div class="sar"><div class="sal"><div class="sai">📷</div><div><div class="san">4/17 21:00 — Instagram / TikTok</div><div class="sah">SS26コート — ルックブック</div></div></div><button class="bsm bo">編集</button></div>`;
+  document.getElementById('sched-posts').innerHTML='<div class="sar"><div class="sal"><div class="sai">📷</div><div><div class="san">4/17 21:00 — Instagram</div><div class="sah">SS26コート</div></div></div><button class="bsm bo">編集</button></div>';
 }
 
-// 投稿スケジュール メディアアップロード
 let schedMediaFiles=[];
 function handleSchedMedia(input){
   const files=Array.from(input.files);if(!files.length)return;
   schedMediaFiles=files;
-  const preview=document.getElementById('sched-media-preview');const list=document.getElementById('sched-media-list');
-  list.innerHTML=files.map(f=>{const isVideo=f.type.startsWith('video/');const url=URL.createObjectURL(f);return isVideo?`<div style="position:relative;width:72px;height:72px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px"><div style="font-size:18px">🎬</div><div style="font-family:'DM Mono',monospace;font-size:6px;color:var(--muted)">${f.name.slice(0,8)}...</div></div>`:`<img src="${url}" style="width:72px;height:72px;object-fit:cover;border:1px solid var(--border)">`;}).join('');
-  preview.style.display='block';
+  const list=document.getElementById('sched-media-list');
+  list.innerHTML=files.map(f=>{const url=URL.createObjectURL(f);return f.type.startsWith('video/')?'<div style="width:72px;height:72px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px">🎬</div>':'<img src="'+url+'" style="width:72px;height:72px;object-fit:cover;border:1px solid var(--border)">';}).join('');
+  document.getElementById('sched-media-preview').style.display='block';
   document.getElementById('sched-media-uz').classList.add('has-file');
   toast(files.length+'件のメディアを追加しました');
 }
 function clearSchedMedia(){schedMediaFiles=[];document.getElementById('sched-media-preview').style.display='none';document.getElementById('sched-media-list').innerHTML='';document.getElementById('sched-media-uz').classList.remove('has-file');document.getElementById('sched-media-file').value='';}
-function schedPost(){
-  const c=document.getElementById('bulk').value;const d=document.getElementById('pdt').value;
-  if(!c){toast('投稿内容を入力してください');return;}if(!d){toast('投稿日時を設定してください');return;}
-  toast('投稿を予約しました（メディア: '+(schedMediaFiles.length||0)+'件）');
-}
+function schedPost(){const c=document.getElementById('bulk').value;const d=document.getElementById('pdt').value;if(!c){toast('投稿内容を入力してください');return;}if(!d){toast('投稿日時を設定してください');return;}toast('投稿を予約しました（メディア: '+(schedMediaFiles.length||0)+'件）');}
 
-function handleVidFile(input){const file=input.files[0];if(!file)return;if(file.type.startsWith('video/')){const url=URL.createObjectURL(file);document.getElementById('vid-preview').src=url;document.getElementById('vid-preview-wrap').style.display='block';document.getElementById('img-preview-wrap').style.display='none';}else if(file.type.startsWith('image/')){fileToBase64(file).then(({base64,mediaType})=>{vidCompImgB64={base64,mediaType};document.getElementById('img-preview-vid').src=URL.createObjectURL(file);document.getElementById('img-preview-wrap').style.display='block';document.getElementById('vid-preview-wrap').style.display='none';});}document.getElementById('vid-uz').classList.add('has-file');toast('ファイルをアップロードしました');}
+function handleVidFile(input){const file=input.files[0];if(!file)return;if(file.type.startsWith('video/')){document.getElementById('vid-preview').src=URL.createObjectURL(file);document.getElementById('vid-preview-wrap').style.display='block';document.getElementById('img-preview-wrap').style.display='none';}else if(file.type.startsWith('image/')){fileToBase64(file).then(({base64,mediaType})=>{vidCompImgB64={base64,mediaType};document.getElementById('img-preview-vid').src=URL.createObjectURL(file);document.getElementById('img-preview-wrap').style.display='block';document.getElementById('vid-preview-wrap').style.display='none';});}document.getElementById('vid-uz').classList.add('has-file');toast('ファイルをアップロードしました');}
 
 async function genVideoComp(){
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
   const prod=document.getElementById('vprod').value;toast('動画構成をAIが分析中...');
-  try{const basePrompt=`ADWENSブランドの動画構成を提案してください。商品: ${prod||'未選択'}。SNS向けReels/TikTok動画の具体的なシーン構成（シーン番号・内容・秒数）、BGMの方向性、テキストオーバーレイの内容、撮影のコツを含めて提案してください。`;
-  let reply;if(vidCompImgB64){reply=await callClaudeWithImage(ADWENS_BRAND+'\nあなたはADWENSのSNSコンテンツ専門AIです。',basePrompt+'アップロードされた写真を参考に。',vidCompImgB64.base64,vidCompImgB64.mediaType);}
-  else{reply=await callClaude(ADWENS_BRAND+'\nあなたはADWENSのSNSコンテンツ専門AIです。',[{role:'user',content:basePrompt}]);}
+  try{const basePrompt='ADWENSブランドの動画構成を提案してください。商品: '+(prod||'未選択')+'。SNS向けReels/TikTok動画の具体的なシーン構成、BGMの方向性、テキストオーバーレイの内容、撮影のコツを含めて提案してください。';
+  let reply;if(vidCompImgB64){reply=await callClaudeWithImage(ADWENS_BRAND+'\n\nあなたはADWENSのSNSコンテンツ専門AIです。',basePrompt,vidCompImgB64.base64,vidCompImgB64.mediaType);}
+  else{reply=await callClaude(ADWENS_BRAND+'\n\nあなたはADWENSのSNSコンテンツ専門AIです。',[{role:'user',content:basePrompt}]);}
   document.getElementById('vcr').style.display='block';document.getElementById('vcr-result').style.display='block';document.getElementById('vcnote').textContent=reply;toast('動画構成の提案が完了しました');}
   catch(e){toast('エラー: '+e.message);}
 }
 async function genCaption(){
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
   const desc=document.getElementById('capdesc').value.trim()||'ADWENSのSS26コレクション';toast('キャプションを生成中...');
-  try{const reply=await callClaude(ADWENS_BRAND+'\nあなたはADWENSのSNSキャプション専門AIです。',[{role:'user',content:`Instagram用とTikTok用のキャプションとハッシュタグを生成してください。\nコンテンツ: ${desc}\nInstagram用（改行あり・世界観表現・ハッシュタグ10個）とTikTok用（短くテンポよく・ハッシュタグ8個）を分けて出力してください。`}]);
+  try{const reply=await callClaude(ADWENS_BRAND+'\n\nあなたはADWENSのSNSキャプション専門AIです。',[{role:'user',content:'Instagram用とTikTok用のキャプションとハッシュタグを生成してください。コンテンツ: '+desc}]);
   document.getElementById('capres').style.display='block';
   const parts=reply.split(/TikTok|tiktok/i);
   document.getElementById('capig').textContent=(parts[0]||reply).trim();
-  document.getElementById('capigt').innerHTML=['#ADWENS','#SS26','#モードストリート','#メンズファッション','#ootd','#streetstyle','#憧れを現実に'].map(t=>`<div class="captag">${t}</div>`).join('');
+  document.getElementById('capigt').innerHTML=['#ADWENS','#SS26','#モードストリート','#メンズファッション','#ootd'].map(t=>'<div class="captag">'+t+'</div>').join('');
   document.getElementById('captk').textContent=(parts[1]||'').trim();
-  document.getElementById('captkt').innerHTML=['#ADWENS','#メンズコーデ','#SS26コーデ','#ootd','#fashiontok','#streetwear'].map(t=>`<div class="captag">${t}</div>`).join('');
+  document.getElementById('captkt').innerHTML=['#ADWENS','#メンズコーデ','#ootd','#fashiontok'].map(t=>'<div class="captag">'+t+'</div>').join('');
   toast('キャプションを生成しました');}catch(e){toast('エラー: '+e.message);}
 }
 function runAlgo(){
-  const items=[['フック（冒頭1秒）の強さ','動画の冒頭でブランドの世界観を即提示する','✓'],['字幕・テキストオーバーレイ','音なし視聴対応の字幕を全動画に追加する','✓'],['最適投稿時間（20:00〜22:00）','この時間帯に投稿予約をセットする','✓'],['ハッシュタグ数（IG: 5〜10個）','ビッグ・ミドル・スモールを混合する','✓'],['トレンドサウンド活用（TK）','バズ中の音源を72時間以内に使用する','△'],['エンゲージメント促進','コメントを誘導するCTAを文末に添える','✓'],['ストーリーズとフィードの連動','投稿後すぐにストーリーズでもシェアする','△']];
-  document.getElementById('algoc').innerHTML=items.map(([k,d,s])=>`<div class="flex-b" style="gap:10px;padding:5px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:10px;color:var(--text)">${k}</div><div style="font-size:9px;color:var(--muted2);margin-top:1px">${d}</div></div><div style="font-family:'DM Mono',monospace;font-size:11px;color:${s==='✓'?'var(--green)':'var(--accent)'};flex-shrink:0">${s}</div></div>`).join('');
+  const items=[['フック（冒頭1秒）の強さ','動画の冒頭でブランドの世界観を即提示する','OK'],['字幕テキストオーバーレイ','音なし視聴対応の字幕を全動画に追加する','OK'],['最適投稿時間（20時〜22時）','この時間帯に投稿予約をセットする','OK'],['ハッシュタグ数（IG: 5〜10個）','ビッグ・ミドル・スモールを混合する','OK'],['トレンドサウンド活用','バズ中の音源を72時間以内に使用する','要改善'],['エンゲージメント促進','コメントを誘導するCTAを文末に添える','OK'],['ストーリーズとフィードの連動','投稿後すぐにストーリーズでもシェアする','要改善']];
+  document.getElementById('algoc').innerHTML=items.map(([k,d,s])=>'<div class="flex-b" style="gap:10px;padding:5px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:10px;color:var(--text)">'+k+'</div><div style="font-size:9px;color:var(--muted2);margin-top:1px">'+d+'</div></div><div style="font-size:11px;color:'+(s==='OK'?'var(--green)':'var(--accent)')+';flex-shrink:0">'+s+'</div></div>').join('');
   toast('アルゴリズムチェックが完了しました');
 }
 
-function handleFeedImg(input){const file=input.files[0];if(!file)return;fileToBase64(file).then(({base64,mediaType})=>{feedImgB64={base64,mediaType};document.getElementById('feed-preview-img').src=URL.createObjectURL(file);document.getElementById('feed-img-preview').style.display='block';document.getElementById('feed-uz').classList.add('has-file');document.getElementById('feed-uz-label').textContent='写真をアップロード済み ✓';toast('商品写真をアップロードしました');});}
+function handleFeedImg(input){const file=input.files[0];if(!file)return;fileToBase64(file).then(({base64,mediaType})=>{feedImgB64={base64,mediaType};document.getElementById('feed-preview-img').src=URL.createObjectURL(file);document.getElementById('feed-img-preview').style.display='block';document.getElementById('feed-uz').classList.add('has-file');document.getElementById('feed-uz-label').textContent='写真をアップロード済み';toast('商品写真をアップロードしました');});}
 async function genFeedAI(){
-  const prompt=document.getElementById('fprompt').value.trim();const btn=document.getElementById('feed-gen-btn');btn.disabled=true;btn.textContent='AI分析中...';toast('AIが画像構成を分析・提案中...');
-  try{const sys=ADWENS_BRAND+'\nあなたはADWENSのビジュアルディレクターAIです。';let reply;
-  if(feedImgB64){reply=await callClaudeWithImage(sys,`この商品写真を分析して①改善ポイント②推奨加工・フィルター③MidjourneyプロンプトB案④キャプション方向性⑤投稿タイミングを提案してください。追加指示: ${prompt||'なし'}`,feedImgB64.base64,feedImgB64.mediaType);}
-  else{reply=await callClaude(sys,[{role:'user',content:`ADWENSブランドのSNSフィード画像構成を提案してください。指示: ${prompt||'ダークでモードなルックブック'}`}]);}
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
+  const prompt=document.getElementById('fprompt').value.trim();const btn=document.getElementById('feed-gen-btn');btn.disabled=true;btn.textContent='AI分析中...';toast('AIが画像構成を分析中...');
+  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのビジュアルディレクターAIです。';let reply;
+  if(feedImgB64){reply=await callClaudeWithImage(sys,'この商品写真を分析して①改善ポイント②推奨加工③プロンプト案④キャプション方向性⑤投稿タイミングを提案してください。追加指示: '+(prompt||'なし'),feedImgB64.base64,feedImgB64.mediaType);}
+  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSブランドのSNSフィード画像構成を提案してください。指示: '+(prompt||'ダークでモードなルックブック')}]);}
   document.getElementById('feed-ai-result').style.display='block';document.getElementById('feed-ai-text').textContent=reply;toast('画像構成の提案が完了しました');}
   catch(e){toast('エラー: '+e.message);}
   btn.disabled=false;btn.textContent='AIに画像構成を提案させる';
@@ -843,108 +910,133 @@ function handleTryonModel(input){const file=input.files[0];if(!file)return;fileT
 function handleTryonItem(input){const file=input.files[0];if(!file)return;fileToBase64(file).then(({base64,mediaType})=>{tryonItemB64={base64,mediaType};document.getElementById('tryon-item-uz').classList.add('has-file');toast('商品写真をアップロードしました');});}
 function useAW01(){tryonModelB64={base64:'AW01',mediaType:'model'};document.getElementById('tryon-model-uz').classList.add('has-file');toast('AW-01モデルを選択しました');}
 async function genTryon(){
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
   const promptTxt=document.getElementById('tryon-prompt').value.trim();const btn=document.getElementById('tryon-btn');btn.disabled=true;btn.textContent='AI分析中...';toast('着用イメージをAIが分析中...');
-  try{const sys=ADWENS_BRAND+'\nあなたはADWENSのスタイリングAIです。';let reply;
-  if(tryonItemB64){reply=await callClaudeWithImage(sys,`この商品写真を見て①特徴・シルエット分析②おすすめスタイリング③SNS映えするシーン設定④ターゲットへの訴求ポイントを提案してください。スタイリング指示: ${promptTxt||'なし'}`,tryonItemB64.base64,tryonItemB64.mediaType);}
-  else{reply=await callClaude(sys,[{role:'user',content:`ADWENSブランドのスタイリング提案をしてください。指示: ${promptTxt||'モード×ストリートのコーディネート'}`}]);}
+  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのスタイリングAIです。';let reply;
+  if(tryonItemB64){reply=await callClaudeWithImage(sys,'この商品写真を見て①特徴分析②おすすめスタイリング③SNS映えシーン④ターゲットへの訴求を提案してください。指示: '+(promptTxt||'なし'),tryonItemB64.base64,tryonItemB64.mediaType);}
+  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSブランドのスタイリング提案をしてください。指示: '+(promptTxt||'モード×ストリートのコーディネート')}]);}
   document.getElementById('tryon-result').style.display='block';document.getElementById('tryon-text').textContent=reply;toast('着用イメージの提案が完了しました');}
   catch(e){toast('エラー: '+e.message);}
   btn.disabled=false;btn.textContent='着用イメージをAIに分析・提案させる';
 }
 
-function handleVgenFile(input){const file=input.files[0];if(!file)return;const preview=document.getElementById('vgen-preview');if(file.type.startsWith('image/')){fileToBase64(file).then(({base64,mediaType})=>{vgenImgB64={base64,mediaType};preview.innerHTML=`<img src="${URL.createObjectURL(file)}" style="width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border)">`;preview.style.display='block';document.getElementById('vgen-uz').classList.add('has-file');toast('写真をアップロードしました');});}else if(file.type.startsWith('video/')){preview.innerHTML=`<video src="${URL.createObjectURL(file)}" controls style="width:100%;max-height:160px;display:block"></video>`;preview.style.display='block';document.getElementById('vgen-uz').classList.add('has-file');toast('動画をアップロードしました');}}
+function handleVgenFile(input){const file=input.files[0];if(!file)return;const preview=document.getElementById('vgen-preview');if(file.type.startsWith('image/')){fileToBase64(file).then(({base64,mediaType})=>{vgenImgB64={base64,mediaType};preview.innerHTML='<img src="'+URL.createObjectURL(file)+'" style="width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border)">';preview.style.display='block';document.getElementById('vgen-uz').classList.add('has-file');toast('写真をアップロードしました');});}else if(file.type.startsWith('video/')){preview.innerHTML='<video src="'+URL.createObjectURL(file)+'" controls style="width:100%;max-height:160px;display:block"></video>';preview.style.display='block';document.getElementById('vgen-uz').classList.add('has-file');toast('動画をアップロードしました');}}
 async function genVgen(){
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
   const promptTxt=document.getElementById('vgen-prompt').value.trim();const btn=document.getElementById('vgen-btn');btn.disabled=true;btn.textContent='AI分析中...';toast('動画構成をAIが提案中...');
-  try{const sys=ADWENS_BRAND+'\nあなたはADWENSのSNS動画制作専門AIです。';let reply;
-  if(vgenImgB64){reply=await callClaudeWithImage(sys,`この写真素材を使ってADWENSブランドのSNS動画構成を提案してください：①写真の特徴分析②TikTok/Reels向け動画構成③冒頭1秒のフック案④BGM方向性⑤字幕案。追加指示: ${promptTxt||'なし'}`,vgenImgB64.base64,vgenImgB64.mediaType);}
-  else{reply=await callClaude(sys,[{role:'user',content:`ADWENSブランドのSNS動画構成を提案してください。指示: ${promptTxt||'ダークでモードなストリートコーデ動画'}`}]);}
+  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNS動画制作専門AIです。';let reply;
+  if(vgenImgB64){reply=await callClaudeWithImage(sys,'この写真素材を使ってSNS動画構成を提案してください：①特徴分析②動画構成③フック案④BGM方向性⑤字幕案。追加指示: '+(promptTxt||'なし'),vgenImgB64.base64,vgenImgB64.mediaType);}
+  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSブランドのSNS動画構成を提案してください。指示: '+(promptTxt||'ダークでモードなストリートコーデ動画')}]);}
   document.getElementById('vgen-result').style.display='block';document.getElementById('vgen-text').textContent=reply;toast('動画構成の提案が完了しました');}
   catch(e){toast('エラー: '+e.message);}
   btn.disabled=false;btn.textContent='AIに動画構成を提案させる';
 }
 
-const PRODS=[{name:'オーバーサイズコート',price:'¥38,000',stock:'在庫あり',icon:'🧥',id:'AW001'},{name:'モノトーンセットアップ',price:'¥28,000',stock:'残り5点',icon:'👔',id:'AW002'},{name:'ワイドデニム',price:'¥18,000',stock:'在庫あり',icon:'👖',id:'AW003'},{name:'クロップドジャケット',price:'¥32,000',stock:'在庫あり',icon:'🥻',id:'AW004'},{name:'グラフィックTシャツ',price:'¥12,000',stock:'残り8点',icon:'👕',id:'AW005'},{name:'ストリートキャップ',price:'¥8,000',stock:'在庫あり',icon:'🧢',id:'AW006'},{name:'レザーバッグ',price:'¥45,000',stock:'残り1点',icon:'👜',id:'AW007'},{name:'スニーカー',price:'¥28,000',stock:'受注生産',icon:'👟',id:'AW008'}];
-function initProds(){document.getElementById('pgrid').innerHTML=PRODS.map(p=>`<div class="pcard" onclick="toast('${p.name}の詳細')"><div class="pthumb">${p.icon}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="pprice">${p.price}</div><div class="pstock">${p.stock}</div><div class="pid">ID: ${p.id}</div></div></div>`).join('');}
+const PRODS=[{name:'オーバーサイズコート',price:38000,stock:'在庫あり',icon:'🧥',id:'AW001'},{name:'モノトーンセットアップ',price:28000,stock:'残り5点',icon:'👔',id:'AW002'},{name:'ワイドデニム',price:18000,stock:'在庫あり',icon:'👖',id:'AW003'},{name:'クロップドジャケット',price:32000,stock:'在庫あり',icon:'🥻',id:'AW004'},{name:'グラフィックTシャツ',price:12000,stock:'残り8点',icon:'👕',id:'AW005'},{name:'ストリートキャップ',price:8000,stock:'在庫あり',icon:'🧢',id:'AW006'},{name:'レザーバッグ',price:45000,stock:'残り1点',icon:'👜',id:'AW007'},{name:'スニーカー',price:28000,stock:'受注生産',icon:'👟',id:'AW008'}];
+function initProds(){document.getElementById('pgrid').innerHTML=PRODS.map(p=>'<div class="pcard" onclick="toast(\''+p.name+'\')"><div class="pthumb">'+p.icon+'</div><div class="pinfo"><div class="pname">'+p.name+'</div><div class="pprice">'+p.price.toLocaleString()+'円</div><div class="pstock">'+p.stock+'</div><div class="pid">ID: '+p.id+'</div></div></div>').join('');}
 
-function handleProdImg(input){const file=input.files[0];if(!file)return;fileToBase64(file).then(({base64,mediaType})=>{prodImgB64={base64,mediaType};document.getElementById('prod-preview-img').src=URL.createObjectURL(file);document.getElementById('prod-img-preview').style.display='block';document.getElementById('prod-desc-uz').classList.add('has-file');document.getElementById('prod-uz-label').textContent='写真をアップロード済み ✓';toast('商品写真をアップロードしました');});}
+function handleProdImg(input){const file=input.files[0];if(!file)return;fileToBase64(file).then(({base64,mediaType})=>{prodImgB64={base64,mediaType};document.getElementById('prod-preview-img').src=URL.createObjectURL(file);document.getElementById('prod-img-preview').style.display='block';document.getElementById('prod-desc-uz').classList.add('has-file');document.getElementById('prod-uz-label').textContent='写真をアップロード済み';toast('商品写真をアップロードしました');});}
 async function genProdDesc(){
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
   const name=document.getElementById('prod-name-inp').value.trim();const priceLevel=document.getElementById('prod-price-sel').value;const btn=document.getElementById('prod-desc-btn');btn.disabled=true;btn.textContent='AI生成中...';toast('商品説明文をAIが生成中...');
-  try{const sys=ADWENS_BRAND+'\nあなたはADWENSの商品説明文専門AIです。必ず①キャッチコピー（【】使用）②リードコピー③ボディコピー④ベネフィット⑤おすすめコーディネート⑥訴求文の構成で作成してください。';
+  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSの商品説明文専門AIです。必ず1.キャッチコピー（【】使用） 2.リードコピー 3.ボディコピー 4.ベネフィット 5.おすすめコーディネート 6.訴求文 の構成で作成してください。';
   const dailyNote=priceLevel==='daily'?'この商品はADWENS DAILYラインです。冒頭でDAILYラインであることを軽く触れてください。':'';
   let reply;
-  if(prodImgB64){reply=await callClaudeWithImage(sys,`この商品写真を分析してADWENSの商品説明文を作成してください。商品名: ${name||'写真から判断'}。${dailyNote}`,prodImgB64.base64,prodImgB64.mediaType);}
-  else{reply=await callClaude(sys,[{role:'user',content:`商品名: ${name||'メンズアパレル商品'}。${dailyNote}ADWENSの商品説明文を作成してください。`}]);}
+  if(prodImgB64){reply=await callClaudeWithImage(sys,'この商品写真を分析してADWENSの商品説明文を作成してください。商品名: '+(name||'写真から判断')+'。'+dailyNote,prodImgB64.base64,prodImgB64.mediaType);}
+  else{reply=await callClaude(sys,[{role:'user',content:'商品名: '+(name||'メンズアパレル商品')+'。'+dailyNote+'ADWENSの商品説明文を作成してください。'}]);}
   document.getElementById('pdres').style.display='block';document.getElementById('pdtext').textContent=reply;toast('商品説明文の生成が完了しました');}
   catch(e){toast('エラー: '+e.message);}
   btn.disabled=false;btn.textContent='商品説明文をAI生成';
 }
-async function applyBase(){if(!B.tok){toast('BASEと連携してください');openModal('base-modal');return;}toast('BASEに反映中...');await sleep(1500);toast('✓ BASEの商品説明文を更新しました');}
-async function genCode(){toast('BASEコードを生成中...');await sleep(1500);document.getElementById('bcres').style.display='block';document.getElementById('bcode').textContent='<!-- ADWENS SS26 バナー -->\n<style>\n.adwens-banner{background:#080808;border:1px solid #2a2a2a;padding:32px 24px;text-align:center;font-family:Georgia,serif;margin:24px 0;}\n.adwens-banner .headline{font-size:28px;font-weight:300;letter-spacing:0.15em;color:#f2ede7;margin-bottom:8px;}\n.adwens-banner .sub{font-size:11px;letter-spacing:0.2em;color:#c8a96e;text-transform:uppercase;margin-bottom:20px;}\n.adwens-banner .cta{display:inline-block;background:#c8a96e;color:#080808;padding:12px 32px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;}\n</style>\n<div class="adwens-banner">\n  <div class="headline">SS26 NEW ARRIVAL</div>\n  <div class="sub">憧れを、現実に。</div>\n  <a href="/items" class="cta">コレクションを見る →</a>\n</div>';toast('BASEコードを生成しました');}
-async function genSnsShop(){const p=document.getElementById('slprod').value;toast('SNS戦略を生成中...');try{const reply=await callClaude(ADWENS_BRAND+'\nあなたはADWENSのSNS×EC戦略専門AIです。',[{role:'user',content:`「${p}」のSNS×BASEショップ連携戦略を提案してください。Instagram Shopping・TikTok Shopの活用法・投稿タイミング・キャプションの方向性を含めてください。`}]);document.getElementById('slres').style.display='block';document.getElementById('sltext').textContent=reply;toast('戦略を生成しました');}catch(e){toast('エラー: '+e.message);}}
+async function applyBase(){if(!B.tok){toast('BASEと連携してください');openModal('base-modal');return;}toast('BASEに反映中...');await sleep(1500);toast('BASEの商品説明文を更新しました');}
+async function genCode(){toast('BASEコードを生成中...');await sleep(1500);document.getElementById('bcres').style.display='block';document.getElementById('bcode').textContent='<!-- ADWENS SS26 バナー -->\n<style>\n.ab{background:#080808;border:1px solid #2a2a2a;padding:32px 24px;text-align:center;font-family:Georgia,serif;margin:24px 0;}\n.ab .h{font-size:28px;font-weight:300;letter-spacing:0.15em;color:#f2ede7;margin-bottom:8px;}\n.ab .s{font-size:11px;letter-spacing:0.2em;color:#c8a96e;text-transform:uppercase;margin-bottom:20px;}\n.ab .c{display:inline-block;background:#c8a96e;color:#080808;padding:12px 32px;font-size:11px;text-decoration:none;}\n</style>\n<div class="ab"><div class="h">SS26 NEW ARRIVAL</div><div class="s">憧れを、現実に。</div><a href="/items" class="c">コレクションを見る</a></div>';toast('BASEコードを生成しました');}
+async function genSnsShop(){
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
+  const p=document.getElementById('slprod').value;toast('SNS戦略を生成中...');
+  try{const reply=await callClaude(ADWENS_BRAND+'\n\nあなたはADWENSのSNS×EC戦略専門AIです。',[{role:'user',content:'「'+p+'」のSNS×BASEショップ連携戦略を提案してください。'}]);document.getElementById('slres').style.display='block';document.getElementById('sltext').textContent=reply;toast('戦略を生成しました');}catch(e){toast('エラー: '+e.message);}
+}
 
-// SIZE ADVISOR AI
 let sizeTableB64=null,sizeTableMediaType='image/jpeg';
 function onSizeProductChange(){const sel=document.getElementById('size-product-sel');clearSizeTable();document.getElementById('size-result').style.display='none';if(!sel.value)return;const linked=!!B.tok;document.getElementById('size-no-base').style.display=linked?'none':'block';document.getElementById('size-img-area').style.display=linked?'block':'none';if(linked)renderSizeProductImages(sel.value);}
-function renderSizeProductImages(itemId){const grid=document.getElementById('size-img-grid');const images=(window._baseProductImages||{})[itemId]||[];if(images.length===0){grid.innerHTML=`<div class="tmuted" style="padding:10px;grid-column:1/-1;font-size:9px">商品画像が見つかりません。手動アップロードをご利用ください。</div>`;return;}grid.innerHTML=images.map(img=>`<div onclick="selectSizeTableUrl('${img}')" style="cursor:pointer;border:2px solid var(--border);overflow:hidden;aspect-ratio:1;background:var(--surface)"><img src="${img}" style="width:100%;height:100%;object-fit:cover"></div>`).join('');}
-function selectSizeTableUrl(url){sizeTableB64=url;sizeTableMediaType='url';document.getElementById('size-table-img').src=url;document.getElementById('size-table-preview').style.display='block';document.getElementById('size-img-area').style.display='none';toast('サイズ表を選択しました ✓');}
-function handleSizeManualImg(input){const file=input.files[0];if(!file)return;fileToBase64(file).then(({base64,mediaType})=>{sizeTableB64=base64;sizeTableMediaType=mediaType;document.getElementById('size-table-img').src=URL.createObjectURL(file);document.getElementById('size-table-preview').style.display='block';document.getElementById('size-no-base').style.display='none';document.getElementById('size-img-area').style.display='none';toast('サイズ表をアップロードしました ✓');});}
+function renderSizeProductImages(itemId){const grid=document.getElementById('size-img-grid');const images=(window._baseProductImages||{})[itemId]||[];if(images.length===0){grid.innerHTML='<div class="tmuted" style="padding:10px;grid-column:1/-1;font-size:9px">商品画像が見つかりません。手動アップロードをご利用ください。</div>';return;}grid.innerHTML=images.map(img=>'<div onclick="selectSizeTableUrl(\''+img+'\')" style="cursor:pointer;border:2px solid var(--border);overflow:hidden;aspect-ratio:1;background:var(--surface)"><img src="'+img+'" style="width:100%;height:100%;object-fit:cover"></div>').join('');}
+function selectSizeTableUrl(url){sizeTableB64=url;sizeTableMediaType='url';document.getElementById('size-table-img').src=url;document.getElementById('size-table-preview').style.display='block';document.getElementById('size-img-area').style.display='none';toast('サイズ表を選択しました');}
+function handleSizeManualImg(input){const file=input.files[0];if(!file)return;fileToBase64(file).then(({base64,mediaType})=>{sizeTableB64=base64;sizeTableMediaType=mediaType;document.getElementById('size-table-img').src=URL.createObjectURL(file);document.getElementById('size-table-preview').style.display='block';document.getElementById('size-no-base').style.display='none';document.getElementById('size-img-area').style.display='none';toast('サイズ表をアップロードしました');});}
 function clearSizeTable(){sizeTableB64=null;document.getElementById('size-table-preview').style.display='none';document.getElementById('size-table-img').src='';['size-manual-file','size-direct-file'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
 function clearSizeForm(){clearSizeTable();document.getElementById('size-product-sel').value='';document.getElementById('size-height').value='';document.getElementById('size-weight').value='';document.getElementById('size-body-note').value='';document.getElementById('size-result').style.display='none';document.getElementById('size-img-area').style.display='none';document.getElementById('size-no-base').style.display='block';}
 async function judgeSizeAI(){
-  const sel=document.getElementById('size-product-sel');const productName=sel.options[sel.selectedIndex]?.text||'';
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
+  const sel=document.getElementById('size-product-sel');const productName=sel.options[sel.selectedIndex]?sel.options[sel.selectedIndex].text:'';
   const height=document.getElementById('size-height').value;const weight=document.getElementById('size-weight').value;const bodyNote=document.getElementById('size-body-note').value;
-  if(!productName||productName.includes('選択してください')){toast('商品を選択してください');return;}
+  if(!productName||productName.indexOf('選択してください')>=0){toast('商品を選択してください');return;}
   if(!height||!weight){toast('身長と体重を入力してください');return;}
   if(!sizeTableB64){toast('サイズ表画像を選択またはアップロードしてください');return;}
   const btn=document.getElementById('size-judge-btn');btn.disabled=true;btn.textContent='AI判定中...';toast('サイズ表を読み取り・判定中...');
-  const fitEls=document.querySelectorAll('#shop-size .sc.on');const fit=fitEls.length>0?fitEls[0].querySelector('.sc-t')?.textContent||'ゆったり着たい':'ゆったり着たい';
-  const sys=ADWENS_BRAND+`\nあなたはADWENSのサイズアドバイザーAIです。必ず以下の形式で回答してください：\n\n【判定結果】\n推奨サイズ: ○○\n（根拠の説明）\n\n【注意点】\n（着丈・肩幅など気になりそうな点）\n\n【返信文】\n（お客様にそのまま送れる丁寧な返信文章）`;
-  const userPrompt=`商品名: ${productName}\nお客様: 身長${height}cm / 体重${weight}kg / 体型: ${bodyNote||'特になし'} / フィット感: ${fit}\n\nこのサイズ表を読み取り、最適なサイズを判定してください。`;
+  const fitEls=document.querySelectorAll('#shop-size .sc.on');const fit=fitEls.length>0&&fitEls[0].querySelector('.sc-t')?fitEls[0].querySelector('.sc-t').textContent:'ゆったり着たい';
+  const sys=ADWENS_BRAND+'\n\nあなたはADWENSのサイズアドバイザーAIです。必ず以下の形式で回答してください：\n\n【判定結果】\n推奨サイズ: ○○\n（根拠の説明）\n\n【注意点】\n（着丈・肩幅など気になりそうな点）\n\n【返信文】\n（お客様にそのまま送れる丁寧な返信文章）';
+  const userPrompt='商品名: '+productName+'\nお客様: 身長'+height+'cm / 体重'+weight+'kg / 体型: '+(bodyNote||'特になし')+' / フィット感: '+fit+'\n\nこのサイズ表を読み取り、最適なサイズを判定してください。';
   try{
     let reply;
-    if(sizeTableMediaType==='url'){reply=await callClaude(sys,[{role:'user',content:userPrompt+`\n\n※サイズ表画像URL: ${sizeTableB64}\n一般的なアパレルサイズ（S:〜165cm、M:165〜175cm、L:175〜182cm、XL:182cm〜）を参考に判定してください。`}]);}
+    if(sizeTableMediaType==='url'){reply=await callClaude(sys,[{role:'user',content:userPrompt+'\n\nサイズ表画像URL: '+sizeTableB64+'\n一般的なアパレルサイズ（S:165cm以下、M:165〜175cm、L:175〜182cm、XL:182cm以上）を参考に判定してください。'}]);}
     else{reply=await callClaudeWithImage(sys,userPrompt,sizeTableB64,sizeTableMediaType);}
     const replyMatch=reply.match(/【返信文】([\s\S]*)$/);const mainResult=reply.replace(/【返信文】[\s\S]*$/,'').trim();const replyText=replyMatch?replyMatch[1].trim():'';
     document.getElementById('size-result').style.display='block';document.getElementById('size-result-text').textContent=mainResult;document.getElementById('size-reply-text').textContent=replyText;
-    toast('サイズ判定が完了しました ✓');document.getElementById('size-result').scrollIntoView({behavior:'smooth',block:'nearest'});
+    toast('サイズ判定が完了しました');document.getElementById('size-result').scrollIntoView({behavior:'smooth',block:'nearest'});
   }catch(e){toast('エラー: '+e.message);}
   btn.disabled=false;btn.textContent='最適サイズをAIが判定する';
 }
-function initSizeProductSelect(items){const sel=document.getElementById('size-product-sel');while(sel.options.length>1)sel.remove(1);if(!window._baseProductImages)window._baseProductImages={};items.forEach(item=>{const opt=document.createElement('option');opt.value=item.item_id;opt.textContent=`${item.title} — ¥${item.price.toLocaleString()}`;const imgs=[];if(item.image_url)imgs.push(item.image_url);window._baseProductImages[item.item_id]=imgs.filter(Boolean);sel.appendChild(opt);});}
+function initSizeProductSelect(items){const sel=document.getElementById('size-product-sel');while(sel.options.length>1)sel.remove(1);if(!window._baseProductImages)window._baseProductImages={};items.forEach(item=>{const opt=document.createElement('option');opt.value=item.item_id;opt.textContent=item.title+' — '+item.price.toLocaleString()+'円';const imgs=[];if(item.image_url)imgs.push(item.image_url);window._baseProductImages[item.item_id]=imgs;sel.appendChild(opt);});}
 
-// SNS SETTINGS
 const SNS_DEF={ig:'@adwens_official_',tk:'@adwens_official_',yt:'@ADwens0111',x:'@adwens_official',th:'@adwens_official_'};
 function loadSnsAccounts(){let acc;try{acc=JSON.parse(localStorage.getItem('adwens_sns')||'null');}catch(e){}acc=acc||SNS_DEF;document.getElementById('h-ig').textContent=acc.ig;document.getElementById('h-tk').textContent=acc.tk;document.getElementById('h-yt').textContent=acc.yt;document.getElementById('h-x').textContent=acc.x;document.getElementById('h-th').textContent=acc.th;}
-function saveSnsAccounts(){const acc={ig:document.getElementById('sns-ig').value.trim()||SNS_DEF.ig,tk:document.getElementById('sns-tk').value.trim()||SNS_DEF.tk,yt:document.getElementById('sns-yt').value.trim()||SNS_DEF.yt,x:document.getElementById('sns-x').value.trim()||SNS_DEF.x,th:document.getElementById('sns-th').value.trim()||SNS_DEF.th};try{localStorage.setItem('adwens_sns',JSON.stringify(acc));}catch(e){}loadSnsAccounts();closeModal('sns-acc-modal');toast('SNSアカウント設定を保存しました ✓');}
+function saveSnsAccounts(){const acc={ig:document.getElementById('sns-ig').value.trim()||SNS_DEF.ig,tk:document.getElementById('sns-tk').value.trim()||SNS_DEF.tk,yt:document.getElementById('sns-yt').value.trim()||SNS_DEF.yt,x:document.getElementById('sns-x').value.trim()||SNS_DEF.x,th:document.getElementById('sns-th').value.trim()||SNS_DEF.th};try{localStorage.setItem('adwens_sns',JSON.stringify(acc));}catch(e){}loadSnsAccounts();closeModal('sns-acc-modal');toast('SNSアカウント設定を保存しました');}
 
-// BASE API
+// API KEY MANAGEMENT
+function saveApiKey(){
+  const key=document.getElementById('apikey-input').value.trim();
+  const s=document.getElementById('apikey-status');s.style.display='block';
+  if(!key||!key.startsWith('sk-ant-')){s.style.color='var(--red)';s.textContent='有効なAPIキーを入力してください（sk-ant-で始まる文字列）';return;}
+  setApiKey(key);
+  document.getElementById('apikey-input').value='';
+  document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';
+  document.getElementById('apikey-current').style.display='block';
+  s.style.color='var(--green)';s.textContent='APIキーを保存しました ✓';
+  setTimeout(()=>closeModal('apikey-modal'),1200);
+  toast('APIキーを設定しました ✓ 全機能が使えます');
+}
+function clearApiKey(){localStorage.removeItem('adwens_api_key');document.getElementById('apikey-current').style.display='none';document.getElementById('apikey-input').value='';toast('APIキーを削除しました');}
+function openApiKeySettings(){
+  const key=getApiKey();
+  if(key){document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';document.getElementById('apikey-current').style.display='block';}
+  openModal('apikey-modal');
+}
+
 function bSave(){try{localStorage.setItem('adwens_b',JSON.stringify({cid:B.cid,csec:B.csec,tok:B.tok,rtok:B.rtok,exp:B.exp}));}catch(e){}}
 function bLoad(){try{const d=JSON.parse(localStorage.getItem('adwens_b')||'{}');Object.assign(B,d);}catch(e){}}
 function bUI(){const cn=!!B.tok;const tb=document.getElementById('base-tb');if(tb)tb.innerHTML=cn?'Shop: <span style="color:var(--green)">BASE Connected</span>':'Shop: <span>BASE未接続</span>';const st=document.getElementById('bstat');if(st){st.className='bstat '+(cn?'conn':'disc');st.textContent=cn?'● Connected':'○ 未接続';}const ba=document.getElementById('bauth');const bs=document.getElementById('bsync');if(ba)ba.style.display=cn?'none':'block';if(bs)bs.style.display=cn?'block':'none';const bb=document.getElementById('base-banner');if(bb)bb.style.display=cn?'none':'flex';}
-function baseOAuth(){const cid=document.getElementById('bcid').value.trim();const cs=document.getElementById('bcsec').value.trim();const ru=document.getElementById('bruri').value.trim()||B.ru;if(!cid||!cs){toast('Client IDとClient Secretを入力してください');return;}B.cid=cid;B.csec=cs;B.ru=ru;bSave();const sc=['read_users','read_items','read_orders','write_items'].join(' ');const url=`${B.au}?response_type=code&client_id=${encodeURIComponent(cid)}&redirect_uri=${encodeURIComponent(ru)}&scope=${encodeURIComponent(sc)}&state=adwens`;const pop=window.open(url,'base_oauth','width=520,height=680,scrollbars=yes');if(!pop){document.getElementById('blink').href=url;document.getElementById('blinkw').style.display='block';}document.getElementById('bcodew').style.display='block';toast('BASEの認可画面を開きました');}
-async function baseExchange(){const code=document.getElementById('bcode2').value.trim();if(!code){toast('認可コードを入力してください');return;}const btn=document.getElementById('bexbtn');btn.disabled=true;btn.textContent='取得中...';try{await sleep(1200);B.tok='mock_'+Math.random().toString(36).slice(2,18);B.exp=Date.now()+3600*1000;bSave();toast('✓ BASEと連携しました！');bUI();document.getElementById('bcodew').style.display='none';closeModal('base-modal');await syncProducts();}catch(e){toast('トークン取得に失敗しました');}btn.disabled=false;btn.textContent='アクセストークンを取得';}
+function baseOAuth(){const cid=document.getElementById('bcid').value.trim();const cs=document.getElementById('bcsec').value.trim();const ru=document.getElementById('bruri').value.trim()||B.ru;if(!cid||!cs){toast('Client IDとClient Secretを入力してください');return;}B.cid=cid;B.csec=cs;B.ru=ru;bSave();const sc=['read_users','read_items','read_orders','write_items'].join(' ');const url=B.au+'?response_type=code&client_id='+encodeURIComponent(cid)+'&redirect_uri='+encodeURIComponent(ru)+'&scope='+encodeURIComponent(sc)+'&state=adwens';const pop=window.open(url,'base_oauth','width=520,height=680,scrollbars=yes');if(!pop){document.getElementById('blink').href=url;document.getElementById('blinkw').style.display='block';}document.getElementById('bcodew').style.display='block';toast('BASEの認可画面を開きました');}
+async function baseExchange(){const code=document.getElementById('bcode2').value.trim();if(!code){toast('認可コードを入力してください');return;}const btn=document.getElementById('bexbtn');btn.disabled=true;btn.textContent='取得中...';try{await sleep(1200);B.tok='mock_'+Math.random().toString(36).slice(2,18);B.exp=Date.now()+3600*1000;bSave();toast('BASEと連携しました');bUI();document.getElementById('bcodew').style.display='none';closeModal('base-modal');await syncProducts();}catch(e){toast('トークン取得に失敗しました');}btn.disabled=false;btn.textContent='アクセストークンを取得';}
 function baseManual(){const t=document.getElementById('bmanual').value.trim();if(!t){toast('アクセストークンを入力してください');return;}B.tok=t;B.exp=Date.now()+3600*1000;bSave();toast('アクセストークンを設定しました');bUI();syncProducts();}
 async function syncProducts(){
   const log=document.getElementById('blog2');const prog=document.getElementById('bprog');
   if(log){log.innerHTML='';bLog(log,'info','商品データの同期を開始...');}if(prog)prog.style.width='0%';
   try{if(log)bLog(log,'info','商品一覧を取得中...');if(prog){await sleep(600);prog.style.width='30%';}
   let items=[];
-  if(B.tok&&!B.tok.startsWith('mock_')){const r=await fetch(`${B.ep}/items?limit=100`,{headers:{'Authorization':'Bearer '+B.tok}});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();items=d.items||[];}
-  else{await sleep(800);items=PRODS.map(p=>({item_id:p.id,title:p.name,price:parseInt(p.price.replace(/[¥,]/g,'')),stock:10,mainImage:p.icon,image_url:''}));}
+  if(B.tok&&B.tok.indexOf('mock_')!==0){const r=await fetch(B.ep+'/items?limit=100',{headers:{'Authorization':'Bearer '+B.tok}});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();items=data.items||[];}
+  else{await sleep(800);items=PRODS.map(p=>({item_id:p.id,title:p.name,price:p.price,stock:10,mainImage:p.icon,image_url:''}));}
   if(prog){await sleep(400);prog.style.width='70%';}if(log)bLog(log,'success',items.length+'件の商品を取得しました');
   renderProds(items);const cnt=document.getElementById('bcnt');if(cnt)cnt.textContent=items.length;
-  if(prog){await sleep(300);prog.style.width='100%';}if(log)bLog(log,'success','同期完了 ✓');toast('BASEから'+items.length+'件の商品を同期しました');}
+  if(prog){await sleep(300);prog.style.width='100%';}if(log)bLog(log,'success','同期完了');toast('BASEから'+items.length+'件の商品を同期しました');}
   catch(e){if(log)bLog(log,'error','エラー: '+e.message);toast('同期に失敗しました');}
 }
 function renderProds(items){
   const g=document.getElementById('pgrid');if(!g)return;
-  g.innerHTML=items.map(item=>{const sc=item.stock===0?'在庫切れ':item.stock<=5?'残り'+item.stock+'点':'在庫あり';const col=item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--green)';return`<div class="pcard" onclick="toast('${item.title}')"><div class="pthumb">${item.mainImage||'📦'}</div><div class="pinfo"><div class="pname">${item.title}</div><div class="pprice">¥${item.price.toLocaleString()}</div><div class="pstock" style="color:${col}">${sc}</div><div class="pid">ID: ${item.item_id}</div></div></div>`;}).join('');
+  g.innerHTML=items.map(item=>{const sc=item.stock===0?'在庫切れ':item.stock<=5?'残り'+item.stock+'点':'在庫あり';const col=item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--green)';return '<div class="pcard" onclick="toast(\''+item.title+'\')"><div class="pthumb">'+(item.mainImage||'📦')+'</div><div class="pinfo"><div class="pname">'+item.title+'</div><div class="pprice">'+item.price.toLocaleString()+'円</div><div class="pstock" style="color:'+col+'">'+sc+'</div><div class="pid">ID: '+item.item_id+'</div></div></div>';}).join('');
   const total=items.reduce((s,i)=>s+i.stock,0);const out=items.filter(i=>i.stock===0).length;const low=items.filter(i=>i.stock>0&&i.stock<=5).length;
-  const bs=document.getElementById('bsum');if(bs)bs.innerHTML=`<div class="bss"><div class="bssv">${items.length}</div><div class="bssl">総商品数</div></div><div class="bss"><div class="bssv" style="color:var(--accent)">${low}</div><div class="bssl">残少</div></div><div class="bss"><div class="bssv" style="color:var(--red)">${out}</div><div class="bssl">在庫切れ</div></div><div class="bss"><div class="bssv">${total}</div><div class="bssl">総在庫数</div></div>`;
-  const pr=document.getElementById('prank');if(pr){const ranked=[...items].sort((a,b)=>b.price-a.price).slice(0,5);pr.innerHTML=ranked.map((item,i)=>`<div class="brr"><div class="brn">${i+1}</div><div class="bri">${item.mainImage||'📦'}</div><div class="brinf"><div class="brnm">${item.title}</div><div class="brpr">¥${item.price.toLocaleString()}</div></div><div class="brst" style="color:${item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--muted2)'}">${item.stock===0?'在庫切れ':item.stock+'点'}</div></div>`).join('');}
+  const bs=document.getElementById('bsum');if(bs)bs.innerHTML='<div class="bss"><div class="bssv">'+items.length+'</div><div class="bssl">総商品数</div></div><div class="bss"><div class="bssv" style="color:var(--accent)">'+low+'</div><div class="bssl">残少</div></div><div class="bss"><div class="bssv" style="color:var(--red)">'+out+'</div><div class="bssl">在庫切れ</div></div><div class="bss"><div class="bssv">'+total+'</div><div class="bssl">総在庫数</div></div>';
+  const pr=document.getElementById('prank');if(pr){const ranked=items.slice().sort((a,b)=>b.price-a.price).slice(0,5);pr.innerHTML=ranked.map((item,i)=>'<div class="brr"><div class="brn">'+(i+1)+'</div><div class="bri">'+(item.mainImage||'📦')+'</div><div class="brinf"><div class="brnm">'+item.title+'</div><div class="brpr">'+item.price.toLocaleString()+'円</div></div><div class="brst" style="color:'+(item.stock===0?'var(--red)':item.stock<=5?'var(--accent)':'var(--muted2)')+'\'>'+(item.stock===0?'在庫切れ':item.stock+'点')+'</div></div>').join('');}
   initSizeProductSelect(items);
 }
-function bLog(el,type,msg){const c={info:'var(--muted2)',success:'var(--green)',error:'var(--red)'};const ic={info:'›',success:'✓',error:'✕'};const d=document.createElement('div');d.style.cssText='padding:1px 0;line-height:1.6;';d.innerHTML=`<span style="color:${c[type]}">${ic[type]}</span> ${msg}`;el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function bLog(el,type,msg){const c={info:'var(--muted2)',success:'var(--green)',error:'var(--red)'};const ic={info:'>',success:'✓',error:'✕'};const d=document.createElement('div');d.style.cssText='padding:1px 0;line-height:1.6;';d.innerHTML='<span style="color:'+c[type]+'">'+ic[type]+'</span> '+msg;el.appendChild(d);el.scrollTop=el.scrollHeight;}
 async function baseRefresh(){toast('トークンを更新中...');await sleep(1000);B.exp=Date.now()+3600*1000;bSave();bUI();toast('トークンを更新しました');}
 function baseDisconn(){if(!confirm('BASEとの接続を解除しますか？'))return;B.tok='';B.rtok='';B.exp=null;bSave();bUI();document.getElementById('pgrid').innerHTML='';toast('BASEとの接続を解除しました');}
 
@@ -956,8 +1048,16 @@ function copyEl(id){const el=document.getElementById(id);navigator.clipboard.wri
 
 document.addEventListener('DOMContentLoaded',()=>{
   bLoad();initCal();initProds();loadTrends();bUI();loadSnsAccounts();
-  initSizeProductSelect(PRODS.map(p=>({item_id:p.id,title:p.name,price:parseInt(p.price.replace(/[¥,]/g,'')),image_url:''})));
+  initSizeProductSelect(PRODS.map(p=>({item_id:p.id,title:p.name,price:p.price,image_url:''})));
   document.querySelectorAll('.modal-ov').forEach(m=>{m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});});
+  // APIキーが未設定なら設定画面を表示
+  if(!getApiKey()){
+    openModal('apikey-modal');
+  } else {
+    const key=getApiKey();
+    document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';
+    document.getElementById('apikey-current').style.display='block';
+  }
   const p=new URLSearchParams(window.location.search);const code=p.get('code');
   if(code){const inp=document.getElementById('bcode2');if(inp){inp.value=code;document.getElementById('bcodew').style.display='block';openModal('base-modal');toast('認可コードを受け取りました');}}
 });
