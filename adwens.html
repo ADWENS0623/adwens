@@ -136,16 +136,6 @@ body{font-family:'Noto Serif JP',serif;background:var(--black);color:var(--text)
 .tr2{font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);margin-bottom:2px;}
 .tt2{font-size:11px;color:var(--text);}
 .tv2{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-top:2px;}
-.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px;}
-.calh{font-family:'DM Mono',monospace;font-size:7px;color:var(--muted);text-align:center;padding:3px 0;text-transform:uppercase;}
-.cald{background:var(--surface);border:1px solid var(--border);min-height:52px;padding:4px;cursor:pointer;}
-.cald.hp{border-color:var(--accent-dim);background:var(--ag);}
-.caln{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted2);margin-bottom:2px;}
-.caldo{width:4px;height:4px;border-radius:50%;margin:1px 0;}
-.caldo.ig{background:var(--ig);}
-.caldo.tk{background:var(--tk);}
-.caldo.xtw{background:#e0e0e0;}
-.caldo.yt{background:var(--yt);}
 .pcard{background:var(--card);border:1px solid var(--border);overflow:hidden;cursor:pointer;}
 .pthumb{background:var(--surface);height:100px;display:flex;align-items:center;justify-content:center;font-size:30px;opacity:.4;border-bottom:1px solid var(--border);}
 .pinfo{padding:8px 10px;}
@@ -254,14 +244,11 @@ video{width:100%;max-height:200px;display:block;}
   </div>
   <div id="sb-sns" style="display:none">
     <div class="sb-label">SNS管理</div>
-    <button class="sbb" onclick="showSns('accounts',this)"><div class="sbi">◎</div>アカウント</button>
+    <button class="sbb active" onclick="showSns('analytics',this)"><div class="sbi">◈</div>アナリティクス</button>
     <button class="sbb" onclick="showSns('trend',this)"><div class="sbi">↑</div>トレンドリサーチ</button>
-    <button class="sbb" onclick="showSns('schedule',this)"><div class="sbi">▦</div>投稿スケジュール</button>
-    <button class="sbb" onclick="showSns('analytics',this)"><div class="sbi">◈</div>アナリティクス</button>
     <button class="sbb" onclick="showSns('video',this)"><div class="sbi">▶</div>動画構成<div class="sbbadge">AI</div></button>
     <button class="sbb" onclick="showSns('caption',this)"><div class="sbi">✐</div>キャプション生成</button>
     <button class="sbb" onclick="showSns('algorithm',this)"><div class="sbi">◉</div>アルゴリズム最適化</button>
-    <button class="sbb" onclick="openModal('sns-acc-modal')"><div class="sbi">⚙</div>アカウント設定</button>
   </div>
   <div id="sb-vision" style="display:none">
     <div class="sb-label">ビジョン生成</div>
@@ -300,88 +287,38 @@ video{width:100%;max-height:200px;display:block;}
       </div>
     </div>
   </div>
-  <div class="cia"><div class="ciw"><textarea class="ci" id="ci" placeholder="AIエージェントに相談する..." rows="1" onkeydown="hk(event)" oninput="ar2(this)"></textarea></div><button class="sbtn" id="sb2" onclick="sendMsg()">→</button></div>
+  <div class="cia">
+    <div class="ciw"><textarea class="ci" id="ci" placeholder="AIエージェントに相談する..." rows="1" onkeydown="hk(event)" oninput="ar2(this)"></textarea></div>
+    <button class="sbtn" id="sb2" onclick="sendMsg()">→</button>
+  </div>
 </div>
 
 <!-- ═══ SNS PANELS ═══ -->
 <div class="panel" id="panel-sns">
-  <!-- アカウント -->
-  <div class="panel active" id="sns-accounts" style="height:100%">
-    <div class="ph"><div><div class="ph-cat">SNS MANAGEMENT</div><div class="ph-title">SNSアカウント</div><div class="ph-desc">ADWENSの各SNSアカウント管理</div></div><div class="ph-right"><button class="bp bsm" onclick="openModal('sns-acc-modal')">アカウント設定</button></div></div>
+  <!-- アナリティクス & 動画分析（デフォルト） -->
+  <div class="panel active" id="sns-analytics" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">ANALYTICS & VIDEO</div><div class="ph-title">アナリティクス & 動画分析</div><div class="ph-desc">SNSデータを入力してAIが改善策を提案 / 動画をアップロードしてAI分析</div></div></div>
     <div class="sb">
-      <div class="st">登録アカウント</div>
-      <div class="sar"><div class="sal"><div class="sai" style="background:rgba(193,53,132,.15)">📷</div><div><div class="san">Instagram</div><div class="sah" id="h-ig">@adwens_official_</div></div></div><a href="https://instagram.com/adwens_official_" target="_blank" class="cbtn disc">開く</a></div>
-      <div class="sar"><div class="sal"><div class="sai" style="background:rgba(255,0,80,.1)">🎵</div><div><div class="san">TikTok</div><div class="sah" id="h-tk">@adwens_official_</div></div></div><a href="https://tiktok.com/@adwens_official_" target="_blank" class="cbtn disc">開く</a></div>
-      <div class="sar"><div class="sal"><div class="sai" style="background:rgba(255,0,0,.1)">▶</div><div><div class="san">YouTube</div><div class="sah" id="h-yt">@ADwens0111</div></div></div><a href="https://youtube.com/@ADwens0111" target="_blank" class="cbtn disc">開く</a></div>
-      <div class="sar"><div class="sal"><div class="sai">✕</div><div><div class="san">X (Twitter)</div><div class="sah" id="h-x">@adwens_official</div></div></div><a href="https://x.com/adwens_official" target="_blank" class="cbtn disc">開く</a></div>
-      <div class="sar"><div class="sal"><div class="sai">◎</div><div><div class="san">Threads</div><div class="sah" id="h-th">@adwens_official_</div></div></div><a href="https://threads.net/@adwens_official_" target="_blank" class="cbtn disc">開く</a></div>
-      <div class="divider"></div>
-      <div class="st">動画パフォーマンス検証</div>
+      <div class="st">動画パフォーマンス分析</div>
       <div class="fb">
-        <div class="fl">TikTok動画URLを入力（またはファイルをアップロード）</div>
-        <input type="text" class="inp" id="tiktok-url" placeholder="https://www.tiktok.com/@adwens_official_/video/..." style="margin-bottom:8px">
-        <div class="uz" id="perf-vid-uz" style="min-height:80px">
+        <div class="fl">動画・スクショをアップロード</div>
+        <div class="uz" id="perf-vid-uz">
           <input type="file" id="perf-vid-file" accept="video/*,image/*" onchange="handlePerfVid(this)">
           <div class="uz-icon">🎬</div>
           <div class="uz-label">動画 / スクショをアップロード</div>
+          <div style="font-size:8px;color:var(--muted);margin-top:2px">TikTok・Instagram動画のスクショも可</div>
         </div>
         <div id="perf-vid-preview" style="display:none;margin-top:8px"></div>
-        <div class="br mt6"><button class="bp" onclick="analyzeVidAI()">AIで動画を分析する</button></div>
+        <div class="fl mt6">動画の説明・気になる点（任意）</div>
+        <textarea class="inp ta ta-sm" id="perf-note" placeholder="例: 再生数は伸びているがフォロワーが増えない、冒頭のフックを改善したい..."></textarea>
+        <div class="br mt6"><button class="bp" onclick="analyzeVidAI()">AIで動画を分析する</button><button class="bo" onclick="clearPerfVid()">クリア</button></div>
       </div>
       <div class="ai-result" id="perf-result">
         <div class="ai-result-label">AI パフォーマンス分析</div>
         <div class="ai-result-text" id="perf-text"></div>
         <div class="br mt6"><button class="bsm bo" onclick="copyEl('perf-text')">コピー</button></div>
       </div>
-    </div>
-  </div>
-  <!-- トレンド -->
-  <div class="panel" id="sns-trend" style="height:100%">
-    <div class="ph"><div><div class="ph-cat">SNS RESEARCH</div><div class="ph-title">トレンドリサーチ</div></div><div class="ph-right"><button class="bp bsm" onclick="loadTrends()">更新</button></div></div>
-    <div class="sb"><div class="g2 mb12"><div><div class="st">Instagram</div><div id="igt"></div></div><div><div class="st">TikTok</div><div id="tkt"></div></div></div><div class="g2"><div><div class="st">X (Twitter)</div><div id="xt"></div></div><div><div class="st">YouTube</div><div id="ytt"></div></div></div></div>
-  </div>
-  <!-- スケジュール -->
-  <div class="panel" id="sns-schedule" style="height:100%">
-    <div class="ph"><div><div class="ph-cat">POST SCHEDULING</div><div class="ph-title">投稿スケジュール</div></div><div class="ph-right"><button class="bp bsm" onclick="toast('新規投稿予約')">+ 新規予約</button></div></div>
-    <div class="sb">
-      <div class="cal"><div class="calh">日</div><div class="calh">月</div><div class="calh">火</div><div class="calh">水</div><div class="calh">木</div><div class="calh">金</div><div class="calh">土</div></div>
-      <div class="cal" id="cal-days"></div>
-      <div class="divider"></div>
-      <div class="st">一括投稿設定</div>
-      <div class="fb">
-        <div class="fl">投稿内容（キャプション）</div>
-        <textarea class="inp ta" id="bulk" placeholder="全SNSに投稿するキャプション..."></textarea>
-        <div class="fl mt6">投稿する画像・動画</div>
-        <div class="uz" id="sched-media-uz">
-          <input type="file" id="sched-media-file" accept="image/*,video/*" multiple onchange="handleSchedMedia(this)">
-          <div class="uz-icon">📎</div>
-          <div class="uz-label">画像 / 動画をアップロード</div>
-          <div style="font-size:8px;color:var(--muted);margin-top:2px">複数ファイル対応</div>
-        </div>
-        <div id="sched-media-preview" style="display:none;margin-top:8px">
-          <div class="fl" style="color:var(--green)">✓ メディアを追加しました</div>
-          <div id="sched-media-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"></div>
-          <button class="bo bsm" style="margin-top:6px" onclick="clearSchedMedia()">メディアをクリア</button>
-        </div>
-        <div class="fl mt6">投稿先SNS</div>
-        <div class="gap-r mt6" style="flex-wrap:wrap;gap:5px">
-          <div class="sns ig on" onclick="this.classList.toggle('on')">📷 Instagram</div>
-          <div class="sns tk on" onclick="this.classList.toggle('on')">🎵 TikTok</div>
-          <div class="sns yt on" onclick="this.classList.toggle('on')">▶ YouTube</div>
-          <div class="sns xtw on" onclick="this.classList.toggle('on')">✕ X</div>
-        </div>
-        <div class="fl mt6">投稿日時</div>
-        <input type="datetime-local" class="inp" id="pdt" style="color:var(--text)">
-        <div class="br mt6"><button class="bp" onclick="schedPost()">投稿を予約する</button></div>
-      </div>
-      <div class="st">予約済み投稿</div><div id="sched-posts"></div>
-    </div>
-  </div>
-  <!-- アナリティクス -->
-  <div class="panel" id="sns-analytics" style="height:100%">
-    <div class="ph"><div><div class="ph-cat">ANALYTICS</div><div class="ph-title">アナリティクス</div><div class="ph-desc">各SNSの管理画面からデータを確認してください</div></div></div>
-    <div class="sb">
-      <div class="card" style="border-color:var(--accent-dim);background:var(--ag);margin-bottom:12px"><div class="cl" style="color:var(--accent)">アナリティクスについて</div><div style="font-size:10px;color:var(--text);line-height:1.9;margin-top:4px">各SNSの公式アプリからインサイトを確認してください。データをここに入力するとAIが改善策を提案します。</div></div>
+      <div class="st">SNSインサイトデータ分析</div>
       <div class="fb">
         <div class="fl">インサイトデータを入力してAIに分析させる</div>
         <textarea class="inp ta" id="analytics-input" placeholder="例:&#10;TikTok: 再生数 12,400 / いいね 892 / フォロワー 1,240&#10;Instagram: リーチ 3,200 / いいね 156 / 保存 89&#10;&#10;気になる点: 再生数に比べてフォロワーが増えない..."></textarea>
@@ -399,6 +336,11 @@ video{width:100%;max-height:200px;display:block;}
       </div>
     </div>
   </div>
+  <!-- トレンド -->
+  <div class="panel" id="sns-trend" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">SNS RESEARCH</div><div class="ph-title">トレンドリサーチ</div></div><div class="ph-right"><button class="bp bsm" onclick="loadTrends()">更新</button></div></div>
+    <div class="sb"><div class="g2 mb12"><div><div class="st">Instagram</div><div id="igt"></div></div><div><div class="st">TikTok</div><div id="tkt"></div></div></div><div class="g2"><div><div class="st">X (Twitter)</div><div id="xt"></div></div><div><div class="st">YouTube</div><div id="ytt"></div></div></div></div>
+  </div>
   <!-- 動画構成 -->
   <div class="panel" id="sns-video" style="height:100%">
     <div class="ph"><div><div class="ph-cat">VIDEO COMPOSITION</div><div class="ph-title">動画構成 AI</div></div></div>
@@ -406,9 +348,7 @@ video{width:100%;max-height:200px;display:block;}
       <div class="fb">
         <div class="fl">使用商品を選択</div>
         <select class="inp" id="vprod" style="cursor:pointer"><option value="">商品を選択...</option><option>オーバーサイズコート — ¥38,000</option><option>モノトーンセットアップ — ¥28,000</option><option>ワイドデニム — ¥18,000</option></select>
-        <div class="fl mt6">TikTok動画のURLを入力（任意）</div>
-        <input type="text" class="inp" id="vgen-url" placeholder="https://www.tiktok.com/@.../video/..." style="margin-bottom:8px">
-        <div class="fl">または動画・写真をアップロード</div>
+        <div class="fl mt6">参考動画・写真をアップロード（任意）</div>
         <div class="uz" id="vid-uz" style="cursor:pointer" onclick="document.getElementById('vid-file').click()">
           <input type="file" id="vid-file" accept="image/*,video/*" style="display:none" onchange="handleVidFile(this)">
           <div class="uz-icon">📁</div>
@@ -436,7 +376,7 @@ video{width:100%;max-height:200px;display:block;}
     <div class="sb">
       <div class="fb">
         <div class="fl">投稿する画像・動画をアップロード（任意）</div>
-        <div class="uz" id="cap-media-uz" style="min-height:80px">
+        <div class="uz" id="cap-media-uz">
           <input type="file" id="cap-media-file" accept="image/*,video/*" onchange="handleCapMedia(this)">
           <div class="uz-icon">📎</div>
           <div class="uz-label">画像 / 動画をアップロード</div>
@@ -579,12 +519,6 @@ video{width:100%;max-height:200px;display:block;}
           <div class="uz-label">動画 / 写真をアップロード（タップして選択）</div>
         </div>
         <div id="vgen-preview" style="display:none;margin-top:8px"></div>
-        <div class="fl mt6">動画形式</div>
-        <div class="g3 mt6" style="gap:6px">
-          <div class="sc on" onclick="selCard(this)"><div class="sc-l">9:16</div><div class="sc-t">Reels / Shorts</div></div>
-          <div class="sc" onclick="selCard(this)"><div class="sc-l">1:1</div><div class="sc-t">フィード動画</div></div>
-          <div class="sc" onclick="selCard(this)"><div class="sc-l">16:9</div><div class="sc-t">YouTube</div></div>
-        </div>
         <div class="fl mt6">追加指示（任意）</div>
         <textarea class="inp ta ta-sm" id="vgen-prompt" placeholder="例: ADWENSのダークでモードなブランドイメージで..."></textarea>
         <div class="br mt6"><button class="bp" id="vgen-btn" onclick="genVgen()">AIに動画構成を提案させる</button></div>
@@ -901,39 +835,36 @@ function rT(id,data){const el=document.getElementById(id);if(el)el.innerHTML=dat
 
 const CAL={10:[{s:'ig'}],14:[{s:'tk'},{s:'xtw'}],17:[{s:'ig'},{s:'tk'}],21:[{s:'yt'}],24:[{s:'ig'},{s:'xtw'}],28:[{s:'tk'}]};
 function initCal(){
-  const g=document.getElementById('cal-days');let h='';
+  const g=document.getElementById('cal-days');if(!g)return;let h='';
   for(let i=0;i<3;i++)h+='<div class="cald" style="opacity:.3"></div>';
   for(let d=1;d<=30;d++){const p=CAL[d]||[];h+='<div class="cald'+(p.length?' hp':'')+'" onclick="toast(\''+d+'日の投稿予約\')"><div class="caln">'+d+'</div>'+p.map(x=>'<div class="caldo '+x.s+'"></div>').join('')+'</div>';}
   g.innerHTML=h;
-  document.getElementById('sched-posts').innerHTML='<div class="sar"><div class="sal"><div class="sai">📷</div><div><div class="san">4/17 21:00 — Instagram</div><div class="sah">SS26コート</div></div></div><button class="bsm bo">編集</button></div>';
+  const sp=document.getElementById('sched-posts');if(sp)sp.innerHTML='<div class="sar"><div class="sal"><div class="sai">📷</div><div><div class="san">4/17 21:00 — Instagram</div><div class="sah">SS26コート</div></div></div><button class="bsm bo">編集</button></div>';
 }
-
-let schedMediaFiles=[];
-function handleSchedMedia(input){
-  const files=Array.from(input.files);if(!files.length)return;
-  schedMediaFiles=files;
-  const list=document.getElementById('sched-media-list');
-  list.innerHTML=files.map(f=>{const url=URL.createObjectURL(f);return f.type.startsWith('video/')?'<div style="width:72px;height:72px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px">🎬</div>':'<img src="'+url+'" style="width:72px;height:72px;object-fit:cover;border:1px solid var(--border)">';}).join('');
-  document.getElementById('sched-media-preview').style.display='block';
-  document.getElementById('sched-media-uz').classList.add('has-file');
-  toast(files.length+'件のメディアを追加しました');
-}
-function clearSchedMedia(){schedMediaFiles=[];document.getElementById('sched-media-preview').style.display='none';document.getElementById('sched-media-list').innerHTML='';document.getElementById('sched-media-uz').classList.remove('has-file');document.getElementById('sched-media-file').value='';}
-function schedPost(){const c=document.getElementById('bulk').value;const d=document.getElementById('pdt').value;if(!c){toast('投稿内容を入力してください');return;}if(!d){toast('投稿日時を設定してください');return;}toast('投稿を予約しました（メディア: '+(schedMediaFiles.length||0)+'件）');}
 
 // 動画パフォーマンス分析
 let perfVidB64=null;
-function handlePerfVid(input){const file=input.files[0];if(!file)return;const preview=document.getElementById('perf-vid-preview');if(file.type.startsWith('image/')){fileToBase64(file).then(({base64,mediaType})=>{perfVidB64={base64,mediaType};preview.innerHTML='<img src="'+URL.createObjectURL(file)+'" style="width:100%;max-height:120px;object-fit:cover;border:1px solid var(--border)">';preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('アップロードしました');});}else{perfVidB64=null;preview.innerHTML='<div style="background:var(--surface);border:1px solid var(--green-dim);padding:8px;font-family:\'DM Mono\',monospace;font-size:8px;color:var(--green)">動画をアップロードしました ✓</div>';preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('動画をアップロードしました');}}
+function handlePerfVid(input){
+  const file=input.files[0];if(!file)return;
+  const preview=document.getElementById('perf-vid-preview');
+  if(file.type.startsWith('image/')){
+    fileToBase64(file).then(({base64,mediaType})=>{perfVidB64={base64,mediaType};preview.innerHTML='<img src="'+URL.createObjectURL(file)+'" style="width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border)">';preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('画像をアップロードしました');});
+  } else {
+    perfVidB64=null;
+    preview.innerHTML='<video src="'+URL.createObjectURL(file)+'" controls style="width:100%;max-height:160px;display:block"></video>';
+    preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('動画をアップロードしました（スクショも添付すると分析精度が上がります）');
+  }
+}
+function clearPerfVid(){perfVidB64=null;document.getElementById('perf-vid-preview').style.display='none';document.getElementById('perf-vid-uz').classList.remove('has-file');document.getElementById('perf-vid-file').value='';const n=document.getElementById('perf-note');if(n)n.value='';document.getElementById('perf-result').style.display='none';}
 
 async function analyzeVidAI(){
   if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
-  const url=document.getElementById('tiktok-url').value.trim();
+  const note=document.getElementById('perf-note')?document.getElementById('perf-note').value.trim():'';
   toast('動画を分析中...');
   try{const sys=ADWENS_BRAND+'\n\nあなたはSNS動画パフォーマンス専門AIです。TikTokの最新トレンドとアルゴリズムに基づいて分析してください。';
   let reply;
-  if(perfVidB64){reply=await callClaudeWithImage(sys,'この動画のスクリーンショットを分析して以下を評価してください：①フックの強さ（冒頭1秒の引き）②ビジュアルのブランド一貫性③改善すべき点（具体的に）④次の投稿への提案⑤ADWENSブランドとしての方向性',perfVidB64.base64,perfVidB64.mediaType);}
-  else if(url){reply=await callClaude(sys,[{role:'user',content:'TikTok動画URL: '+url+'\n\nこの動画について、ADWENSブランドのTikTok戦略として①現状の評価②改善すべき点③フック・構成・編集の具体的な改善案④次回動画への提案を教えてください。'}]);}
-  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSのTikTok動画を改善するための2026年最新アドバイスをください。冒頭フック・構成・編集・サウンド・ハッシュタグの観点から具体的に教えてください。'}]);}
+  if(perfVidB64){reply=await callClaudeWithImage(sys,'この動画・スクショを分析して以下を評価してください：\n①フックの強さ（冒頭1秒の引き力）\n②ビジュアルのブランド一貫性（ADWENSらしさ）\n③改善すべき点（具体的に3点）\n④次の投稿への提案\n⑤2026年TikTokアルゴリズムに対応するための具体的なアドバイス\n\n気になる点: '+(note||'なし'),perfVidB64.base64,perfVidB64.mediaType);}
+  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSのTikTok動画を改善するための2026年最新アドバイスをください。冒頭フック・構成・編集・サウンド・ハッシュタグの観点から具体的に教えてください。\n\n気になる点: '+(note||'なし')}]);}
   document.getElementById('perf-result').style.display='block';document.getElementById('perf-text').textContent=reply;toast('分析が完了しました');}
   catch(e){toast('エラー: '+e.message);}
 }
@@ -949,7 +880,7 @@ async function analyzeAnalytics(){
 }
 
 window._capMediaB64=null;
-function handleCapMedia(input){const file=input.files[0];if(!file)return;const isImg=file.type.startsWith('image/');document.getElementById('cap-media-preview').style.display='block';if(isImg){fileToBase64(file).then(({base64,mediaType})=>{window._capMediaB64={base64,mediaType};document.getElementById('cap-preview-img').src=URL.createObjectURL(file);document.getElementById('cap-preview-img').style.display='block';document.getElementById('cap-preview-video').style.display='none';document.getElementById('cap-media-uz').classList.add('has-file');toast('画像をアップロードしました');});}else{window._capMediaB64=null;document.getElementById('cap-preview-img').style.display='none';document.getElementById('cap-preview-video').style.display='block';document.getElementById('cap-media-uz').classList.add('has-file');toast('動画をアップロードしました（内容を説明欄に入力してください）');}}
+function handleCapMedia(input){const file=input.files[0];if(!file)return;const isImg=file.type.startsWith('image/');document.getElementById('cap-media-preview').style.display='block';if(isImg){fileToBase64(file).then(({base64,mediaType})=>{window._capMediaB64={base64,mediaType};document.getElementById('cap-preview-img').src=URL.createObjectURL(file);document.getElementById('cap-preview-img').style.display='block';document.getElementById('cap-preview-video').style.display='none';document.getElementById('cap-media-uz').classList.add('has-file');toast('画像をアップロードしました');});}else{window._capMediaB64=null;document.getElementById('cap-preview-img').style.display='none';document.getElementById('cap-preview-video').style.display='block';document.getElementById('cap-media-uz').classList.add('has-file');toast('動画をアップロードしました');}}
 
 async function genCaption(){
   if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
@@ -1011,13 +942,11 @@ function handleVidFile(input){const file=input.files[0];if(!file)return;if(file.
 async function genVideoComp(){
   if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
   const prod=document.getElementById('vprod').value;
-  const vgenUrl=document.getElementById('vgen-url')?document.getElementById('vgen-url').value.trim():'';
   const extraPrompt=document.getElementById('vprompt-extra')?document.getElementById('vprompt-extra').value.trim():'';
   toast('動画構成をAIが分析中...');
-  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNSコンテンツ専門AIです。2026年現在のTikTokトレンド（15〜30秒のリール、冒頭1秒フック、字幕必須、トレンドサウンド活用）を踏まえて提案してください。';
-  const basePrompt='ADWENSブランドの動画構成を提案してください。商品: '+(prod||'未選択')+'。SNS向けReels/TikTok動画の具体的なシーン構成（シーン番号・内容・秒数）、BGMの方向性、テキストオーバーレイの内容、撮影のコツを含めて提案してください。追加指示: '+(extraPrompt||'なし');
+  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNSコンテンツ専門AIです。2026年現在のTikTokトレンドを踏まえて提案してください。';
+  const basePrompt='ADWENSブランドの動画構成を提案してください。商品: '+(prod||'未選択')+'。SNS向けReels/TikTok動画の具体的なシーン構成（シーン番号・内容・秒数）、BGMの方向性、テキストオーバーレイの内容、撮影のコツを含めて。追加指示: '+(extraPrompt||'なし');
   let reply;if(vidCompImgB64){reply=await callClaudeWithImage(sys,basePrompt,vidCompImgB64.base64,vidCompImgB64.mediaType);}
-  else if(vgenUrl){reply=await callClaude(sys,[{role:'user',content:'TikTok動画URL参考: '+vgenUrl+'\n\n'+basePrompt}]);}
   else{reply=await callClaude(sys,[{role:'user',content:basePrompt}]);}
   document.getElementById('vcr').style.display='block';document.getElementById('vcr-result').style.display='block';document.getElementById('vcnote').textContent=reply;toast('動画構成の提案が完了しました');}
   catch(e){toast('エラー: '+e.message);}
@@ -1030,10 +959,10 @@ async function genVgen(){
   const promptTxt=document.getElementById('vgen-prompt').value.trim();
   const vgenUrl2=document.getElementById('vgen-url2')?document.getElementById('vgen-url2').value.trim():'';
   const btn=document.getElementById('vgen-btn');btn.disabled=true;btn.textContent='AI分析中...';toast('動画構成をAIが提案中...');
-  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNS動画制作専門AIです。2026年現在のTikTokトレンド（15〜30秒のリール、冒頭1秒フック必須、字幕テキスト、トレンドサウンド活用）を踏まえて提案してください。';let reply;
+  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNS動画制作専門AIです。2026年現在のTikTokトレンドを踏まえて提案してください。';let reply;
   if(vgenImgB64){reply=await callClaudeWithImage(sys,'この動画・写真素材を分析して、TikTok/Instagramリール向けの動画構成を提案してください：①素材の特徴分析②シーン構成（秒数付き）③冒頭1秒のフック文案④BGM方向性⑤テキストオーバーレイ案⑥撮影・編集のコツ。追加指示: '+(promptTxt||'なし'),vgenImgB64.base64,vgenImgB64.mediaType);}
-  else if(vgenUrl2){reply=await callClaude(sys,[{role:'user',content:'参考TikTok URL: '+vgenUrl2+'\n\nADWENSブランドとして次の動画改善案と新規動画構成を提案してください。2026年TikTokトレンドを踏まえて：①改善点②次回動画構成案③フック文案④BGM方向性⑤テキストオーバーレイ案。追加指示: '+(promptTxt||'なし')}]);}
-  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSブランドのTikTok/Reels動画構成を提案してください。2026年のTikTokトレンドを踏まえた具体的なシーン構成（シーン番号・内容・秒数）、フック文案、BGM方向性、テキストオーバーレイ、編集のコツを含めてください。指示: '+(promptTxt||'ダークでモードなストリートコーデ動画')}]);}
+  else if(vgenUrl2){reply=await callClaude(sys,[{role:'user',content:'参考TikTok URL: '+vgenUrl2+'\n\nADWENSブランドとして次の動画改善案と新規動画構成を提案してください。追加指示: '+(promptTxt||'なし')}]);}
+  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSブランドのTikTok/Reels動画構成を提案してください。具体的なシーン構成（秒数付き）、フック文案、BGM方向性、テキストオーバーレイ、編集のコツを含めてください。指示: '+(promptTxt||'ダークでモードなストリートコーデ動画')}]);}
   document.getElementById('vgen-result').style.display='block';document.getElementById('vgen-text').textContent=reply;toast('動画構成の提案が完了しました');}
   catch(e){toast('エラー: '+e.message);}
   btn.disabled=false;btn.textContent='AIに動画構成を提案させる';
@@ -1095,27 +1024,18 @@ async function judgeSizeAI(){
 function initSizeProductSelect(items){const sel=document.getElementById('size-product-sel');while(sel.options.length>1)sel.remove(1);if(!window._baseProductImages)window._baseProductImages={};items.forEach(item=>{const opt=document.createElement('option');opt.value=item.item_id;opt.textContent=item.title+' — '+item.price.toLocaleString()+'円';const imgs=[];if(item.image_url)imgs.push(item.image_url);window._baseProductImages[item.item_id]=imgs;sel.appendChild(opt);});}
 
 const SNS_DEF={ig:'@adwens_official_',tk:'@adwens_official_',yt:'@ADwens0111',x:'@adwens_official',th:'@adwens_official_'};
-function loadSnsAccounts(){let acc;try{acc=JSON.parse(localStorage.getItem('adwens_sns')||'null');}catch(e){}acc=acc||SNS_DEF;document.getElementById('h-ig').textContent=acc.ig;document.getElementById('h-tk').textContent=acc.tk;document.getElementById('h-yt').textContent=acc.yt;document.getElementById('h-x').textContent=acc.x;document.getElementById('h-th').textContent=acc.th;}
+function loadSnsAccounts(){let acc;try{acc=JSON.parse(localStorage.getItem('adwens_sns')||'null');}catch(e){}acc=acc||SNS_DEF;const hig=document.getElementById('h-ig');if(hig)hig.textContent=acc.ig;const htk=document.getElementById('h-tk');if(htk)htk.textContent=acc.tk;const hyt=document.getElementById('h-yt');if(hyt)hyt.textContent=acc.yt;const hx=document.getElementById('h-x');if(hx)hx.textContent=acc.x;const hth=document.getElementById('h-th');if(hth)hth.textContent=acc.th;}
 function saveSnsAccounts(){const acc={ig:document.getElementById('sns-ig').value.trim()||SNS_DEF.ig,tk:document.getElementById('sns-tk').value.trim()||SNS_DEF.tk,yt:document.getElementById('sns-yt').value.trim()||SNS_DEF.yt,x:document.getElementById('sns-x').value.trim()||SNS_DEF.x,th:document.getElementById('sns-th').value.trim()||SNS_DEF.th};try{localStorage.setItem('adwens_sns',JSON.stringify(acc));}catch(e){}loadSnsAccounts();closeModal('sns-acc-modal');toast('SNSアカウント設定を保存しました');}
 
 function saveApiKey(){
   const key=document.getElementById('apikey-input').value.trim();
   const s=document.getElementById('apikey-status');s.style.display='block';
   if(!key||!key.startsWith('sk-ant-')){s.style.color='var(--red)';s.textContent='有効なAPIキーを入力してください（sk-ant-で始まる文字列）';return;}
-  setApiKey(key);
-  document.getElementById('apikey-input').value='';
-  document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';
-  document.getElementById('apikey-current').style.display='block';
-  s.style.color='var(--green)';s.textContent='APIキーを保存しました ✓';
-  setTimeout(()=>closeModal('apikey-modal'),1200);
-  toast('APIキーを設定しました ✓ 全機能が使えます');
+  setApiKey(key);document.getElementById('apikey-input').value='';document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';document.getElementById('apikey-current').style.display='block';
+  s.style.color='var(--green)';s.textContent='APIキーを保存しました ✓';setTimeout(()=>closeModal('apikey-modal'),1200);toast('APIキーを設定しました ✓ 全機能が使えます');
 }
 function clearApiKey(){localStorage.removeItem('adwens_api_key');document.getElementById('apikey-current').style.display='none';document.getElementById('apikey-input').value='';toast('APIキーを削除しました');}
-function openApiKeySettings(){
-  const key=getApiKey();
-  if(key){document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';document.getElementById('apikey-current').style.display='block';}
-  openModal('apikey-modal');
-}
+function openApiKeySettings(){const key=getApiKey();if(key){document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';document.getElementById('apikey-current').style.display='block';}openModal('apikey-modal');}
 
 function bSave(){try{localStorage.setItem('adwens_b',JSON.stringify({cid:B.cid,csec:B.csec,tok:B.tok,rtok:B.rtok,exp:B.exp}));}catch(e){}}
 function bLoad(){try{const d=JSON.parse(localStorage.getItem('adwens_b')||'{}');Object.assign(B,d);}catch(e){}}
