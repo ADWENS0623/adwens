@@ -1008,7 +1008,7 @@ async function syncProducts(){
   try{
     if(log)bLog(log,'info','商品一覧を取得中...');if(prog){await sleep(600);prog.style.width='30%';}
     let items=[];
-    if(B.tok&&!B.tok.startsWith('mock_')){const r=await fetch(B.ep+'/items?limit=100',{headers:{'Authorization':'Bearer '+B.tok}});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();items=data.items||[];}
+    if(B.tok){const r=await fetch('https://script.google.com/macros/s/AKfycbwfGy78ixSQjifTXx-qR73IxKTwXUpewfNHhygi8Qk3-9BoloXC3M3SrvgJ4qLWmKRG/exec');if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();items=d.items||[];}
     else{await sleep(800);items=PRODS.map(p=>({item_id:p.id,title:p.name,price:p.price,stock:10,mainImage:p.icon,image_url:''}));}
     if(prog){await sleep(400);prog.style.width='70%';}if(log)bLog(log,'success',items.length+'件取得しました');
     renderProds(items);const cnt=document.getElementById('bcnt');if(cnt)cnt.textContent=items.length;
