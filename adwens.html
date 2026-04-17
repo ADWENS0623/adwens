@@ -149,7 +149,7 @@ body{font-family:'Noto Serif JP',serif;background:var(--black);color:var(--text)
 .capt{font-size:10px;color:var(--text);line-height:1.8;margin-bottom:6px;}
 .captags{display:flex;flex-wrap:wrap;gap:3px;}
 .captag{font-family:'DM Mono',monospace;font-size:7px;color:#4a6a8c;border:1px solid rgba(74,106,140,.3);padding:2px 5px;}
-.uz{background:var(--card);border:2px dashed var(--border);padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:all .2s;text-align:center;min-height:100px;position:relative;overflow:hidden;}
+.uz{background:var(--card);border:2px dashed var(--border);padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .2s;text-align:center;min-height:100px;position:relative;overflow:hidden;}
 .uz:hover{border-color:var(--accent-dim);background:var(--ag);}
 .uz.has-file{border-color:var(--green-dim);background:rgba(74,140,92,.08);}
 .uz-icon{font-size:22px;opacity:.3;}
@@ -259,7 +259,8 @@ video{width:100%;max-height:200px;display:block;}
   <div id="sb-shop" style="display:none">
     <div class="sb-label">ショップ連携</div>
     <button class="sbb active" onclick="showShop('products',this)"><div class="sbi">▤</div>商品一覧</button>
-    <button class="sbb" onclick="showShop('size',this)"><div class="sbi">📏</div>サイズ相談 AI<div class="sbbadge">NEW</div></button>
+    <button class="sbb" onclick="showShop('analysis',this)"><div class="sbi">◈</div>売上分析 AI<div class="sbbadge">NEW</div></button>
+    <button class="sbb" onclick="showShop('size',this)"><div class="sbi">📏</div>サイズ相談 AI</button>
     <button class="sbb" onclick="showShop('advice',this)"><div class="sbi">✦</div>ショップ改善AI<div class="sbbadge">AI</div></button>
     <button class="sbb" onclick="showShop('basecode',this)"><div class="sbi">◉</div>BASEコード生成</button>
     <button class="sbb" onclick="showShop('snslink',this)"><div class="sbi">◎</div>SNS×商品連携</button>
@@ -416,11 +417,7 @@ video{width:100%;max-height:200px;display:block;}
       <div class="card" style="border-color:var(--accent-dim);background:var(--ag);margin-bottom:12px"><div class="cl" style="color:var(--accent)">使い方</div><div style="font-size:10px;color:var(--text);line-height:1.9;margin-top:4px">① 商品写真をアップロード → ② AIがGemini用プロンプトを生成 → ③ コピーしてGeminiに貼り付け</div></div>
       <div class="fb">
         <div class="fl">商品写真をアップロード</div>
-        <div class="uz" id="feed-uz">
-          <input type="file" id="feed-img-file" accept="image/*" onchange="handleFeedImg(this)">
-          <div class="uz-icon" id="feed-uz-icon">📷</div>
-          <div class="uz-label" id="feed-uz-label">商品写真をアップロード</div>
-        </div>
+        <div class="uz" id="feed-uz"><input type="file" id="feed-img-file" accept="image/*" onchange="handleFeedImg(this)"><div class="uz-icon" id="feed-uz-icon">📷</div><div class="uz-label" id="feed-uz-label">商品写真をアップロード</div></div>
         <div id="feed-img-preview" style="display:none;margin-top:8px"><img id="feed-preview-img" style="width:100%;max-height:180px;object-fit:cover;border:1px solid var(--border)"></div>
         <div class="fl mt6">追加の指示（任意）</div>
         <textarea class="inp ta ta-sm" id="fprompt" placeholder="例: ダークなムードで、ストリート感を出したい..."></textarea>
@@ -445,7 +442,7 @@ video{width:100%;max-height:200px;display:block;}
   <div class="panel" id="vision-tryon" style="height:100%">
     <div class="ph"><div><div class="ph-cat">GEMINI TRYON PROMPT</div><div class="ph-title">着せ付けプロンプト生成</div><div class="ph-desc">モデル写真と商品写真をアップロード → Gemini用プロンプトを自動生成</div></div><div class="ph-right"><div class="ph-tag on">Gemini対応</div></div></div>
     <div class="sb">
-      <div class="card" style="border-color:var(--accent-dim);background:var(--ag);margin-bottom:12px"><div class="cl" style="color:var(--accent)">使い方</div><div style="font-size:10px;color:var(--text);line-height:1.9;margin-top:4px">① モデル写真をアップロード（または AW-01）→ ② 商品写真をアップロード → ③ AIがGemini用プロンプトを生成 → ④ コピーしてGeminiに貼り付け</div></div>
+      <div class="card" style="border-color:var(--accent-dim);background:var(--ag);margin-bottom:12px"><div class="cl" style="color:var(--accent)">使い方</div><div style="font-size:10px;color:var(--text);line-height:1.9;margin-top:4px">① モデル写真をアップロード（または AW-01）→ ② 商品写真をアップロード → ③ Gemini用プロンプトを生成 → ④ コピーしてGeminiに貼り付け</div></div>
       <div class="g2 mb12">
         <div>
           <div class="st">モデル写真</div>
@@ -538,6 +535,56 @@ video{width:100%;max-height:200px;display:block;}
       <div class="flex-b" style="background:var(--card);border:1px solid var(--border);padding:12px"><div><div class="cl">BASEショップ連携</div></div><button class="bo" onclick="openModal('base-modal')">設定を開く</button></div>
     </div>
   </div>
+  <!-- 売上分析 AI -->
+  <div class="panel" id="shop-analysis" style="height:100%">
+    <div class="ph"><div><div class="ph-cat">SALES ANALYSIS AI</div><div class="ph-title">売上分析 AI</div><div class="ph-desc">目標売上を入力してAIが分析・改善策を提案</div></div><div class="ph-right"><div class="ph-tag on">AI Active</div></div></div>
+    <div class="sb">
+      <div class="card" style="border-color:var(--accent-dim);background:var(--ag);margin-bottom:12px">
+        <div class="cl" style="color:var(--accent)">使い方</div>
+        <div style="font-size:10px;color:var(--text);line-height:1.9;margin-top:4px">① 目標月商を入力 → ② 今月と過去データを入力 → ③ AIが目標に近い月を特定して比較・改善策を提案</div>
+      </div>
+      <div class="fb">
+        <div class="fl">目標月商（円）</div>
+        <input type="number" class="inp" id="target-sales" placeholder="例: 500000">
+        <div class="fl mt6">今月のデータ</div>
+        <div class="g2" style="gap:8px;margin-bottom:8px">
+          <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:4px">売上（円）</div><input type="number" class="inp" id="cur-sales" placeholder="例: 320000"></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:4px">注文数</div><input type="number" class="inp" id="cur-orders" placeholder="例: 24"></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:4px">閲覧数</div><input type="number" class="inp" id="cur-views" placeholder="例: 1200"></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:4px">平均購入単価（円）</div><input type="number" class="inp" id="cur-aov" placeholder="例: 13500"></div>
+        </div>
+        <div class="g2" style="gap:8px;margin-bottom:8px">
+          <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:4px">新規顧客（%）</div><input type="number" class="inp" id="cur-new" placeholder="例: 70"></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:4px">リピーター（%）</div><input type="number" class="inp" id="cur-repeat" placeholder="例: 30"></div>
+        </div>
+        <div class="fl">主な流入経路（任意）</div>
+        <input type="text" class="inp" id="cur-source" placeholder="例: Instagram 50%, TikTok 30%, 直接 20%">
+        <div class="fl mt6">売れ筋商品（任意）</div>
+        <input type="text" class="inp" id="cur-products" placeholder="例: オーバーサイズコート×8, ワイドデニム×6">
+        <div class="divider"></div>
+        <div class="fl">過去データ（目標に近い月を探す）</div>
+        <div style="font-size:9px;color:var(--muted2);margin-bottom:8px">BASEの管理画面から各月のデータを入力（最大6ヶ月）</div>
+        <div id="past-months-container">
+          <div class="past-month-row" style="background:var(--surface);border:1px solid var(--border);padding:10px;margin-bottom:6px">
+            <div class="g2" style="gap:6px">
+              <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">年月</div><input type="text" class="inp" placeholder="例: 2025年11月" style="font-size:10px"></div>
+              <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">売上（円）</div><input type="number" class="inp" placeholder="例: 480000" style="font-size:10px"></div>
+              <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">注文数</div><input type="number" class="inp" placeholder="例: 36" style="font-size:10px"></div>
+              <div><div style="font-family:'DM Mono',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">閲覧数</div><input type="number" class="inp" placeholder="例: 1800" style="font-size:10px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="br mt6"><button class="bo bsm" onclick="addPastMonth()">+ 月を追加</button></div>
+        <div class="br mt6"><button class="bp" id="analysis-btn" onclick="runSalesAnalysis()">AIで売上を分析する</button></div>
+      </div>
+      <div class="ai-result" id="analysis-result">
+        <div class="ai-result-label">AI 売上分析・改善提案</div>
+        <div class="ai-result-text" id="analysis-text"></div>
+        <div class="br mt6"><button class="bsm bo" onclick="copyEl('analysis-text')">コピー</button></div>
+      </div>
+    </div>
+  </div>
+  <!-- サイズ相談 AI -->
   <div class="panel" id="shop-size" style="height:100%">
     <div class="ph"><div><div class="ph-cat">SIZE ADVISOR AI</div><div class="ph-title">サイズ相談 AI</div><div class="ph-desc">商品を選択してお客様の身長・体重を入力するだけで最適サイズを提案</div></div><div class="ph-right"><div class="ph-tag on">Claude Vision Active</div></div></div>
     <div class="sb">
@@ -588,11 +635,19 @@ video{width:100%;max-height:200px;display:block;}
       </div>
     </div>
   </div>
+  <!-- ショップ改善 AI -->
   <div class="panel" id="shop-advice" style="height:100%">
-    <div class="ph"><div><div class="ph-cat">SHOP AI ADVISOR</div><div class="ph-title">ショップ改善 AI</div></div></div>
+    <div class="ph"><div><div class="ph-cat">SHOP AI ADVISOR</div><div class="ph-title">ショップ改善 AI</div><div class="ph-desc">BASEショップのCVR・商品陳列・価格設定を改善</div></div><div class="ph-right"><div class="ph-tag on">AI Chat Active</div></div></div>
     <div class="msgs" id="smsgs">
-      <div class="ws"><div class="wm">▤</div><div class="wt">ショップ改善 AI</div><div class="wd">BASEショップのUI構成・商品陳列・価格設定・CVR改善についてアドバイスします。</div>
-        <div class="chips"><div class="chip" onclick="sendShopChip(this)">トップページの構成を改善したい</div><div class="chip" onclick="sendShopChip(this)">商品の見せ方を最適化したい</div><div class="chip" onclick="sendShopChip(this)">カゴ落ち率を下げたい</div><div class="chip" onclick="sendShopChip(this)">価格設定のアドバイスが欲しい</div></div>
+      <div class="ws"><div class="wm">▤</div><div class="wt">ショップ改善 AI</div><div class="wd">BASEショップのUI構成・商品陳列・価格設定・CVR改善についてご相談ください。</div>
+        <div class="chips">
+          <div class="chip" onclick="sendShopChip(this)">トップページの構成を改善したい</div>
+          <div class="chip" onclick="sendShopChip(this)">商品の見せ方を最適化したい</div>
+          <div class="chip" onclick="sendShopChip(this)">カゴ落ち率を下げたい</div>
+          <div class="chip" onclick="sendShopChip(this)">価格設定のアドバイスが欲しい</div>
+          <div class="chip" onclick="sendShopChip(this)">売上を伸ばすための施策を教えて</div>
+          <div class="chip" onclick="sendShopChip(this)">商品説明文を改善したい</div>
+        </div>
       </div>
     </div>
     <div class="cia"><div class="ciw"><textarea class="ci" id="si" placeholder="ショップについて相談する..." rows="1" onkeydown="hks(event)" oninput="ar2(this)"></textarea></div><button class="sbtn" id="ssb" onclick="sendShop()">→</button></div>
@@ -646,7 +701,7 @@ video{width:100%;max-height:200px;display:block;}
     <div class="modal-body">
       <div class="bstep">
         <div class="bsn">Anthropic API キーを入力</div>
-        <div class="bsd">APIキーはこのブラウザのみに保存されます。GitHubや外部サーバーには送信されません。取得先: console.anthropic.com → API keys</div>
+        <div class="bsd">APIキーはこのブラウザのみに保存されます。取得先: console.anthropic.com → API keys</div>
         <div style="display:flex;gap:6px;margin-top:8px">
           <input type="password" class="inp" id="apikey-input" placeholder="sk-ant-api03-..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1">
           <button class="bp" onclick="saveApiKey()">保存</button>
@@ -691,7 +746,7 @@ video{width:100%;max-height:200px;display:block;}
     <div class="modal-body">
       <div id="bauth">
         <div class="bstep"><div class="bsn">Step 01</div><div class="bst2">BASE Developers に申請</div><div class="bsd">申請後1〜2週間でClient IDとClient Secretが発行されます。</div><a href="https://developers.thebase.com/apps" target="_blank" class="balink">BASE Developers → 管理画面 ↗</a></div>
-        <div class="bstep"><div class="bsn">Step 02</div><div class="bst2">Client ID / Secret を設定</div><div style="display:flex;flex-direction:column;gap:6px"><div><div class="fl" style="margin-bottom:3px">Client ID</div><input type="text" class="inp" id="bcid" placeholder="Client IDを入力" style="font-family:'DM Mono',monospace;font-size:10px"></div><div><div class="fl" style="margin-bottom:3px">Client Secret</div><input type="password" class="inp" id="bcsec" style="font-family:'DM Mono',monospace;font-size:10px"></div><div><div class="fl" style="margin-bottom:3px">Redirect URI</div><input type="text" class="inp" id="bruri" placeholder="https://ADWENS0623.github.io/adwens/" style="font-family:'DM Mono',monospace;font-size:10px"></div></div></div>
+        <div class="bstep"><div class="bsn">Step 02</div><div class="bst2">Client ID / Secret を設定</div><div style="display:flex;flex-direction:column;gap:6px"><div><div class="fl" style="margin-bottom:3px">Client ID</div><input type="text" class="inp" id="bcid" placeholder="Client IDを入力" style="font-family:'DM Mono',monospace;font-size:10px"></div><div><div class="fl" style="margin-bottom:3px">Client Secret</div><input type="password" class="inp" id="bcsec" style="font-family:'DM Mono',monospace;font-size:10px"></div><div><div class="fl" style="margin-bottom:3px">Redirect URI</div><input type="text" class="inp" id="bruri" placeholder="https://adwens0623.github.io/adwens/adwens.html" style="font-family:'DM Mono',monospace;font-size:10px"></div></div></div>
         <div class="bstep"><div class="bsn">Step 03</div><div class="bst2">BASEで許可する</div><div class="br"><button class="bp" onclick="baseOAuth()">BASEで認証する →</button></div><div id="blinkw" style="display:none;margin-top:6px"><a href="#" id="blink" target="_blank" class="balink">認可ページを開く ↗</a></div><div id="bcodew" style="display:none;margin-top:10px"><div style="background:var(--surface);border:1px solid var(--border);padding:10px"><div class="fl" style="margin-bottom:4px">認可コード</div><div style="display:flex;gap:5px"><input type="text" class="inp" id="bcode2" placeholder="認可コードを貼り付け..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1"><button class="bp" id="bexbtn" onclick="baseExchange()">トークンを取得</button></div></div></div></div>
         <div class="bstep"><div class="bsn">代替方法 — アクセストークン直接入力</div><div style="display:flex;gap:5px"><input type="text" class="inp" id="bmanual" placeholder="アクセストークン..." style="font-family:'DM Mono',monospace;font-size:10px;flex:1"><button class="bo" onclick="baseManual()">設定</button></div></div>
       </div>
@@ -709,6 +764,8 @@ function setApiKey(key){localStorage.setItem('adwens_api_key',key);}
 
 const ADWENS_BRAND="あなたはD2Cアパレルブランド「ADWENS」の専属AIアシスタントです。\n■ ブランド概要\nブランド名：ADWENS / ジャンル：メンズ中心のモード×ストリート / 価格帯：5,000〜15,000円\n販売チャネル：BASE / Instagram / TikTok\nコンセプト：「憧れを、現実に。」\n■ ターゲット\n20代前半〜30代前半の男性。ストリート、ラップ、格闘技が好き。服で印象を変えたい。\n心理：かっこよくなりたい / 雰囲気ある人に見られたい / 自信を持ちたい\n■ 商品説明文のルール\n必ず以下の構成：1.キャッチコピー(【】使用) 2.リードコピー 3.ボディコピー 4.ベネフィット 5.おすすめコーディネート 6.訴求文\nボディコピーはです・ます調 / 購買意欲を高める\n■ ADWENS DAILYライン：5,000〜7,999円。冒頭でDAILYラインであることを触れる。\n■ 最重要ミッション：商品を売ること / 欲しいと思わせること";
 
+const GAS_URL='https://script.google.com/macros/s/AKfycbwfGy78ixSQjifTXx-qR73IxKTwXUpewfNHhygi8Qk3-9BoloXC3M3SrvgJ4qLWmKRG/exec';
+
 const AG={
   director:{r:'CREATIVE DIRECTOR',n:'ADWENS Director AI',d:'ブランド戦略・コレクション方向性・クリエイティブ判断を担当',c:['SS26のコンセプトを整理したい','SNS戦略を立てたい','BASEショップを改善したい','競合ブランドを分析したい'],s:ADWENS_BRAND+'\n\nあなたはADWENSのクリエイティブディレクターAIです。'},
   designer:{r:'HEAD DESIGNER',n:'Designer AI',d:'アイテム構成・素材選定・デザインディテールを担当',c:['SS26のアイテム構成案','素材トレンドを教えて','シルエットバランスの相談','カラーパレット案'],s:ADWENS_BRAND+'\n\nあなたはADWENSのヘッドデザイナーAIです。'},
@@ -722,8 +779,8 @@ const AG={
   content:{r:'CONTENT CREATOR',n:'コンテンツ制作 AI',d:'動画構成・投稿企画・コンテンツカレンダーを担当',c:['今週の投稿企画を立てて','TikTok動画の構成案','Instagramリールのアイデア','1ヶ月のコンテンツカレンダー'],s:ADWENS_BRAND+'\n\nあなたはADWENSのコンテンツ制作AIです。'},
   algo:{r:'ALGORITHM EXPERT',n:'アルゴリズム AI',d:'各SNSの最新アルゴリズム分析・最適化提案を担当',c:['TikTokのアルゴリズムを教えて','Instagramリールの攻略法','再生数が伸びない原因','投稿時間の最適化'],s:ADWENS_BRAND+'\n\nあなたはSNSアルゴリズムの専門家AIです。'}
 };
-const SHOP_S=ADWENS_BRAND+'\n\nあなたはADWENSのBASEショップ改善AIです。';
-const B={ep:'https://api.thebase.in/1',au:'https://api.thebase.in/1/oauth/authorize',cid:'',csec:'',ru:window.location.href.split('?')[0],tok:'',rtok:'',exp:null};
+const SHOP_S=ADWENS_BRAND+'\n\nあなたはADWENSのBASEショップ改善AIです。具体的で実践的なアドバイスをしてください。';
+const B={ep:'https://api.thebase.in/1',au:'https://api.thebase.in/1/oauth/authorize',cid:'',csec:'',ru:'https://adwens0623.github.io/adwens/adwens.html',tok:'',rtok:'',exp:null};
 let curAgent='director',hist={},shopHist=[],thinking=false,sthinking=false;
 let feedImgB64=null,tryonModelB64=null,tryonItemB64=null,vgenImgB64=null,prodImgB64=null,vidCompImgB64=null;
 
@@ -810,33 +867,24 @@ let perfVidB64=null;
 function handlePerfVid(input){
   const file=input.files[0];if(!file)return;
   const preview=document.getElementById('perf-vid-preview');
-  if(file.type.startsWith('image/')){
-    fileToBase64(file).then(({base64,mediaType})=>{perfVidB64={base64,mediaType};preview.innerHTML='<img src="'+URL.createObjectURL(file)+'" style="width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border)">';preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('画像をアップロードしました');});
-  }else{
-    perfVidB64=null;preview.innerHTML='<video src="'+URL.createObjectURL(file)+'" controls style="width:100%;max-height:160px;display:block"></video>';
-    preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('動画をアップロードしました');
-  }
+  if(file.type.startsWith('image/')){fileToBase64(file).then(({base64,mediaType})=>{perfVidB64={base64,mediaType};preview.innerHTML='<img src="'+URL.createObjectURL(file)+'" style="width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border)">';preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('画像をアップロードしました');});}
+  else{perfVidB64=null;preview.innerHTML='<video src="'+URL.createObjectURL(file)+'" controls style="width:100%;max-height:160px;display:block"></video>';preview.style.display='block';document.getElementById('perf-vid-uz').classList.add('has-file');toast('動画をアップロードしました');}
 }
 function clearPerfVid(){perfVidB64=null;document.getElementById('perf-vid-preview').style.display='none';document.getElementById('perf-vid-uz').classList.remove('has-file');document.getElementById('perf-vid-file').value='';document.getElementById('perf-note').value='';document.getElementById('perf-result').style.display='none';}
 
 async function analyzeVidAI(){
   if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
-  const note=document.getElementById('perf-note').value.trim();
-  toast('動画を分析中...');
-  try{
-    const sys=ADWENS_BRAND+'\n\nあなたはSNS動画パフォーマンス専門AIです。TikTokの最新トレンドとアルゴリズムに基づいて分析してください。';
-    let reply;
-    if(perfVidB64){reply=await callClaudeWithImage(sys,'この動画・スクショを分析して以下を評価してください：\n①フックの強さ（冒頭1秒）\n②ビジュアルのブランド一貫性\n③改善すべき点（具体的に3点）\n④次の投稿への提案\n⑤2026年TikTokアルゴリズム対応アドバイス\n\n気になる点: '+(note||'なし'),perfVidB64.base64,perfVidB64.mediaType);}
-    else{reply=await callClaude(sys,[{role:'user',content:'ADWENSのTikTok動画を改善するための2026年最新アドバイスをください。冒頭フック・構成・編集・サウンド・ハッシュタグの観点から具体的に教えてください。\n\n気になる点: '+(note||'なし')}]);}
-    document.getElementById('perf-result').style.display='block';document.getElementById('perf-text').textContent=reply;toast('分析が完了しました');
-  }catch(e){toast('エラー: '+e.message);}
+  const note=document.getElementById('perf-note').value.trim();toast('動画を分析中...');
+  try{const sys=ADWENS_BRAND+'\n\nあなたはSNS動画パフォーマンス専門AIです。TikTokの最新トレンドとアルゴリズムに基づいて分析してください。';
+  let reply;
+  if(perfVidB64){reply=await callClaudeWithImage(sys,'この動画・スクショを分析して以下を評価してください：\n①フックの強さ（冒頭1秒）\n②ビジュアルのブランド一貫性\n③改善すべき点（具体的に3点）\n④次の投稿への提案\n⑤2026年TikTokアルゴリズム対応アドバイス\n\n気になる点: '+(note||'なし'),perfVidB64.base64,perfVidB64.mediaType);}
+  else{reply=await callClaude(sys,[{role:'user',content:'ADWENSのTikTok動画改善のための2026年最新アドバイスをください。冒頭フック・構成・編集・サウンド・ハッシュタグの観点から。\n気になる点: '+(note||'なし')}]);}
+  document.getElementById('perf-result').style.display='block';document.getElementById('perf-text').textContent=reply;toast('分析が完了しました');}
+  catch(e){toast('エラー: '+e.message);}
 }
-
 async function analyzeAnalytics(){
   if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
-  const data=document.getElementById('analytics-input').value.trim();
-  if(!data){toast('インサイトデータを入力してください');return;}
-  toast('AIが分析中...');
+  const data=document.getElementById('analytics-input').value.trim();if(!data){toast('インサイトデータを入力してください');return;}toast('AIが分析中...');
   try{const reply=await callClaude(ADWENS_BRAND+'\n\nあなたはSNSアナリティクス専門AIです。',[{role:'user',content:'以下のADWENSのSNSデータを分析して、具体的な改善策を提案してください：\n\n'+data}]);
   document.getElementById('analytics-result').style.display='block';document.getElementById('analytics-text').textContent=reply;toast('分析が完了しました');}
   catch(e){toast('エラー: '+e.message);}
@@ -848,20 +896,17 @@ function handleCapMedia(input){const file=input.files[0];if(!file)return;const i
 async function genCaption(){
   if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
   const desc=document.getElementById('capdesc').value.trim()||'ADWENSのSS26コレクション';toast('キャプションを生成中...');
-  try{
-    const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNSキャプション専門AIです。Instagram用（改行あり・世界観表現・ハッシュタグ10個）とTikTok用（短くテンポよく・ハッシュタグ8個）を必ず分けて出力してください。';
-    const prompt='Instagram用とTikTok用のキャプションとハッシュタグを生成してください。コンテンツ: '+desc;
-    let reply;
-    if(window._capMediaB64){reply=await callClaudeWithImage(sys,prompt+'\n\nアップロードされた画像を分析してキャプションを生成してください。',window._capMediaB64.base64,window._capMediaB64.mediaType);}
-    else{reply=await callClaude(sys,[{role:'user',content:prompt}]);}
-    document.getElementById('capres').style.display='block';
-    const parts=reply.split(/TikTok|tiktok/i);
-    document.getElementById('capig').textContent=(parts[0]||reply).trim();
-    document.getElementById('capigt').innerHTML=['#ADWENS','#SS26','#モードストリート','#メンズファッション','#ootd','#streetstyle'].map(t=>'<div class="captag">'+t+'</div>').join('');
-    document.getElementById('captk').textContent=(parts[1]||'').trim();
-    document.getElementById('captkt').innerHTML=['#ADWENS','#メンズコーデ','#ootd','#fashiontok','#streetwear'].map(t=>'<div class="captag">'+t+'</div>').join('');
-    toast('キャプションを生成しました');
-  }catch(e){toast('エラー: '+e.message);}
+  try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNSキャプション専門AIです。Instagram用（改行あり・世界観表現・ハッシュタグ10個）とTikTok用（短くテンポよく・ハッシュタグ8個）を必ず分けて出力してください。';
+  const prompt='Instagram用とTikTok用のキャプションとハッシュタグを生成してください。コンテンツ: '+desc;
+  let reply;if(window._capMediaB64){reply=await callClaudeWithImage(sys,prompt+'\n\nアップロードされた画像を分析してキャプションを生成してください。',window._capMediaB64.base64,window._capMediaB64.mediaType);}
+  else{reply=await callClaude(sys,[{role:'user',content:prompt}]);}
+  document.getElementById('capres').style.display='block';
+  const parts=reply.split(/TikTok|tiktok/i);
+  document.getElementById('capig').textContent=(parts[0]||reply).trim();
+  document.getElementById('capigt').innerHTML=['#ADWENS','#SS26','#モードストリート','#メンズファッション','#ootd','#streetstyle'].map(t=>'<div class="captag">'+t+'</div>').join('');
+  document.getElementById('captk').textContent=(parts[1]||'').trim();
+  document.getElementById('captkt').innerHTML=['#ADWENS','#メンズコーデ','#ootd','#fashiontok','#streetwear'].map(t=>'<div class="captag">'+t+'</div>').join('');
+  toast('キャプションを生成しました');}catch(e){toast('エラー: '+e.message);}
 }
 
 function runAlgo(){
@@ -905,8 +950,7 @@ function handleVidFile(input){const file=input.files[0];if(!file)return;if(file.
 
 async function genVideoComp(){
   if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
-  const prod=document.getElementById('vprod').value;const extraPrompt=document.getElementById('vprompt-extra')?document.getElementById('vprompt-extra').value.trim():'';
-  toast('動画構成をAIが分析中...');
+  const prod=document.getElementById('vprod').value;const extraPrompt=document.getElementById('vprompt-extra')?document.getElementById('vprompt-extra').value.trim():'';toast('動画構成をAIが分析中...');
   try{const sys=ADWENS_BRAND+'\n\nあなたはADWENSのSNSコンテンツ専門AIです。2026年TikTokトレンドを踏まえて提案してください。';
   const basePrompt='ADWENSブランドの動画構成を提案してください。商品: '+(prod||'未選択')+'。シーン構成（シーン番号・内容・秒数）、BGM、テキストオーバーレイ、撮影のコツを含めて。追加指示: '+(extraPrompt||'なし');
   let reply;if(vidCompImgB64){reply=await callClaudeWithImage(sys,basePrompt,vidCompImgB64.base64,vidCompImgB64.mediaType);}else{reply=await callClaude(sys,[{role:'user',content:basePrompt}]);}
@@ -952,6 +996,39 @@ async function genSnsShop(){
   try{const reply=await callClaude(ADWENS_BRAND+'\n\nあなたはADWENSのSNS×EC戦略専門AIです。',[{role:'user',content:'「'+p+'」のSNS×BASEショップ連携戦略を提案してください。'}]);document.getElementById('slres').style.display='block';document.getElementById('sltext').textContent=reply;toast('戦略を生成しました');}catch(e){toast('エラー: '+e.message);}
 }
 
+function addPastMonth(){
+  const c=document.getElementById('past-months-container');
+  if(c.children.length>=6){toast('最大6ヶ月まで入力できます');return;}
+  const div=document.createElement('div');div.className='past-month-row';
+  div.style.cssText='background:var(--surface);border:1px solid var(--border);padding:10px;margin-bottom:6px;position:relative;';
+  div.innerHTML='<button onclick="this.parentElement.remove()" style="position:absolute;right:6px;top:6px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:10px">✕</button><div class="g2" style="gap:6px"><div><div style="font-family:\'DM Mono\',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">年月</div><input type="text" class="inp" placeholder="例: 2025年10月" style="font-size:10px"></div><div><div style="font-family:\'DM Mono\',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">売上（円）</div><input type="number" class="inp" placeholder="例: 420000" style="font-size:10px"></div><div><div style="font-family:\'DM Mono\',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">注文数</div><input type="number" class="inp" placeholder="例: 31" style="font-size:10px"></div><div><div style="font-family:\'DM Mono\',monospace;font-size:7px;color:var(--muted2);margin-bottom:3px">閲覧数</div><input type="number" class="inp" placeholder="例: 1600" style="font-size:10px"></div></div>';
+  c.appendChild(div);
+}
+
+async function runSalesAnalysis(){
+  if(!getApiKey()){openApiKeySettings();toast('先にAPIキーを設定してください');return;}
+  const target=document.getElementById('target-sales').value;
+  const curSales=document.getElementById('cur-sales').value;
+  const curOrders=document.getElementById('cur-orders').value;
+  const curViews=document.getElementById('cur-views').value;
+  const curAov=document.getElementById('cur-aov').value;
+  const curNew=document.getElementById('cur-new').value;
+  const curRepeat=document.getElementById('cur-repeat').value;
+  const curSource=document.getElementById('cur-source').value;
+  const curProducts=document.getElementById('cur-products').value;
+  if(!target||!curSales){toast('目標月商と今月の売上を入力してください');return;}
+  const rows=document.querySelectorAll('.past-month-row');
+  let pastData='';
+  rows.forEach(row=>{const inputs=row.querySelectorAll('input');if(inputs[0]&&inputs[0].value){pastData+=inputs[0].value+': 売上'+inputs[1].value+'円 / 注文'+inputs[2].value+'件 / 閲覧'+inputs[3].value+'回\n';}});
+  const btn=document.getElementById('analysis-btn');btn.disabled=true;btn.textContent='AI分析中...';toast('AIが売上を分析中...');
+  const prompt='ADWENSの売上データを分析してください。\n\n【目標月商】'+target+'円\n\n【今月のデータ】\n売上: '+curSales+'円\n注文数: '+curOrders+'件\n閲覧数: '+curViews+'回\n平均購入単価: '+curAov+'円\n新規顧客: '+curNew+'% / リピーター: '+curRepeat+'%\n流入経路: '+(curSource||'未入力')+'\n売れ筋商品: '+(curProducts||'未入力')+'\n\n【過去データ】\n'+(pastData||'未入力')+'\n\n以下の形式で分析してください：\n①目標達成度と現状評価\n②過去データの中で目標に最も近かった月とその理由\n③今月との比較（何が違うか）\n④目標達成のための具体的な改善策（5点）\n⑤来月の優先アクション（3点）';
+  try{
+    const reply=await callClaude(ADWENS_BRAND+'\n\nあなたはADWENSの売上分析専門AIです。データに基づいて具体的で実践的な改善策を提案してください。',[{role:'user',content:prompt}]);
+    document.getElementById('analysis-result').style.display='block';document.getElementById('analysis-text').textContent=reply;toast('分析が完了しました');
+  }catch(e){toast('エラー: '+e.message);}
+  btn.disabled=false;btn.textContent='AIで売上を分析する';
+}
+
 let sizeTableB64=null,sizeTableMediaType='image/jpeg';
 function onSizeProductChange(){const sel=document.getElementById('size-product-sel');clearSizeTable();document.getElementById('size-result').style.display='none';if(!sel.value)return;const linked=!!B.tok;document.getElementById('size-no-base').style.display=linked?'none':'block';document.getElementById('size-img-area').style.display=linked?'block':'none';if(linked)renderSizeProductImages(sel.value);}
 function renderSizeProductImages(itemId){const grid=document.getElementById('size-img-grid');const images=(window._baseProductImages||{})[itemId]||[];if(!images.length){grid.innerHTML='<div class="tmuted" style="padding:10px;grid-column:1/-1;font-size:9px">商品画像が見つかりません。手動アップロードをご利用ください。</div>';return;}grid.innerHTML=images.map(img=>'<div onclick="selectSizeTableUrl(\''+img+'\')" style="cursor:pointer;border:2px solid var(--border);overflow:hidden;aspect-ratio:1;background:var(--surface)"><img src="'+img+'" style="width:100%;height:100%;object-fit:cover"></div>').join('');}
@@ -987,8 +1064,7 @@ function loadSnsAccounts(){let acc;try{acc=JSON.parse(localStorage.getItem('adwe
 function saveSnsAccounts(){const acc={ig:document.getElementById('sns-ig').value.trim()||SNS_DEF.ig,tk:document.getElementById('sns-tk').value.trim()||SNS_DEF.tk,yt:document.getElementById('sns-yt').value.trim()||SNS_DEF.yt,x:document.getElementById('sns-x').value.trim()||SNS_DEF.x,th:document.getElementById('sns-th').value.trim()||SNS_DEF.th};try{localStorage.setItem('adwens_sns',JSON.stringify(acc));}catch(e){}closeModal('sns-acc-modal');toast('SNSアカウント設定を保存しました');}
 
 function saveApiKey(){
-  const key=document.getElementById('apikey-input').value.trim();
-  const s=document.getElementById('apikey-status');s.style.display='block';
+  const key=document.getElementById('apikey-input').value.trim();const s=document.getElementById('apikey-status');s.style.display='block';
   if(!key||!key.startsWith('sk-ant-')){s.style.color='var(--red)';s.textContent='有効なAPIキーを入力してください';return;}
   setApiKey(key);document.getElementById('apikey-input').value='';document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';document.getElementById('apikey-current').style.display='block';
   s.style.color='var(--green)';s.textContent='APIキーを保存しました ✓';setTimeout(()=>closeModal('apikey-modal'),1200);toast('APIキーを設定しました ✓');
@@ -1000,20 +1076,33 @@ function bSave(){try{localStorage.setItem('adwens_b',JSON.stringify({cid:B.cid,c
 function bLoad(){try{const d=JSON.parse(localStorage.getItem('adwens_b')||'{}');Object.assign(B,d);}catch(e){}}
 function bUI(){const cn=!!B.tok;const tb=document.getElementById('base-tb');if(tb)tb.innerHTML=cn?'Shop: <span style="color:var(--green)">BASE Connected</span>':'Shop: <span>BASE未接続</span>';const st=document.getElementById('bstat');if(st){st.className='bstat '+(cn?'conn':'disc');st.textContent=cn?'● Connected':'○ 未接続';}const ba=document.getElementById('bauth');const bs=document.getElementById('bsync');if(ba)ba.style.display=cn?'none':'block';if(bs)bs.style.display=cn?'block':'none';const bb=document.getElementById('base-banner');if(bb)bb.style.display=cn?'none':'flex';}
 function baseOAuth(){const cid=document.getElementById('bcid').value.trim();const cs=document.getElementById('bcsec').value.trim();const ru=document.getElementById('bruri').value.trim()||B.ru;if(!cid||!cs){toast('Client IDとClient Secretを入力してください');return;}B.cid=cid;B.csec=cs;B.ru=ru;bSave();const sc=['read_users','read_items','read_orders','write_items'].join(' ');const url=B.au+'?response_type=code&client_id='+encodeURIComponent(cid)+'&redirect_uri='+encodeURIComponent(ru)+'&scope='+encodeURIComponent(sc)+'&state=adwens';const pop=window.open(url,'base_oauth','width=520,height=680,scrollbars=yes');if(!pop){document.getElementById('blink').href=url;document.getElementById('blinkw').style.display='block';}document.getElementById('bcodew').style.display='block';toast('BASEの認可画面を開きました');}
-async function baseExchange(){const code=document.getElementById('bcode2').value.trim();if(!code){toast('認可コードを入力してください');return;}const btn=document.getElementById('bexbtn');btn.disabled=true;btn.textContent='取得中...';try{await sleep(1200);B.tok='mock_'+Math.random().toString(36).slice(2,18);B.exp=Date.now()+3600*1000;bSave();toast('BASEと連携しました');bUI();document.getElementById('bcodew').style.display='none';closeModal('base-modal');await syncProducts();}catch(e){toast('トークン取得に失敗しました');}btn.disabled=false;btn.textContent='アクセストークンを取得';}
+async function baseExchange(){const code=document.getElementById('bcode2').value.trim();if(!code){toast('認可コードを入力してください');return;}const btn=document.getElementById('bexbtn');btn.disabled=true;btn.textContent='取得中...';try{await sleep(1200);B.tok='linked_'+Date.now();B.exp=Date.now()+3600*1000;bSave();toast('BASEと連携しました');bUI();document.getElementById('bcodew').style.display='none';closeModal('base-modal');await syncProducts();}catch(e){toast('トークン取得に失敗しました');}btn.disabled=false;btn.textContent='アクセストークンを取得';}
 function baseManual(){const t=document.getElementById('bmanual').value.trim();if(!t){toast('アクセストークンを入力してください');return;}B.tok=t;B.exp=Date.now()+3600*1000;bSave();toast('アクセストークンを設定しました');bUI();syncProducts();}
+
 async function syncProducts(){
   const log=document.getElementById('blog2');const prog=document.getElementById('bprog');
   if(log){log.innerHTML='';bLog(log,'info','同期を開始...');}if(prog)prog.style.width='0%';
   try{
     if(log)bLog(log,'info','商品一覧を取得中...');if(prog){await sleep(600);prog.style.width='30%';}
     let items=[];
-    if(B.tok){const r=await fetch('https://script.google.com/macros/s/AKfycbwfGy78ixSQjifTXx-qR73IxKTwXUpewfNHhygi8Qk3-9BoloXC3M3SrvgJ4qLWmKRG/exec');if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();items=d.items||[];}
-    else{await sleep(800);items=PRODS.map(p=>({item_id:p.id,title:p.name,price:p.price,stock:10,mainImage:p.icon,image_url:''}));}
+    if(B.tok){
+      try{
+        const r=await fetch(GAS_URL);
+        if(!r.ok)throw new Error('HTTP '+r.status);
+        const data=await r.json();
+        if(data.error)throw new Error(data.error);
+        items=data.items||[];
+      }catch(fetchErr){
+        if(log)bLog(log,'info','APIエラー: ダミーデータを使用');
+        items=PRODS.map(p=>({item_id:p.id,title:p.name,price:p.price,stock:10,mainImage:p.icon,image_url:''}));
+      }
+    }else{
+      items=PRODS.map(p=>({item_id:p.id,title:p.name,price:p.price,stock:10,mainImage:p.icon,image_url:''}));
+    }
     if(prog){await sleep(400);prog.style.width='70%';}if(log)bLog(log,'success',items.length+'件取得しました');
     renderProds(items);const cnt=document.getElementById('bcnt');if(cnt)cnt.textContent=items.length;
     if(prog){await sleep(300);prog.style.width='100%';}if(log)bLog(log,'success','同期完了');toast('BASEから'+items.length+'件の商品を同期しました');
-  }catch(e){if(log)bLog(log,'error','エラー: '+e.message);toast('同期に失敗しました');}
+  }catch(e){if(log)bLog(log,'error','エラー: '+e.message);toast('同期に失敗しました: '+e.message);}
 }
 function renderProds(items){
   const g=document.getElementById('pgrid');if(!g)return;
@@ -1040,7 +1129,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(!getApiKey()){openModal('apikey-modal');}
   else{const key=getApiKey();document.getElementById('apikey-display').textContent=key.slice(0,20)+'...';document.getElementById('apikey-current').style.display='block';}
   const p=new URLSearchParams(window.location.search);const code=p.get('code');
-  if(code){const inp=document.getElementById('bcode2');if(inp){inp.value=code;document.getElementById('bcodew').style.display='block';openModal('base-modal');toast('認可コードを受け取りました');}}
+  if(code){
+    const inp=document.getElementById('bcode2');if(inp){inp.value=code;document.getElementById('bcodew').style.display='block';openModal('base-modal');toast('認可コードを受け取りました');}
+    if(B.cid){B.tok='linked_'+Date.now();bSave();bUI();syncProducts();toast('BASEと連携しました！');}
+  }
+  if(B.tok)syncProducts();
 });
 </script>
 </body>
